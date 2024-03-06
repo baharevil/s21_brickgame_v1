@@ -1,26 +1,36 @@
 # GOALS all, install, uninstall, clean, dvi, dist, test, gcov_report
+# -lpanel -lncurses
 
 #---- STATIC_VARIABLES ----#
 # STATIC
 project_name = s21_tetris
-bin_dir = 
-bin_sub_dir = 
-build_dir = 
-func_dir = brick_game/tetris/function
-test_dir = brick_game/tetris/tests
-report_dir = brick_game/tetris/gcovr-report
+game_dir = brick_game/tetris/
+gui_dir = gui/cli/
+
+bin_dir = bin 
+bin_sub_dir = reales
+
+game_build_dir = brick_game/tetris/obj
+game_func_dir = brick_game/tetris/function
+game_test_dir = brick_game/tetris/tests
+game_report_dir = brick_game/tetris/gcovr-report
+
+gui_build_dir = gui/cli/obj
+gui_func_dir = gui/cli/function
+gui_test_dir = gui/cli/tests
+gui_report_dir = gui/cli/gcovr-report
 
 # COMPILER
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -std=c11 -I. -pedantic
-LDFLAGS = -lcheck -lsubunit -lm
+CFLAGS = -Wall -Werror -Wextra -std=c11 -I . -pedantic
+LDFLAGS = -lcheck -lsubunit -lm -lncurses
 VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 
 # GCOVR + OPEN
 # GCOV = gcovr
 GCOV = ~/.local/bin/gcovr
 REPORTFLAGS = --html-nested --output
-OS      := $(shell uname -s)
+OS := $(shell uname -s)
 OPEN_CMD := $(if $(filter Linux, $(OS)),xdg-open,open)
 
 
@@ -44,78 +54,87 @@ dir_list := $(addprefix $(build_dir)/, $(sort $(dir $(func_source) $(test_source
 
 #-----=== COMPILE_RULES ===------#
 .PHONY: test 
-all: $(lib_name)
-
-test: bin $(import)
+test: 
 	@rm -rf $(bin_dir)/$(bin_sub_dir)
 	@mkdir $(bin_dir)/$(bin_sub_dir)
 	$(CC) -o $(bin_dir)/$(bin_sub_dir)/$@ -pipe -L. $(addprefix -l:, $(import)) $(LDFLAGS)
-	@$(if $(filter valgrind, $(val)), CK_FORK=no $(val) $(VALFLAGS)) $(bin_dir)/$(bin_sub_dir)/$@
-
-debug: DEBUG = -g
-debug: bin_sub_dir = debug
-debug: clean_obj test
-
-build:
-	@echo $(dir_list)
+	
+bin: 
 	@mkdir $(build_dir)
 	@mkdir $(dir_list)
+# .PHONY: test 
+# all: $(lib_name)
 
-bin:
-	@mkdir $(bin_dir)
+# test: bin $(import)
+# 	@rm -rf $(bin_dir)/$(bin_sub_dir)
+# 	@mkdir $(bin_dir)/$(bin_sub_dir)
+# 	$(CC) -o $(bin_dir)/$(bin_sub_dir)/$@ -pipe -L. $(addprefix -l:, $(import)) $(LDFLAGS)
+# 	@$(if $(filter valgrind, $(val)), CK_FORK=no $(val) $(VALFLAGS)) $(bin_dir)/$(bin_sub_dir)/$@
 
-$(lib_name): $(call depenc_command, $(func_dir))
-$(test_lib_name): $(call depenc_command, $(test_dir))
-%.a: build
-	ar crs $@ $(filter %.o, $?)
+# debug: DEBUG = -g
+# debug: bin_sub_dir = debug
+# debug: clean_obj test
 
-$(build_dir)/%.o: %.c
-	$(CC) $(CFLAGS) $(if $(filter $(func_dir)/%.c, $^), $(GCOVFLAGS)) $(DEBUG) -c $^ -o $@
+# build:
+# 	@echo $(dir_list)
+# 	@mkdir $(build_dir)
+# 	@mkdir $(dir_list)
 
+# bin:
+# 	@mkdir $(bin_dir)
 
-#-----=== CHECK_RULES ===------#
-.PHONY: clang-n clang-i
-clang-n:
-	find . -iname '*.h' -o -iname '*.c' | xargs clang-format -n -style=file:../materials/linters/.clang-format
+# $(lib_name): $(call depenc_command, $(func_dir))
+# $(test_lib_name): $(call depenc_command, $(test_dir))
+# %.a: build
+# 	ar crs $@ $(filter %.o, $?)
 
-clang-i:
-	find . -iname '*.h' -o -iname '*.c' | xargs clang-format -i -style=file:../materials/linters/.clang-format
-
-valgrind: val = valgrind
-valgrind: test
-
-
-#---- REPORT ----#
-.PHONY: doc
-gcov_report: GCOVFLAGS = -fprofile-arcs -ftest-coverage
-gcov_report: LDFLAGS += -lgcov
-gcov_report: clean_gcov test
-	@mkdir $(report_dir)
-	$(GCOV) $(REPORTFLAGS) $(report_name)
-
-gcov_open:
-	$(OPEN_CMD) $(report_name)
-
-deps:
-	pip install gcovr
-
-doc:
-	doxygen doc/doc_config
-	$(OPEN_CMD) doc/html/index.html
+# $(build_dir)/%.o: %.c
+# 	$(CC) $(CFLAGS) $(if $(filter $(func_dir)/%.c, $^), $(GCOVFLAGS)) $(DEBUG) -c $^ -o $@
 
 
-#---- CLEAN ----#
-.PHONY: clean clean_gcov clean_obj clean_doc
-clean: clean_doc
-	@rm -rf $(obj_list) $(gcov_list)
-	@rm -rf $(lib_name) $(test_lib_name) test
-	@rm -rf $(report_dir) $(build_dir) $(bin_dir)
+# #-----=== CHECK_RULES ===------#
+# .PHONY: clang-n clang-i
+# clang-n:
+# 	find . -iname '*.h' -o -iname '*.c' | xargs clang-format -n -style=file:../materials/linters/.clang-format
 
-clean_obj:
-	@rm -rf $(addprefix $(build_dir)/, $(filter $(func_dir)/%.o, $(obj_list)))
+# clang-i:
+# 	find . -iname '*.h' -o -iname '*.c' | xargs clang-format -i -style=file:../materials/linters/.clang-format
 
-clean_gcov: clean_obj
-	@rm -rf $(report_dir) $(gcov_list)
+# valgrind: val = valgrind
+# valgrind: test
 
-clean_doc:
-	@rm -rf doc/html doc/latex
+
+# #---- REPORT ----#
+# .PHONY: doc
+# gcov_report: GCOVFLAGS = -fprofile-arcs -ftest-coverage
+# gcov_report: LDFLAGS += -lgcov
+# gcov_report: clean_gcov test
+# 	@mkdir $(report_dir)
+# 	$(GCOV) $(REPORTFLAGS) $(report_name)
+
+# gcov_open:
+# 	$(OPEN_CMD) $(report_name)
+
+# deps:
+# 	pip install gcovr
+
+# doc:
+# 	doxygen doc/doc_config
+# 	$(OPEN_CMD) doc/html/index.html
+
+
+# #---- CLEAN ----#
+# .PHONY: clean clean_gcov clean_obj clean_doc
+# clean: clean_doc
+# 	@rm -rf $(obj_list) $(gcov_list)
+# 	@rm -rf $(lib_name) $(test_lib_name) test
+# 	@rm -rf $(report_dir) $(build_dir) $(bin_dir)
+
+# clean_obj:
+# 	@rm -rf $(addprefix $(build_dir)/, $(filter $(func_dir)/%.o, $(obj_list)))
+
+# clean_gcov: clean_obj
+# 	@rm -rf $(report_dir) $(gcov_list)
+
+# clean_doc:
+# 	@rm -rf doc/html doc/latex
