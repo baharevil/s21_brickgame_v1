@@ -1,12 +1,12 @@
-# TODO: all, uninstall, clean, dvi, dist
-# -lpanel -lncurses
+# TODO: all, install, uninstall, clean, dvi, dist
+# -lpanel -lncurses -lmenu
 
 #---== SETTING_GAME ==---#
 project_name = s21_tetris
-sub_backend_dir = tetris
-sub_frontend_dir = cli/
-backend_dir = brick_game/
 frontend_dir = gui/
+backend_dir = brick_game/
+sub_frontend_dir = cli
+sub_backend_dir = tetris
 install_dir = $(project_name)
 
 #---== COMPILER ==---#
@@ -15,25 +15,39 @@ LDFLAGS = -lcheck -lsubunit -lm -lncurses
 VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 
 #---== COMPILE_RULES ==---#
-all: 
+all: rebuild
 
 
+#---== INSTALL ==---#
 install: install_backend install_frontend game.o
 	mkdir -p $(install_dir)
+	@echo "Game install"
 
 install_backend:
 	cd $(backend_dir)
 	$(MAKE) s21_backend.a target_dir=$(sub_backend_dir)
-	cd ../..
+	cd ..
 
 install_frontend:
 	cd $(frontend_dir)
 	$(MAKE) s21_frontend.a target_dir=$(sub_backend_dir)
-	cd ../..
+	cd ..
 
+#---== UNINSTALL ==---#
+uninstall: uninstall_backend uninstall_frontend
+	@echo "Game uninstall"
 
-uninstall:
+uninstall_backend:
+	cd $(backend_dir)
+	$(MAKE) clear target_dir=$(sub_backend_dir)
+	cd ..
 
+uninstall_frontend:
+	cd $(frontend_dir)
+	$(MAKE) s21_frontend.a target_dir=$(sub_backend_dir)
+	cd ..
+
+#---== TEST ==---#
 test: test_backend test_frontend
 	@echo "Test complidet"
 
@@ -49,7 +63,6 @@ test_frontend:
 
 
 dist:
-
 
 #---== CHECK_RULES ==---#
 .PHONY: clang-n clang-i
