@@ -1,4 +1,3 @@
-# TODO: all, install, uninstall, clean, dvi, dist
 # -lpanel -lncurses -lmenu
 
 #---== SETTING_GAME ==---#
@@ -16,11 +15,12 @@ VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=
 
 #---== COMPILE_RULES ==---#
 all: rebuild
-
+# TODO rebuild goal
 
 #---== INSTALL ==---#
 install: install_backend install_frontend game.o
 	mkdir -p $(install_dir)
+# TODO install goal
 	@echo "Game install"
 
 install_backend:
@@ -35,6 +35,7 @@ install_frontend:
 
 #---== UNINSTALL ==---#
 uninstall: uninstall_backend uninstall_frontend
+# TODO uninstall goal
 	@echo "Game uninstall"
 
 uninstall_backend:
@@ -63,6 +64,7 @@ test_frontend:
 
 
 dist:
+# TODO dist (tar) goal
 
 #---== CHECK_RULES ==---#
 .PHONY: clang-n clang-i
@@ -72,8 +74,8 @@ clang-n:
 clang-i:
 	find . -iname '*.h' -o -iname '*.c' | xargs clang-format -i -style=file:../materials/linters/.clang-format
 
-valgrind: val = valgrind
-valgrind: test
+# valgrind: val = valgrind
+# valgrind: test
 
 #---== REPORT ==---#
 gcov_report: gcov_report_backend gcov_report_frontend
@@ -110,19 +112,20 @@ deps:
 	pip install gcovr
 
 dvi:
+# TODO dvi (document) goal
 
 #---== CLEAN ==---#
-.PHONY: clean clean_gcov clean_obj clean_doc
-clean: clean_doc
-	@rm -rf $(obj_list) $(gcov_list)
-	@rm -rf $(lib_name) $(test_lib_name) test
-	@rm -rf $(report_dir) $(build_dir) $(bin_dir)
+# TODO clean_dvi goal
+.PHONY: clean
+clean : clean_backend clean_frontend
+	@rm -rf $(install_dir)
+	
+clean_backend:
+	@cd $(backend_dir)
+	@$(MAKE) clean target_dir=$(sub_backend_dir)
+	@cd ../..
 
-clean_obj:
-	@rm -rf $(addprefix $(build_dir)/, $(filter $(func_dir)/%.o, $(obj_list)))
-
-clean_gcov: clean_obj
-	@rm -rf $(report_dir) $(gcov_list)
-
-clean_doc:
-	@rm -rf doc/html doc/latex
+clean_frontend:
+	@cd $(frontend_dir)
+	@$(MAKE) gcov_open target_dir=$(sub_backend_dir)
+	@cd ../..
