@@ -1,7 +1,7 @@
 #ifndef CONROLLER_CLI_TETRIS_H
 #define CONROLLER_CLI_TETRIS_H
 
-#include "../../gui/cli/cli.h"
+#include "../../view/cli/cli.h"
 
 typedef struct {
   int **field;

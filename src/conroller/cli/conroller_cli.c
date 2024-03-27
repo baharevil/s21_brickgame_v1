@@ -3,7 +3,7 @@
 #include <locale.h>
 #include <stdint.h>
 
-#include "conroller_cli_tetris.h"
+#include "conroller_cli.h"
 
 int main() {
   // init ncurses
