@@ -10,6 +10,7 @@ install_dir = $(project_name)
 
 #---== COMPILER ==---#
 CC = gcc
+CFLAGS = -Wall -Werror -Wextra -std=c11 -I. -pedantic
 LDFLAGS = -lcheck -lsubunit -lm -lncurses
 VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 

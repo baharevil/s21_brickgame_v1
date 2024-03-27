@@ -13,7 +13,7 @@ typedef struct {
   int pause;
 } game_info_t;
 
-void game_loop();
+void * controller_loop( void * );
 game_info_t update_current_state();
 
 #endif
