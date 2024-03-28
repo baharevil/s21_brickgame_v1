@@ -1,3 +1,5 @@
+# TODO: fix goal 'doc'
+
 #---== STATIC_VARIABLES ==---#
 project_name = controller
 target_dir = cli
@@ -8,10 +10,15 @@ func_dir = $(target_dir)/functions
 test_dir = $(target_dir)
 report_dir = $(target_dir)/gcovr-report
 
+lib_name := $(project_name).a
+test_lib_name := $(test_dir)/$(project_name)_test.a
+report_name = $(report_dir)/$(project_name).html
+import = $(test_lib_name) $(lib_name)
+
 #---== COMPILER ==---#
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -std=c11 -I. -pedantic
-LDFLAGS = -lpthread -lcheck -lsubunit -lm -lncurses
+LDFLAGS = -lcheck -lsubunit -lm -lncurses -lpthread
 VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 
 #---= GCOVR + OPEN =---#
@@ -28,11 +35,6 @@ find_command = find $(1) -iname "*.c"
 depenc_command = $(addprefix $(build_dir)/, $(filter $(1)/%.o, $(obj_list)))
 find_command_gcov = find $(1) -iname "*.gcda" -o -iname '*.gcno'
 
-report_name = $(report_dir)/$(project_name).html
-lib_name := $(addsuffix .a, $(project_name))
-test_lib_name := $(addprefix  $(test_dir)/, $(addsuffix _test.a, $(project_name)))
-import = $(test_lib_name) $(lib_name)
-
 func_source := $(shell $(call find_command, $(func_dir)))
 test_source = $(shell $(call find_command, $(test_dir)))
 obj_list := $(patsubst %.c, %.o, $(func_source) $(test_source))
@@ -44,31 +46,28 @@ dir_list := $(addprefix $(build_dir)/, $(sort $(dir $(func_source) $(test_source
 all: $(lib_name)
 
 test: bin $(import)
-	# @rm -rf $(bin_dir)/$(bin_sub_dir)
-	$(shell [ ! -w $(bin_dir)/$(bin_sub_dir) ] && mkdir $(bin_dir)/$(bin_sub_dir) )
-	# $(( @mkdir $(bin_dir)/$(bin_sub_dir) ))
 	$(CC) -o $(bin_dir)/$(bin_sub_dir)/$@ -pipe -L. $(addprefix -l:, $(import)) $(LDFLAGS)
 	@$(if $(filter valgrind, $(val)), CK_FORK=no $(val) $(VALFLAGS)) $(bin_dir)/$(bin_sub_dir)/$@
+
+$(lib_name): $(call depenc_command, $(func_dir))
+$(test_lib_name): $(call depenc_command, $(test_dir))
+%.a: build
+	@ar crs $@ $(filter %.o, $?)
+
+$(build_dir)/%.o: %.c
+	$(CC) $(CFLAGS) $(if $(filter $(func_dir)/%.c, $^), $(GCOVFLAGS)) $(DEBUG) -c $^ -o $@
 
 debug: DEBUG = -g
 debug: bin_sub_dir = debug
 debug: clean_obj test
 
 build:
-	@echo $(dir_list)
-	$(shell [ ! -w $(build_dir) ] && mkdir $(build_dir) )
-	$(shell [ ! -w $(dir_list) ] && mkdir $(dir_list) )
+	@$(shell [ ! -w $(build_dir) ] && mkdir $(build_dir) )
+	@$(shell [ ! -w $(dir_list) ] && mkdir $(dir_list) )
 
 bin:	
-	$(shell [ ! -w $(bin_dir) ] && mkdir $(bin_dir) )
-
-$(lib_name): $(call depenc_command, $(func_dir))
-$(test_lib_name): $(call depenc_command, $(test_dir))
-%.a: build
-	ar crs $@ $(filter %.o, $?)
-
-$(build_dir)/%.o: %.c
-	$(CC) $(CFLAGS) $(if $(filter $(func_dir)/%.c, $^), $(GCOVFLAGS)) $(DEBUG) -c $^ -o $@
+	@$(shell [ ! -w $(bin_dir) ] && mkdir $(bin_dir) )
+	@$(shell [ ! -w $(bin_dir)/$(bin_sub_dir) ] && mkdir $(bin_dir)/$(bin_sub_dir) )
 
 #-----=== CHECK_RULES ===------#
 .PHONY: clang-n clang-i
