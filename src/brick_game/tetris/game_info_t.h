@@ -1,7 +1,5 @@
-#ifndef CONROLLER_CLI_TETRIS_H
-#define CONROLLER_CLI_TETRIS_H
-
-#include "../../view/cli/cli.h"
+#ifndef GAME_INFO_T
+#define GAME_INFO_T
 
 typedef struct {
   int **field;
@@ -13,7 +11,6 @@ typedef struct {
   int pause;
 } game_info_t;
 
-void *controller_loop(void *);
 game_info_t update_current_state();
 
 #endif
