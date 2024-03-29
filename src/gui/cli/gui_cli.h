@@ -24,8 +24,11 @@ typedef enum {
     Action
 } UserAction_t;
 
-int gui_init(pthreads *);
+int gui_init(runtime_t *);
 int gui(pthread_cond_t *, pthread_mutex_t *);
+
+// Точка входа потока
+void* (*model_loop)(void*) = (void* (*)(void*))gui_init; 
 
 int render(int **);
 

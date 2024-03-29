@@ -18,10 +18,13 @@ typedef struct {
   pthread_condattr_t do_render_attr;
   pthread_mutex_t mutex;
   pthread_mutexattr_t mutex_attr;
-} pthreads;
+  int game_stop;
+  int model_stop;
+  int gui_stop;
+} runtime_t;
 
-int controller_init(pthreads *);
-
-void *controller_loop(void *);
+int controller_init(runtime_t *);
+int controller_init(runtime_t *);
+void* controller_loop(void *);
 
 #endif

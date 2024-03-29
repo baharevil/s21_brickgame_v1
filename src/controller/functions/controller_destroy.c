@@ -4,7 +4,7 @@
 
 #include "controller.h"
 
-int controller_init(pthreads *data) {
+int controller_init(runtime_t *data) {
   int code = 0;
   
   code = (data == NULL) * EFAULT;

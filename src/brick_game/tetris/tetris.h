@@ -5,8 +5,10 @@
 
 #include "game_t.h"
 
-int tetris_init(pthreads *);
+int tetris_init(runtime_t *);
 int tetris(game_t *);
 
+// Точка входа потока
+void* (*model_loop)(void*) = (void* (*)(void*))tetris_init;
 
 #endif
