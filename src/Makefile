@@ -1,7 +1,8 @@
 #---== COMPILER ==---#
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -std=c11 -I. -pedantic
-LDFLAGS = -lcheck -lsubunit -lm -lncurses -lpthread $(controller)/controller.a $(model)/tetris.a $(gui)/gui.a
+LDFLAGS = -lcheck -lsubunit -lm -lncurses -lpthread -l:controller.a $(model)/tetris.a $(gui)/gui.a
+LDIRS = -L$(controller) -L$(model) -L$(gui)
 VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 # -lpanel -lncurses -lmenu
 
@@ -21,7 +22,7 @@ all: $(project_name)
 # TODO rebuild goal
 
 $(project_name): $(controller)/controller.a $(model)/tetris.a $(gui)/gui.a
-	$(CC) $(LDFLAGS) $(controller)/controller.o -o $(project_name)
+	$(CC) $(LDIRS) $(LDFLAGS) $(controller)/controller.o -o $(project_name)
 
 $(controller)/controller.a:
 	$(MAKE) -C controller
