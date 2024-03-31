@@ -1,7 +1,7 @@
 #ifndef GUI_CLI_H
 #define GUI_CLI_H
 
-#include "../../controller/controller.h"
+#include "../../controller/runtime_t.h"
 
 #include "../../brick_game/tetris/game_info_t.h"
 
@@ -25,10 +25,7 @@ typedef enum {
 } UserAction_t;
 
 int gui_init(runtime_t *);
-int gui(pthread_cond_t *, pthread_mutex_t *);
-
-// Точка входа потока
-void* (*model_loop)(void*) = (void* (*)(void*))gui_init; 
+int gui_loop(pthread_cond_t *, pthread_mutex_t *);
 
 int render(int **);
 

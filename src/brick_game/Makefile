@@ -1,18 +1,18 @@
+#---== COMPILER ==---#
+CC = gcc
+CFLAGS = -Wall -Werror -Wextra -std=c11 -I./tetris  -pedantic
+LDFLAGS = -lcheck -lsubunit -lpthread
+VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
+
 #---== STATIC_VARIABLES ==---#
-project_name = s21_backend
-target_dir = 
+project_name = tetris
+target_dir = tetris
 bin_dir	= $(target_dir)/bin
 bin_sub_dir = realese
 build_dir = $(target_dir)/build
-func_dir = $(target_dir)/function
-test_dir = $(target_dir)/test
+func_dir = $(target_dir)/functions
+test_dir = $(target_dir)/tests
 report_dir = $(target_dir)/gcovr-report
-
-#---== COMPILER ==---#
-CC = gcc
-CFLAGS = -Wall -Werror -Wextra -std=c11 -I. -pedantic
-LDFLAGS = -lcheck -lsubunit -lm
-VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 
 #---= GCOVR + OPEN =---#
 GCOVR := $(shell command -v gcovr 2> /dev/null)
@@ -25,7 +25,7 @@ OPEN_CMD := $(if $(filter Linux, $(OS)), xdg-open, open)
 
 #---= DYNAMIC_VARIABLES =---#
 find_command = find $(1) -iname "*.c"
-depenc_command = $(addprefix $(build_dir)/, $(filter $(1)/%.o, $(obj_list)))
+depenc_command = $(obj_list)
 find_command_gcov = find $(1) -iname "*.gcda" -o -iname '*.gcno'
 
 report_name = $(report_dir)/$(project_name).html
@@ -54,16 +54,16 @@ debug: bin_sub_dir = debug
 debug: clean_obj test
 
 build:
-	@echo $(dir_list)
-	@mkdir $(build_dir)
-	@mkdir $(dir_list)
+	@$(shell [ ! -w $(build_dir) ] && mkdir $(build_dir) )
+	@$(shell [ ! -w $(dir_list) ] && mkdir $(dir_list) )
 
-bin:	
-	@mkdir $(bin_dir)
+bin:
+	@$(shell [ ! -w $(bin_dir) ] && mkdir $(bin_dir) )
+	@$(shell [ ! -w $(bin_dir)/$(bin_sub_dir) ] && mkdir $(bin_dir)/$(bin_sub_dir) )
 
 $(lib_name): $(call depenc_command, $(func_dir))
 $(test_lib_name): $(call depenc_command, $(test_dir))
-%.a: build
+%.a:
 	ar crs $@ $(filter %.o, $?)
 
 $(build_dir)/%.o: %.c

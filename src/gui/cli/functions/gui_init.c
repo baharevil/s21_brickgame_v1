@@ -4,9 +4,9 @@
 #include <pthread.h>
 
 #include "../../../controller/runtime_t.h"
-#include "tetris.h"
+#include "gui_cli.h"
 
-void * tetris_init(runtime_t *runtime) {
+int tetris_init(runtime_t *runtime) {
   int code = 0;
 
   code = (runtime == NULL) * EFAULT;
@@ -16,7 +16,7 @@ void * tetris_init(runtime_t *runtime) {
     pthread_t self_tid = pthread_self();
     
     pthread_mutex_lock(&data->mutex);
-    data->model = self_tid;
+    data->gui = self_tid;
     pthread_mutex_unlock(&data->mutex);    
     
     /* No other thread is going to join() this one - прикольно,
@@ -25,8 +25,8 @@ void * tetris_init(runtime_t *runtime) {
   }
 
   if (!code) {
-    game_t game = {0};
-    tetris_loop(&game);
+    // UserAction_t action = {0};
+    code = gui_loop(&runtime->do_input, &runtime->mutex);
   }
 
   pthread_exit(0);

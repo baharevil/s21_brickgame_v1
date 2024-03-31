@@ -2,10 +2,11 @@
 #include <errno.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <stdio.h>
 
 #include "controller.h"
 
-void *controller_loop(void *runtime) {
+int controller_loop(runtime_t *runtime) {
   int code = 0;
 
   code = (runtime == NULL) * EFAULT;

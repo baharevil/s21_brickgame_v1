@@ -4,7 +4,7 @@
 
 #include "controller.h"
 
-int controller_init(runtime_t *data) {
+int controller_destroy(runtime_t *data) {
   int code = 0;
   
   code = (data == NULL) * EFAULT;
@@ -17,7 +17,9 @@ int controller_init(runtime_t *data) {
     pthread_attr_destroy(&data->gui_attr);
     pthread_condattr_destroy(&data->do_render_attr);
     pthread_cond_destroy(&data->do_render);
-    pthread_mutexattr_destroy(&data->model_attr);
+    pthread_condattr_destroy(&data->do_input_attr);
+    pthread_cond_destroy(&data->do_input);
+    pthread_mutexattr_destroy(&data->mutex_attr);
     pthread_mutex_destroy(&data->mutex);
   }
 
