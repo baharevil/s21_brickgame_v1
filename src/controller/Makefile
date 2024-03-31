@@ -101,7 +101,7 @@ clean: clean_doc
 	@rm -rf $(obj_list) $(gcov_list)
 	@rm -rf $(lib_name) $(test_lib_name) test
 	@rm -rf $(report_dir) $(build_dir) $(bin_dir)
-	@rm $(project_name).o
+	@rm -rf $(project_name).o
 
 clean_obj:
 	@rm -rf $(addprefix $(build_dir)/, $(filter $(func_dir)/%.o, $(obj_list)))
