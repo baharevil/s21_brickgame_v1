@@ -6,7 +6,7 @@
 #include "../../../controller/runtime_t.h"
 #include "tetris.h"
 
-void * tetris_init(runtime_t *runtime) {
+void* tetris_init(runtime_t *runtime) {
   int code = 0;
 
   code = (runtime == NULL) * EFAULT;

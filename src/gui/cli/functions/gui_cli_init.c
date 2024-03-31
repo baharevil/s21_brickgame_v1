@@ -6,7 +6,7 @@
 #include "../../../controller/runtime_t.h"
 #include "gui_cli.h"
 
-int tetris_init(runtime_t *runtime) {
+void* gui_cli_init(runtime_t *runtime) {
   int code = 0;
 
   code = (runtime == NULL) * EFAULT;
@@ -26,7 +26,7 @@ int tetris_init(runtime_t *runtime) {
 
   if (!code) {
     // UserAction_t action = {0};
-    code = gui_loop(&runtime->do_input, &runtime->mutex);
+    code = gui_cli_loop(&runtime->do_input, &runtime->mutex);
   }
 
   pthread_exit(0);

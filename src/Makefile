@@ -20,16 +20,16 @@ gui = gui
 all: $(project_name)
 # TODO rebuild goal
 
-$(project_name): $(controller)/controller.a $(model)/tetris.a $(gui)/cli/gui.a
+$(project_name): $(controller)/controller.a $(model)/tetris.a $(gui)/gui.a
 	$(CC) $(LDFLAGS) $(controller)/controller.o -o $(project_name)
 
 $(controller)/controller.a:
 	$(MAKE) -C controller
 
-$(model)/tetris/tetris.a:
+$(model)/tetris.a:
 	$(MAKE) -C brick_game
 
-$(gui)/cli/gui.a:
+$(gui)/gui.a:
 	$(MAKE) -C gui
 
 #---== INSTALL ==---#
