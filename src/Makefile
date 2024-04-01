@@ -22,7 +22,7 @@ all: $(project_name)
 # TODO rebuild goal
 
 $(project_name): $(controller)/controller.a $(model)/tetris.a $(gui)/gui.a
-	$(CC) $(LDIRS) $(LDFLAGS) $(controller)/controller.o -o $(project_name)
+	$(CC) $(LDIRS) $(controller)/controller.o $(LDFLAGS) -o $(project_name)
 
 $(controller)/controller.a:
 	$(MAKE) -C controller

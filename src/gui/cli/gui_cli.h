@@ -11,7 +11,7 @@ GUI_CLI function here:
 - Render
 */
 
-int height = 20, width = 10;
+typedef enum { height = 20, width = 10 } field_size;
 
 typedef enum {
     Start,
