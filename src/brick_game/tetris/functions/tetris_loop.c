@@ -1,16 +1,31 @@
+//TODO: Инициализация и запуск основного цикла
 #include <stddef.h>
 #include <errno.h>
+#include <pthread.h>
 
-#include "game_t.h"
+#include "../../../controller/runtime_t.h"
+#include "tetris.h"
 
-int tetris_loop(game_t *game) {
-    int code = 0;
+void* tetris_loop(runtime_t *runtime) {
+  int code = 0;
 
-    code = (game == NULL) * EFAULT;
+  code = (runtime == NULL) * EFAULT;
+  
+  if (!code) {
+    pthread_t self_tid = pthread_self();
+    runtime->model = self_tid;
+    
+    /* No other thread is going to join() this one - прикольно,
+    * самоотсоединение:*/
+    pthread_detach(self_tid);
+  }
 
-    while (1) {
+  if (!code) {
+    // game_t game = {0};
+    while (runtime->model_stop) {
         // endless
     }
-    
-    return code;
+  }
+
+  pthread_exit(0);
 }

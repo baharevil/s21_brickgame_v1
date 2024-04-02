@@ -10,7 +10,7 @@ report_dir = $(target_dir)/gcovr-report
 
 #---== COMPILER ==---#
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -std=c11 -I./cli -pedantic
+CFLAGS = -Wall -Werror -Wextra -std=c11 -I./cli -pedantic -g
 LDFLAGS = -lcheck -lsubunit -lm
 VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 

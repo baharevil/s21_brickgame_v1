@@ -1,6 +1,6 @@
 #---== COMPILER ==---#
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -std=c11 -I. -pedantic
+CFLAGS = -Wall -Werror -Wextra -std=c11 -I. -pedantic -g
 LDFLAGS = -lcheck -lsubunit -lpthread
 VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 

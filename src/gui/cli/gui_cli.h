@@ -24,8 +24,7 @@ typedef enum {
     Action
 } UserAction_t;
 
-void * gui_cli_init(runtime_t *);
-int gui_cli_loop(pthread_cond_t *, pthread_mutex_t *);
+void * gui_cli_loop(runtime_t *);
 
 int render(int **);
 

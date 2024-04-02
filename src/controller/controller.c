@@ -6,28 +6,36 @@
 
 int main() {
   int code = 0;
-
   runtime_t runtime = {0};
+
   // Model
-  extern void* tetris_init(runtime_t *);
-  void* (*model_init)(void*) = (void* (*)(void*))tetris_init;
+  extern void* tetris_loop(runtime_t *);
+  void* (*model_loop)(void*) = (void* (*)(void*))tetris_loop;
 
   // GUI
-  extern void* gui_cli_init(runtime_t *);
-  void* (*gui_init)(void*) = (void* (*)(void*))gui_cli_init;
+  extern void* gui_cli_loop(runtime_t *);
+  void* (*gui_loop)(void*) = (void* (*)(void*))gui_cli_loop;
+
+  // Controller
+  void* (*input_controller)(void*) = (void* (*)(void*))controller_loop;
 
   code = controller_init(&runtime);
 
-  if (!code) code = pthread_create(&runtime.model, &runtime.model_attr, model_init, (void *)&runtime);
-  if (!code) code = pthread_create(&runtime.gui, &runtime.gui_attr, gui_init, (void *)&runtime);
+  if (!code) code = pthread_create(&runtime.model, &runtime.model_attr, model_loop, (void *)&runtime);
+  if (!code) code = pthread_create(&runtime.gui, &runtime.gui_attr, gui_loop, (void *)&runtime);
+  if (!code) code = pthread_create(&runtime.controller, &runtime.controller_attr, input_controller, (void *)&runtime);
 
   if (!code) {
-    code = controller_loop(&runtime);
+    while (!runtime.game_stop) {
+      sleep(1);
+    }
+    runtime.model_stop = 1;
+    runtime.gui_stop = 1;
   }
+
+  sleep(1);
   
   controller_destroy(&runtime);
 
   return code;
 }
-
-

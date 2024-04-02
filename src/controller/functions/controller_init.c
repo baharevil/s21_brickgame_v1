@@ -11,12 +11,20 @@ int controller_init(runtime_t *data) {
   
   if (!code) code = pthread_attr_init(&data->model_attr);
   if (!code) code = pthread_attr_init(&data->gui_attr);
+  if (!code) code = pthread_attr_init(&data->controller_attr);
+
   if (!code) code = pthread_condattr_init(&data->do_input_attr);
   if (!code) code = pthread_cond_init(&data->do_input, &data->do_input_attr);
+  
   if (!code) code = pthread_condattr_init(&data->do_render_attr);
   if (!code) code = pthread_cond_init(&data->do_render, &data->do_render_attr);
-  if (!code) code = pthread_mutexattr_init(&data->mutex_attr);
-  if (!code) code = pthread_mutex_init(&data->mutex, &data->mutex_attr);
+  
+  if (!code) code = pthread_mutexattr_init(&data->stdin_mutex_attr);
+  if (!code) code = pthread_mutex_init(&data->stdin_mutex, &data->stdin_mutex_attr);
+  if (!code) code = pthread_mutexattr_init(&data->stdout_mutex_attr);
+  if (!code) code = pthread_mutex_init(&data->stdout_mutex, &data->stdout_mutex_attr);
+  if (!code) code = pthread_mutexattr_init(&data->cond_mutex_attr);
+  if (!code) code = pthread_mutex_init(&data->cond_mutex, &data->cond_mutex_attr);
 
   return code;
 }

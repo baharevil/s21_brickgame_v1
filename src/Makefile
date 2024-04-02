@@ -18,8 +18,11 @@ model = brick_game
 gui = gui
 
 #---== COMPILE_RULES ==---#
+.PHONY: all rebuild
+
 all: $(project_name)
-# TODO rebuild goal
+
+rebuild: clean $(project_name)
 
 $(project_name): $(controller)/controller.a $(model)/tetris.a $(gui)/gui.a
 	$(CC) $(LDIRS) $(controller)/controller.o $(LDFLAGS) -o $(project_name)
@@ -90,8 +93,8 @@ clang-n:
 clang-i:
 	find . -iname '*.h' -o -iname '*.c' | xargs clang-format -i -style=file:../materials/linters/.clang-format
 
-# valgrind: val = valgrind
-# valgrind: test
+valgrind: $(project_name)
+	valgrind --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s $(shell pwd)/$(project_name)
 
 #---== REPORT ==---#
 gcov_report: gcov_report_backend gcov_report_frontend
@@ -138,7 +141,7 @@ clean:
 	$(MAKE) clean -C controller
 	$(MAKE) clean -C brick_game
 	$(MAKE) clean -C gui
-	@rm -rf brick_game_v1
+	@rm -rf s21_brick_game_v1
 	
 # clean_backend:
 # 	@cd $(backend_dir)

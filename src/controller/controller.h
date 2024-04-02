@@ -10,7 +10,7 @@
 #include "runtime_t.h"
 
 int controller_init(runtime_t *);
-int controller_loop(runtime_t *);
+void* controller_loop(runtime_t *);
 int controller_destroy(runtime_t *);
 
 #endif

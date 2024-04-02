@@ -5,7 +5,6 @@
 
 #include "game_t.h"
 
-void * tetris_init(runtime_t *);
-int tetris_loop(game_t *);
+void * tetris_loop(runtime_t *);
 
 #endif
