@@ -2,7 +2,10 @@
 #include <errno.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <termios.h>
+
 #include <stdio.h>
+#include <wchar.h>
 
 #include "controller.h"
 
@@ -17,23 +20,30 @@ void* controller_loop(runtime_t *runtime) {
     
     /* No other thread is going to join() this one - прикольно,
     * самоотсоединение:*/
-    pthread_detach(self_tid);
+    code = pthread_detach(self_tid);
   }
+
 
   if (!code) {
-    int count = 5;
-    // runtime_t *data = (runtime_t *)runtime;
-    while (!runtime->game_stop) {
-        // устанавливаем блокировку
-        pthread_mutex_lock(&runtime->stdout_mutex);
-        // Операции ввода-вывода, изменение переменных, памяти.
-        printf("Controller check %d\n", count--);
-        // снимаем блокировку
-        pthread_mutex_unlock(&runtime->stdout_mutex);
+    // Выключение канонического режима
+    struct termios t, old;
+    tcgetattr(0, &t);
+    old = t;
+    t.c_lflag &= ~(ISIG | ICANON | ECHO);
+    t.c_cc[VMIN] = 1;
+    t.c_cc[VTIME] = 0;
+    tcsetattr(0, TCSANOW, &t);
 
-        runtime->game_stop = (count < 1);
-        sleep(1);
+    unsigned key = 0;
+    pthread_mutex_lock(&runtime->stdin_mutex);
+    while (!runtime->game_stop) {
+      key = getc(stdin);
+        wprintf(L"key: %u\n", key);
+      if (key == L'q') runtime->game_stop = 1;
     }
+    tcsetattr(0, TCSANOW, &old);
+    pthread_mutex_unlock(&runtime->stdin_mutex);
   }
+
   pthread_exit(0);
 }

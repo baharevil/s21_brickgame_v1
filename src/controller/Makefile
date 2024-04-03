@@ -1,7 +1,7 @@
 #---== COMPILER ==---#
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -std=c11 -I. -pedantic -g
-LDFLAGS = -lcheck -lsubunit -lpthread
+LDFLAGS = -lcheck -lsubunit -lpthread -lncurses
 VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 
 #---== STATIC_VARIABLES ==---#

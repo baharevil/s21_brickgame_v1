@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <errno.h>
 #include <pthread.h>
+#include <ncurses.h>
 
 #include "../../../controller/runtime_t.h"
 #include "gui_cli.h"

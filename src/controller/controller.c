@@ -33,7 +33,7 @@ int main() {
     runtime.gui_stop = 1;
   }
 
-  sleep(1);
+  // sleep(1);
   
   controller_destroy(&runtime);
 
