@@ -1,6 +1,6 @@
 #---== STATIC_VARIABLES ==---#
 project_name = gui
-target_dir = cli
+target_dir = 
 bin_dir	= $(target_dir)/bin
 bin_sub_dir = realese
 build_dir = $(target_dir)/build
@@ -10,8 +10,8 @@ report_dir = $(target_dir)/gcovr-report
 
 #---== COMPILER ==---#
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -std=c11 -I./cli -pedantic -g
-LDFLAGS = -lcheck -lsubunit -lm
+CFLAGS = -Wall -Werror -Wextra -std=c11 -I./$(target_dir) -pedantic -g
+LDFLAGS = -lcheck -lsubunit -lm -lncurses
 VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 
 #---= GCOVR + OPEN =---#

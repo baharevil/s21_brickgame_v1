@@ -1,86 +1,47 @@
 #---== COMPILER ==---#
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -std=c11 -I. -pedantic
-LDFLAGS = -lcheck -lsubunit -lm -lncurses -lpthread -l:controller.a $(model)/tetris.a $(gui)/gui.a
-LDIRS = -L$(controller) -L$(model) -L$(gui)
 VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 # -lpanel -lncurses -lmenu
 
 #---== SETTING_GAME ==---#
 project_name = s21_brick_game_v1
-frontend_dir = gui/
-backend_dir = brick_game/
-sub_frontend_dir = cli
+controller_dir = controller
+backend_dir = brick_game
+frontend_dir = gui
 sub_backend_dir = tetris
+sub_frontend_dir = cli
 install_dir = $(project_name)
-controller = controller
-model = brick_game
-gui = gui
+import := $(controller_dir)/controller.a $(backend_dir)/tetris.a $(frontend_dir)/gui.a
 
-#---== COMPILE_RULES ==---#
 .PHONY: all rebuild
 
 all: $(project_name)
+rebuild: uninstall $(project_name)
 
-rebuild: clean $(project_name)
+$(project_name): $(import)
+	$(CC) -L. $(controller_dir)/controller.o $(addprefix -l:, $^) -o $(project_name)
 
-$(project_name): $(controller)/controller.a $(model)/tetris.a $(gui)/gui.a
-	$(CC) $(LDIRS) $(controller)/controller.o $(LDFLAGS) -o $(project_name)
+$(backend_dir)/tetris.a:
+	$(MAKE) --directory=$(backend_dir) target_dir=$(sub_backend_dir)
 
-$(controller)/controller.a:
-	$(MAKE) -C controller
+$(frontend_dir)/gui.a:
+	$(MAKE) --directory=$(frontend_dir) target_dir=$(sub_frontend_dir)
 
-$(model)/tetris.a:
-	$(MAKE) -C brick_game
+$(controller_dir)/controller.a:
+	$(MAKE) --directory=$(controller_dir)
 
-$(gui)/gui.a:
-	$(MAKE) -C gui
-
+# TODO
 #---== INSTALL ==---#
-install: install_backend install_frontend game.o
-	mkdir -p $(install_dir)
-# TODO install goal
-	@echo "Game install"
-
-install_backend:
-	cd $(backend_dir)
-	$(MAKE) s21_backend.a target_dir=$(sub_backend_dir)
-	cd ..
-
-install_frontend:
-	cd $(frontend_dir)
-	$(MAKE) s21_frontend.a target_dir=$(sub_backend_dir)
-	cd ..
+# install: 
 
 #---== UNINSTALL ==---#
-uninstall: uninstall_backend uninstall_frontend
-# TODO uninstall goal
+uninstall: clean
 	@echo "Game uninstall"
 
-uninstall_backend:
-	cd $(backend_dir)
-	$(MAKE) clear target_dir=$(sub_backend_dir)
-	cd ..
-
-uninstall_frontend:
-	cd $(frontend_dir)
-	$(MAKE) s21_frontend.a target_dir=$(sub_backend_dir)
-	cd ..
-
 #---== TEST ==---#
-test: test_backend test_frontend
+test:
+	$(MAKE) test --directory=$(backend_dir) target_dir=$(sub_backend_dir)
 	@echo "Test complidet"
-
-test_backend:
-	@cd $(backend_dir)
-	@$(MAKE) test target_dir=$(sub_backend_dir)
-	@cd ../..
-
-test_frontend:
-	@cd $(frontend_dir)
-	@$(MAKE) test target_dir=$(sub_backend_dir)
-	@cd ../..
-
 
 dist:
 # TODO dist (tar) goal
@@ -98,34 +59,12 @@ valgrind: $(project_name)
 
 #---== REPORT ==---#
 gcov_report: gcov_report_backend gcov_report_frontend
-	@echo
+	$(MAKE) gcov_report --directory=$(backend_dir) target_dir=$(sub_backend_dir)
 	@echo "If you want open use: make gcov_open"
-	@echo
-
-gcov_report_backend:
-	@cd $(backend_dir)
-	@$(MAKE) gcov_report target_dir=$(sub_backend_dir)
-	@cd ../..
-
-gcov_report_frontend:
-	@cd $(frontend_dir)
-	@$(MAKE) gcov_report target_dir=$(sub_backend_dir)
-	@cd ../..
 
 gcov_open: gcov_open_backend gcov_open_frontend
-	@echo
-	@echo "Open complet"
-	@echo
-
-gcov_open_backend:
-	@cd $(backend_dir)
-	@$(MAKE) gcov_open target_dir=$(sub_backend_dir)
-	@cd ../..
-
-gcov_open_frontend:
-	@cd $(frontend_dir)
-	@$(MAKE) gcov_open target_dir=$(sub_backend_dir)
-	@cd ../..
+	$(MAKE) gcov_open --directory=$(backend_dir) target_dir=$(sub_backend_dir)
+	@echo "Open completed"
 
 deps:
 	pip install gcovr
@@ -134,21 +73,14 @@ dvi:
 # TODO dvi (document) goal
 
 #---== CLEAN ==---#
-# TODO clean_dvi goal
 .PHONY: clean
-# clean : clean_backend clean_frontend
-clean:
-	$(MAKE) clean -C controller
-	$(MAKE) clean -C brick_game
-	$(MAKE) clean -C gui
+# TODO clean_dvi goal
+clean: clean_backend clean_frontend
+	$(MAKE) clean --directory=$(controller_dir)
 	@rm -rf s21_brick_game_v1
 	
-# clean_backend:
-# 	@cd $(backend_dir)
-# 	@$(MAKE) clean target_dir=$(sub_backend_dir)
-# 	@cd ../..
+clean_backend:
+	@$(MAKE) clean --directory=$(backend_dir) target_dir=$(sub_backend_dir)
 
-# clean_frontend:
-# 	@cd $(frontend_dir)
-# 	@$(MAKE) gcov_open target_dir=$(sub_backend_dir)
-# 	@cd ../..
+clean_frontend:
+	@$(MAKE) clean --directory=$(frontend_dir) target_dir=$(sub_frontend_dir)

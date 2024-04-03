@@ -1,18 +1,18 @@
-#---== COMPILER ==---#
-CC = gcc
-CFLAGS = -Wall -Werror -Wextra -std=c11 -I./tetris  -pedantic -g
-LDFLAGS = -lcheck -lsubunit -lpthread
-VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
-
 #---== STATIC_VARIABLES ==---#
 project_name = tetris
-target_dir = tetris
+target_dir = 
 bin_dir	= $(target_dir)/bin
 bin_sub_dir = realese
 build_dir = $(target_dir)/build
 func_dir = $(target_dir)/functions
 test_dir = $(target_dir)/tests
 report_dir = $(target_dir)/gcovr-report
+
+#---== COMPILER ==---#
+CC = gcc
+CFLAGS = -Wall -Werror -Wextra -std=c11 -I./$(target_dir) -pedantic -g
+LDFLAGS = -lcheck -lsubunit -lpthread
+VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 
 #---= GCOVR + OPEN =---#
 GCOVR := $(shell command -v gcovr 2> /dev/null)
@@ -43,15 +43,13 @@ dir_list := $(addprefix $(build_dir)/, $(sort $(dir $(func_source) $(test_source
 .PHONY: test 
 all: $(lib_name)
 
-test: bin $(import)
-	@rm -rf $(bin_dir)/$(bin_sub_dir)
-	@mkdir $(bin_dir)/$(bin_sub_dir)
-	$(CC) -o $(bin_dir)/$(bin_sub_dir)/$@ -pipe -L. $(addprefix -l:, $(import)) $(LDFLAGS)
-	@$(if $(filter valgrind, $(val)), CK_FORK=no $(val) $(VALFLAGS)) $(bin_dir)/$(bin_sub_dir)/$@
-
 debug: DEBUG = -g
 debug: bin_sub_dir = debug
 debug: clean_obj test
+
+test: bin $(import)
+	$(CC) -o $(bin_dir)/$(bin_sub_dir)/$@ -pipe -L. $(addprefix -l:, $(import)) $(LDFLAGS)
+	@$(if $(filter valgrind, $(val)), CK_FORK=no $(val) $(VALFLAGS)) $(bin_dir)/$(bin_sub_dir)/$@
 
 build:
 	@$(shell [ ! -w $(build_dir) ] && mkdir $(build_dir) )
