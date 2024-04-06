@@ -2,9 +2,11 @@
 #include <errno.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <poll.h>
 
 #include <stdio.h>
 #include <wchar.h>
+#include <string.h>
 
 #include "controller.h"
 
@@ -22,14 +24,31 @@ void* controller_loop(runtime_t *runtime) {
     code = pthread_detach(self_tid);
   }
 
+  if (!code) code = canonical_mode(1);
+
   if (!code) {
-    unsigned key = 0;
-    canonical_mode(1);
+    char key[4] = {0};
+    int len = 0;
+    UserAction_t action = 0;
+    size_t poll_code = 0;
+    struct pollfd event = {0};
+    event.events = POLLIN;
+    event.fd = STDIN_FILENO;
+    
+    // Основной цикл
     pthread_mutex_lock(&runtime->stdin_mutex);
-    while (!runtime->game_stop) {
-      key = getc(stdin);
-        wprintf(L"key: %u\n", key);
-      if (key == L'q') runtime->game_stop = 1;
+    while (!code && !atomic_load(&runtime->game_stop)) {
+      poll_code = poll(&event, 1, -1);
+      if (poll_code > 0 && event.revents & POLLIN) {
+        event.revents = 0;
+        len = read(STDIN_FILENO, key, 4);
+        key[len] = 0;
+        code = get_action(&action, key);
+        if (!code && action) atomic_store(&runtime->to_model, (int)action);
+        if (action == Terminate) atomic_store(&runtime->game_stop, 1);
+      } else {
+        atomic_store(&runtime->gui_stop, 1);
+      }
     }
     pthread_mutex_unlock(&runtime->stdin_mutex);
     canonical_mode(0);

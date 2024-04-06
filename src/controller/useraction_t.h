@@ -2,6 +2,7 @@
 #define USERACTION_T
 
 typedef enum {
+    none,
     Start,
     Pause,
     Terminate,

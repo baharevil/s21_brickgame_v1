@@ -26,5 +26,9 @@ int controller_init(runtime_t *data) {
   if (!code) code = pthread_mutexattr_init(&data->cond_mutex_attr);
   if (!code) code = pthread_mutex_init(&data->cond_mutex, &data->cond_mutex_attr);
 
+  ATOMIC_VAR_INIT(data->game_stop);
+  ATOMIC_VAR_INIT(data->model_stop);
+  ATOMIC_VAR_INIT(data->gui_stop);
+
   return code;
 }

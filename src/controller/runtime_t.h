@@ -2,6 +2,7 @@
 #define RUNTIME_T
 
 #include <stdbool.h>
+#include <stdatomic.h>
 #include <pthread.h>
 
 typedef struct {
@@ -28,9 +29,14 @@ typedef struct {
   pthread_mutexattr_t stdout_mutex_attr;
   pthread_mutexattr_t cond_mutex_attr;
   // Flags
-  bool game_stop;
-  bool model_stop;
-  bool gui_stop;
+  atomic_bool game_stop;
+  atomic_bool model_stop;
+  atomic_bool gui_stop;
+  // Message boxes
+  atomic_int to_model;
+  atomic_int to_gui;
+  atomic_int to_controller;
+
 } runtime_t;
 
 #endif
