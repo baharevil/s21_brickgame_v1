@@ -28,9 +28,7 @@ int get_action(UserAction_t *action, char *array) {
       { result = Pause; printf("Pause\n"); }
     else if (array[0] == 'q')
       { result = Terminate; printf("Terminate\n"); }
-    else
-      printf("array: %s\n", array);
-        
+  
     *action = result;    
   }
 

@@ -6,7 +6,25 @@
 
 #include "game_t.h"
 
-void * tetris_loop(runtime_t *);
+typedef void (*action)(game_t *);
+
+void* tetris_loop(runtime_t *);
+
+void start_fn(game_t *);
+void pause_fn(game_t *);
+void spawn_fn(game_t *);
+void move_fn(game_t *);
+void shift_fn(game_t *);
+void connect_fn(game_t *);
+void game_over_fn(game_t *);
+void terminate_fn(game_t *);
+void left_fn(game_t *);
+void right_fn(game_t *);
+void up_fn(game_t *);
+void down_fn(game_t *);
+void action_fn(game_t *);
+
+action fsm(fsm_state, UserAction_t);
 
 void userInput(UserAction_t action, int hold);
 

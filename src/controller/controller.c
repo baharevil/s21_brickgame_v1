@@ -26,11 +26,11 @@ int main() {
   if (!code) code = pthread_create(&runtime.controller, &runtime.controller_attr, input_controller, (void *)&runtime);
 
   if (!code) {
-    while (!runtime.game_stop) {
+    while (!atomic_load(&runtime.game_stop)) {
       sleep(1);
     }
-    runtime.model_stop = 1;
-    runtime.gui_stop = 1;
+    atomic_store(&runtime.model_stop, 1);
+    atomic_store(&runtime.gui_stop, 1);
   }
 
   // sleep(1);

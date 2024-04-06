@@ -30,7 +30,7 @@ void* controller_loop(runtime_t *runtime) {
     char key[4] = {0};
     int len = 0;
     UserAction_t action = 0;
-    size_t poll_code = 0;
+    int poll_code = 0;
     struct pollfd event = {0};
     event.events = POLLIN;
     event.fd = STDIN_FILENO;
@@ -44,7 +44,7 @@ void* controller_loop(runtime_t *runtime) {
         len = read(STDIN_FILENO, key, 4);
         key[len] = 0;
         code = get_action(&action, key);
-        if (!code && action) atomic_store(&runtime->to_model, (int)action);
+        if (!code && action) atomic_store(&runtime->msg_to_model, (int)action);
         if (action == Terminate) atomic_store(&runtime->game_stop, 1);
       } else {
         atomic_store(&runtime->gui_stop, 1);

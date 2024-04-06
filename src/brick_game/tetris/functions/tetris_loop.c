@@ -6,6 +6,8 @@
 #include "../../../controller/runtime_t.h"
 #include "tetris.h"
 
+#include <stdio.h>
+
 void* tetris_loop(runtime_t *runtime) {
   int code = 0;
 
@@ -22,8 +24,11 @@ void* tetris_loop(runtime_t *runtime) {
 
   if (!code) {
     // game_t game = {0};
-    while (runtime->model_stop) {
-        // endless
+    while (!code && !atomic_load(&runtime->model_stop)) {
+      if (atomic_load(&runtime->msg_to_model)) {
+        userInput((UserAction_t)atomic_load(&runtime->msg_to_model), 0);
+        atomic_store(&runtime->msg_to_model, 0);
+      }
     }
   }
 

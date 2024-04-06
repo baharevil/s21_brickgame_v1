@@ -33,9 +33,9 @@ typedef struct {
   atomic_bool model_stop;
   atomic_bool gui_stop;
   // Message boxes
-  atomic_int to_model;
-  atomic_int to_gui;
-  atomic_int to_controller;
+  atomic_int msg_to_model;
+  atomic_int msg_to_gui;
+  atomic_int msg_to_controller;
 
 } runtime_t;
 

@@ -11,6 +11,7 @@
 
 typedef enum {
   start,
+  pause,
   spawn,
   move,
   shift,
