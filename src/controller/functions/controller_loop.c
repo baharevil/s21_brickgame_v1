@@ -45,7 +45,7 @@ void* controller_loop(runtime_t *runtime) {
         key[len] = 0;
         code = get_action(&action, key);
         if (!code && action) atomic_store(&runtime->msg_to_model, (int)action);
-        if (action == Terminate) atomic_store(&runtime->game_stop, 1);
+        // if (action == Terminate) atomic_store(&runtime->game_stop, 1);
       } else {
         atomic_store(&runtime->gui_stop, 1);
       }

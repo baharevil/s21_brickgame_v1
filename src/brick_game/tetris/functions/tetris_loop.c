@@ -6,8 +6,6 @@
 #include "../../../controller/runtime_t.h"
 #include "tetris.h"
 
-#include <stdio.h>
-
 void* tetris_loop(runtime_t *runtime) {
   int code = 0;
 
@@ -15,7 +13,7 @@ void* tetris_loop(runtime_t *runtime) {
   
   if (!code) {
     pthread_t self_tid = pthread_self();
-    runtime->model = self_tid;
+    // runtime->model = self_tid;
     
     /* No other thread is going to join() this one - прикольно,
     * самоотсоединение:*/
@@ -23,11 +21,12 @@ void* tetris_loop(runtime_t *runtime) {
   }
 
   if (!code) {
-    // game_t game = {0};
+    UserAction_t act = None;
     while (!code && !atomic_load(&runtime->model_stop)) {
-      if (atomic_load(&runtime->msg_to_model)) {
-        userInput((UserAction_t)atomic_load(&runtime->msg_to_model), 0);
+      if ((act = (UserAction_t)atomic_load(&runtime->msg_to_model)) > 0) {
+        userInput(act, 0);
         atomic_store(&runtime->msg_to_model, 0);
+        if (act == Terminate) atomic_store(&runtime->game_stop, 1);
       }
     }
   }

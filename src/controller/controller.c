@@ -32,7 +32,7 @@ int main() {
     atomic_store(&runtime.model_stop, 1);
     atomic_store(&runtime.gui_stop, 1);
   }
-
+  // TODO: Здесь должен быть потоковый барьер
   // sleep(1);
   
   controller_destroy(&runtime);

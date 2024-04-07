@@ -10,8 +10,6 @@ GUI_CLI function here:
 - Render
 */
 
-typedef enum { height = 20, width = 10 } field_size;
-
 void * gui_cli_loop(runtime_t *);
 
 int render(int **);

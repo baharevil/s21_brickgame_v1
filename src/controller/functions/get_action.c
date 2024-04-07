@@ -1,7 +1,6 @@
 #include <stddef.h>
 #include <errno.h>
 #include <string.h>
-#include <stdio.h> // temporary
 
 #include "useraction_t.h"
 
@@ -13,21 +12,21 @@ int get_action(UserAction_t *action, char *array) {
 
   if (!code) {
     if (strcmp(array, "\033[A") == 0)
-      { result = Up; printf("Up arrow\n"); }
+      result = Up;
     else if (strcmp(array, "\033[B") == 0)
-      { result = Down; printf("Down arrow\n"); }
+      result = Down;
     else if (strcmp(array, "\033[C") == 0)
-      { result = Right; printf("Right arrow\n"); }
+      result = Right;
     else if (strcmp(array, "\033[D") == 0)
-      { result = Left; printf("Left arrow\n"); }
+      result = Left;
     else if (array[0] == ' ')
-      { result = Action; printf("Action\n"); }
+      result = Action;
     else if (array[0] == 's')
-      { result = Start; printf("Start\n"); }
+      result = Start;
     else if (array[0] == 'p')
-      { result = Pause; printf("Pause\n"); }
+      result = Pause;
     else if (array[0] == 'q')
-      { result = Terminate; printf("Terminate\n"); }
+      result = Terminate;
   
     *action = result;    
   }

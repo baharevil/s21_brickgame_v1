@@ -10,6 +10,7 @@
 #endif
 
 typedef enum {
+  none,
   start,
   pause,
   spawn,
