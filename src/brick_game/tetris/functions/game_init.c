@@ -10,6 +10,12 @@ int game_init(game_t *game) {
   code = (game == NULL) * EINVAL;
 
   if (!code) {
+    game_info_t *temp = calloc(1, sizeof(game_info_t));
+    code = (temp == NULL) * ENOMEM;
+    if (!code) game->game_info = temp;
+  }
+
+  if (!code) {
     int **temp = NULL;
     temp = (int **)malloc(field_height * sizeof(int *));
     code = (temp == NULL) * ENOMEM;
@@ -23,12 +29,16 @@ int game_init(game_t *game) {
       code = (temp == NULL) * ENOMEM;
       if (!code) game->game_info->field[row] = temp;
     }
-    game->state = start;
     game->game_info->score = 0;
     game->game_info->high_score = 0; // TODO: Load HISCORES
     game->game_info->level = 1;
     game->game_info->speed = 100;
     game->game_info->pause = 0;
+
+    game->figure_pos.x = 3;
+    game->figure_pos.x = 0;
+
+    game->state = start;
   }
   
   return code;

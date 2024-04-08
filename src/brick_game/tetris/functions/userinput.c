@@ -5,7 +5,7 @@ void userInput(UserAction_t user_action, int hold) {
   action act = NULL;
   
   // Если игра не инициализирована
-  if (game.state == none)
+  if (game.game_info == NULL)
     game_init(&game);
     
   // Получаем указатель на функцию-обработчик события

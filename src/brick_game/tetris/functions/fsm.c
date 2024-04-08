@@ -6,16 +6,17 @@
 action fsm(fsm_state state, UserAction_t user_action) {
     action result = NULL;
 
-    action fsm_matrix[8][8] = {\
-  // Start  Pause Term       Left  Right Up    Down  none
-    {start_fn, NULL, terminate_fn, NULL, NULL, NULL, NULL, NULL}, // Start
-    {NULL, pause_fn, terminate_fn, NULL, NULL, NULL, NULL, NULL}, // Pause
-    {NULL,  NULL, terminate_fn, NULL, NULL, NULL, NULL, NULL}, // Spawn
-    {NULL, pause_fn, terminate_fn, left_fn, right_fn, up_fn,  down_fn, NULL}, // Move
-    {NULL,  NULL, terminate_fn, NULL, NULL, NULL, NULL, NULL}, // Shift
-    {NULL,  NULL, terminate_fn, NULL, NULL, NULL, NULL, NULL}, // Connect
-    {start_fn, NULL, terminate_fn, NULL, NULL, NULL, NULL, NULL}, // Game Over
-    {NULL,  NULL, NULL,      NULL, NULL, NULL, NULL, NULL}};// Terminate
+    action fsm_matrix[9][8] = {\
+  // None  Start  Pause    Term         Left  Right Up    Down  none
+    {NULL, NULL,  NULL,    NULL,        NULL, NULL, NULL, NULL}, // none
+    {NULL, start_fn, NULL, terminate_fn, NULL, NULL, NULL, NULL}, // start
+    {NULL, NULL, pause_fn, terminate_fn, NULL, NULL, NULL, NULL}, // pause
+    {NULL, NULL,  NULL,    terminate_fn, NULL, NULL, NULL, NULL}, // spawn
+    {NULL, NULL, pause_fn, terminate_fn, left_fn, right_fn, up_fn,  down_fn}, // move
+    {NULL, NULL,  NULL,    terminate_fn, NULL, NULL, NULL, NULL}, // shift
+    {NULL, NULL,  NULL,    terminate_fn, NULL, NULL, NULL, NULL}, // connect
+    {NULL, start_fn, NULL, terminate_fn, NULL, NULL, NULL, NULL}, // game Over
+    {NULL, NULL,  NULL, NULL,      NULL, NULL, NULL, NULL}};// terminate
     
     result = fsm_matrix[state][(int)user_action];
     return result;

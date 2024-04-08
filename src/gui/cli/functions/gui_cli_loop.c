@@ -14,7 +14,7 @@ void* gui_cli_loop(runtime_t *runtime) {
   
   if (!code) {
     pthread_t self_tid = pthread_self();
-    runtime->gui = self_tid;
+    // runtime->gui = self_tid;
     
     /* No other thread is going to join() this one - прикольно,
     * самоотсоединение:*/
@@ -23,7 +23,7 @@ void* gui_cli_loop(runtime_t *runtime) {
 
   if (!code) {
     // UserAction_t action = {0};
-    while (runtime->gui_stop) {
+    while (!atomic_load(&runtime->gui_stop)) {
         // endless
     }
   }

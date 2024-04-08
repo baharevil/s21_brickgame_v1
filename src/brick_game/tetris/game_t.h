@@ -9,7 +9,12 @@
 #include "game_info_t.h"
 #endif
 
-typedef enum {
+typedef struct position {
+  int x;
+  int y;
+} position;
+
+typedef enum fsm_state {
   none,
   start,
   pause,
@@ -20,8 +25,9 @@ typedef enum {
   game_over
 } fsm_state;
 
-typedef struct {
+typedef struct game_t {
   game_info_t *game_info;
+  position figure_pos;
   fsm_state state;
 } game_t;
 

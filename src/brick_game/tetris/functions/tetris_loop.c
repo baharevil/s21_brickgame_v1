@@ -22,11 +22,11 @@ void* tetris_loop(runtime_t *runtime) {
 
   if (!code) {
     UserAction_t act = None;
-    while (!code && !atomic_load(&runtime->model_stop)) {
+    while (!atomic_load(&runtime->model_stop)) {
       if ((act = (UserAction_t)atomic_load(&runtime->msg_to_model)) > 0) {
         userInput(act, 0);
         atomic_store(&runtime->msg_to_model, 0);
-        if (act == Terminate) atomic_store(&runtime->game_stop, 1);
+        if (act == Terminate) atomic_store(&runtime->model_stop, 1);
       }
     }
   }
