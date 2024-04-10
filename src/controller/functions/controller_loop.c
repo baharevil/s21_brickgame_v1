@@ -37,7 +37,7 @@ void* controller_loop(runtime_t *runtime) {
     
     // Основной цикл
     pthread_mutex_lock(&runtime->stdin_mutex);
-    while (!code && !atomic_load(&runtime->game_stop)) {
+    while (!code && !atomic_load(&runtime->controller_stop) && !atomic_load(&runtime->game_stop)) {
       poll_code = poll(&event, 1, -1);
       if (poll_code > 0 && event.revents & POLLIN) {
         event.revents = 0;
@@ -45,12 +45,14 @@ void* controller_loop(runtime_t *runtime) {
         key[len] = 0;
         code = get_action(&action, key);
         if (!code && action) atomic_store(&runtime->msg_to_model, (int)action);
-        else atomic_store(&runtime->gui_stop, 1);
+        if (action == Terminate) atomic_store(&runtime->controller_stop, 1);
       }
     }
     pthread_mutex_unlock(&runtime->stdin_mutex);
     canonical_mode(0);
   }
+
+  pthread_barrier_wait(&runtime->barrier);
 
   pthread_exit(0);
 }

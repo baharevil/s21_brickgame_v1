@@ -1,6 +1,8 @@
 #include <stddef.h>
-#include <pthread.h>
+#include <errno.h>
 #include <unistd.h>
+#include <pthread.h>
+#include <stdio.h>
 
 #include "controller.h"
 
@@ -24,17 +26,18 @@ int main() {
   if (!code) code = pthread_create(&runtime.model, &runtime.model_attr, model_loop, (void *)&runtime);
   if (!code) code = pthread_create(&runtime.gui, &runtime.gui_attr, gui_loop, (void *)&runtime);
   if (!code) code = pthread_create(&runtime.controller, &runtime.controller_attr, input_controller, (void *)&runtime);
+  if (!code) code = pthread_barrier_init(&runtime.barrier, &runtime.barrier_attr, 4);
 
   if (!code) {
-    while (!atomic_load(&runtime.model_stop)) {
+    int barrier_status = 0;
+    while (!atomic_load(&runtime.model_stop) && !atomic_load(&runtime.gui_stop) && !atomic_load(&runtime.controller_stop))
       sleep(1);
-    }
     atomic_store(&runtime.game_stop, 1);
-    atomic_store(&runtime.gui_stop, 1);
+
+    barrier_status = pthread_barrier_wait(&runtime.barrier);
+    code = (barrier_status > 0) * barrier_status;
   }
-  // TODO: Здесь должен быть потоковый барьер
   sleep(1);
-  
   controller_destroy(&runtime);
 
   return code;

@@ -1,9 +1,11 @@
 #ifndef RUNTIME_T
 #define RUNTIME_T
 
+#include <pthread.h>
 #include <stdbool.h>
 #include <stdatomic.h>
-#include <pthread.h>
+
+#include "pthread_barrier.h"
 
 typedef struct {
   // TIDs
@@ -28,10 +30,14 @@ typedef struct {
   pthread_mutexattr_t stdin_mutex_attr;
   pthread_mutexattr_t stdout_mutex_attr;
   pthread_mutexattr_t cond_mutex_attr;
+  //Barriers
+  pthread_barrier_t barrier;
+  pthread_barrierattr_t barrier_attr;
   // Flags
   atomic_bool game_stop;
   atomic_bool model_stop;
   atomic_bool gui_stop;
+  atomic_bool controller_stop;
   // Message boxes
   atomic_int msg_to_model;
   atomic_int msg_to_gui;

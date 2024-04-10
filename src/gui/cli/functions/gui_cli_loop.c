@@ -23,10 +23,14 @@ void* gui_cli_loop(runtime_t *runtime) {
 
   if (!code) {
     // UserAction_t action = {0};
-    while (!atomic_load(&runtime->gui_stop)) {
+    while (!atomic_load(&runtime->game_stop)) {
         // endless
     }
   }
+  
+  atomic_store(&runtime->gui_stop, 1);
+
+  pthread_barrier_wait(&runtime->barrier);
 
   pthread_exit(0);
 }

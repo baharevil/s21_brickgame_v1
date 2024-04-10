@@ -26,6 +26,9 @@ int controller_init(runtime_t *data) {
   if (!code) code = pthread_mutexattr_init(&data->cond_mutex_attr);
   if (!code) code = pthread_mutex_init(&data->cond_mutex, &data->cond_mutex_attr);
 
+  if (!code) code = pthread_barrierattr_init(&data->barrier_attr);
+  if (!code) code = pthread_barrier_init(&data->barrier, &data->barrier_attr, 3);
+
   ATOMIC_VAR_INIT(data->game_stop);
   ATOMIC_VAR_INIT(data->model_stop);
   ATOMIC_VAR_INIT(data->gui_stop);

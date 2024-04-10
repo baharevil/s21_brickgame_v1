@@ -27,6 +27,8 @@ int controller_destroy(runtime_t *runtime) {
     pthread_mutex_destroy(&runtime->stdout_mutex);
     pthread_mutexattr_destroy(&runtime->cond_mutex_attr);
     pthread_mutex_destroy(&runtime->cond_mutex);
+    pthread_barrierattr_destroy(&runtime->barrier_attr);
+    pthread_barrier_destroy(&runtime->barrier);
   }
 
   return code;
