@@ -38,14 +38,13 @@ void* controller_loop(runtime_t *runtime) {
     // Основной цикл
     pthread_mutex_lock(&runtime->stdin_mutex);
     while (!code && !atomic_load(&runtime->controller_stop) && !atomic_load(&runtime->game_stop)) {
-      poll_code = poll(&event, 1, -1);
+      poll_code = poll(&event, 1, 1);
       if (poll_code > 0 && event.revents & POLLIN) {
         event.revents = 0;
         len = read(STDIN_FILENO, key, 4);
         key[len] = 0;
         code = get_action(&action, key);
         if (!code && action) atomic_store(&runtime->msg_to_model, (int)action);
-        if (action == Terminate) atomic_store(&runtime->controller_stop, 1);
       }
     }
     pthread_mutex_unlock(&runtime->stdin_mutex);

@@ -33,7 +33,6 @@ int main() {
     while (!atomic_load(&runtime.model_stop) && !atomic_load(&runtime.gui_stop) && !atomic_load(&runtime.controller_stop))
       sleep(1);
     atomic_store(&runtime.game_stop, 1);
-
     barrier_status = pthread_barrier_wait(&runtime.barrier);
     code = (barrier_status > 0) * barrier_status;
   }
