@@ -29,6 +29,9 @@ void action_fn(game_t *);
 
 action fsm(fsm_state, UserAction_t);
 
+// Геттер/сеттер
+game_t * game_locate(game_t *);
+
 void userInput(UserAction_t action, int hold);
 
 #endif

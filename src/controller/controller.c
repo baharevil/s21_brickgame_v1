@@ -2,7 +2,6 @@
 #include <errno.h>
 #include <unistd.h>
 #include <pthread.h>
-#include <stdio.h>
 
 #include "controller.h"
 

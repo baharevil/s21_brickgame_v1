@@ -4,9 +4,9 @@
 
 void start_fn(game_t *game) {
   if (game) {
+    game->state = start;
     printf("Game started.\n");
-    //Spawn()
-    game->state = move;
+    spawn_fn(game);
   }
 }
 
@@ -25,8 +25,10 @@ void pause_fn(game_t *game) {
 }
 
 void spawn_fn(game_t *game) {
-  if (game)
-  game->state = move;
+  if (game) {
+    game->state = spawn;
+    move_fn(game);
+  }
 }
 
 void move_fn(game_t *game) {
@@ -38,10 +40,14 @@ void move_fn(game_t *game) {
 }
 
 void shift_fn(game_t *game) {
-  if (game)
-  // shift()
-  // push cond_variable
-  game->state = move;
+  if (game) {
+    fsm_state temp_state = game->state;
+    game->state = shift;
+    printf("Shifted.\n");
+    // shift()
+    // push cond_variable
+    game->state = temp_state;
+  }
 }
 
 void connect_fn(game_t *game) {
