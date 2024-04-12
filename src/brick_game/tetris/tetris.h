@@ -1,7 +1,7 @@
 #ifndef TETRIS_H
 #define TETRIS_H
 
-// #include "../../controller/controller.h"
+#include "common/common.h"
 #include "common/runtime_t.h"
 #include "common/useraction_t.h"
 #include "game_t.h"

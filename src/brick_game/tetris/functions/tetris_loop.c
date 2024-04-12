@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <errno.h>
 #include <pthread.h>
+#include <malloc.h>
 #include <time.h>
 
 #include "common/common.h"
@@ -25,8 +26,7 @@ void* tetris_loop(runtime_t *runtime) {
   if (!code) {
     game_t game = {0};
     UserAction_t act = None;
-    // clock_t now = 0;
-    // struct timespec now = {0};
+    unsigned long now = 0;
 
     code = game_init(&game);
     
@@ -34,15 +34,16 @@ void* tetris_loop(runtime_t *runtime) {
       game_locate(&game);
 
     while (!code && !atomic_load(&runtime->game_stop)) {
-      // Вызов функции shift_fn по таймеру
-      // code = ((now = clock()) == -1) * ETIME;
-      // if (game.state == move && (now - game.last_op) / CLOCKS_PER_SEC >= game.game_info->speed / 20) {
-      //   shift_fn(&game);
-      //   game.last_op = now;
-      // }
-
+      // Цикл не грузит процессор
       thread_wait(100);
-      
+
+      // Вызов функции shift_fn по таймеру
+      now = time_msec();
+      if (game.state == move && now - game.last_op >= (unsigned long) game.game_info->speed) {
+        shift_fn(&game);
+        game.last_op = now;
+      }
+
       // Обработка пользовательского ввода
       if ((act = (UserAction_t)atomic_load(&runtime->msg_to_model)) > 0) {
         userInput(act, 0);

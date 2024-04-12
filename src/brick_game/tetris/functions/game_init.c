@@ -32,13 +32,15 @@ int game_init(game_t *game) {
     game->game_info->score = 0;
     game->game_info->high_score = 0; // TODO: Load HISCORES
     game->game_info->level = 1;
-    game->game_info->speed = 100;
+    game->game_info->speed = 1000;
     game->game_info->pause = 0;
 
     game->figure_pos.x = 3;
     game->figure_pos.x = 0;
 
     game->state = start;
+    game->last_op = time_msec();
+    game->modified = false;
   }
   
   return code;

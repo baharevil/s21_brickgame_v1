@@ -6,6 +6,7 @@ void start_fn(game_t *game) {
   if (game) {
     game->state = start;
     printf("Game started.\n");
+    game->last_op = time_msec();
     spawn_fn(game);
   }
 }
@@ -19,7 +20,7 @@ void pause_fn(game_t *game) {
       game->state = pause;
     } else {
       printf("Game unpaused.\n");
-      game->last_op = clock();
+      game->last_op = time_msec();
       game->state = temp_state;
     }
   }
@@ -36,6 +37,7 @@ void spawn_fn(game_t *game) {
 void move_fn(game_t *game) {
   if (game)
   game->state = move;
+  game->last_op = time_msec();
 //   TODO: conditions block
 //   game->state = connect;
 //   game->state = shift;

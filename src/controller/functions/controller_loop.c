@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include "controller.h"
+#include "common/common.h"
 
 void* controller_loop(runtime_t *runtime) {
   int code = 0;
@@ -37,7 +38,7 @@ void* controller_loop(runtime_t *runtime) {
     
     // Основной цикл
     pthread_mutex_lock(&runtime->stdin_mutex);
-    while (!code && !atomic_load(&runtime->controller_stop) && !atomic_load(&runtime->game_stop)) {
+    while (!code && !atomic_load(&runtime->game_stop)) {
       poll_code = poll(&event, 1, 1);
       if (poll_code > 0 && event.revents & POLLIN) {
         event.revents = 0;
