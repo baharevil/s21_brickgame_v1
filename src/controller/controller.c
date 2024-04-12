@@ -25,17 +25,18 @@ int main() {
   if (!code) code = pthread_create(&runtime.model, &runtime.model_attr, model_loop, (void *)&runtime);
   if (!code) code = pthread_create(&runtime.gui, &runtime.gui_attr, gui_loop, (void *)&runtime);
   if (!code) code = pthread_create(&runtime.controller, &runtime.controller_attr, input_controller, (void *)&runtime);
-  if (!code) code = pthread_barrier_init(&runtime.barrier, &runtime.barrier_attr, 4);
 
   if (!code) {
-    int barrier_status = 0;
     while (!atomic_load(&runtime.model_stop) && !atomic_load(&runtime.gui_stop) && !atomic_load(&runtime.controller_stop))
       sleep(1);
     atomic_store(&runtime.game_stop, 1);
-    barrier_status = pthread_barrier_wait(&runtime.barrier);
-    code = (barrier_status > 0) * barrier_status;
   }
-  sleep(1);
+  // Ожидание выхода всех дочерних потоков
+  if (!code) {
+    while (runtime.barrier.__size[0] != 3)
+      sleep(1);
+  }
+  // Деструктор
   controller_destroy(&runtime);
 
   return code;
