@@ -4,7 +4,8 @@
 #include <pthread.h>
 #include <time.h>
 
-#include "../../../controller/runtime_t.h"
+#include "common/common.h"
+#include "common/runtime_t.h"
 #include "tetris.h"
 
 void* tetris_loop(runtime_t *runtime) {
@@ -24,7 +25,8 @@ void* tetris_loop(runtime_t *runtime) {
   if (!code) {
     game_t game = {0};
     UserAction_t act = None;
-    clock_t timer = 0, time_offset = 0;
+    // clock_t now = 0;
+    // struct timespec now = {0};
 
     code = game_init(&game);
     
@@ -33,11 +35,13 @@ void* tetris_loop(runtime_t *runtime) {
 
     while (!code && !atomic_load(&runtime->game_stop)) {
       // Вызов функции shift_fn по таймеру
-      code = ((time_offset = clock()) == -1) * ETIME;
-      if (game.state == move && (time_offset - timer) / CLOCKS_PER_SEC >= game.game_info->speed / 20) {
-        shift_fn(&game);
-        timer = time_offset;
-      }
+      // code = ((now = clock()) == -1) * ETIME;
+      // if (game.state == move && (now - game.last_op) / CLOCKS_PER_SEC >= game.game_info->speed / 20) {
+      //   shift_fn(&game);
+      //   game.last_op = now;
+      // }
+
+      thread_wait(100);
       
       // Обработка пользовательского ввода
       if ((act = (UserAction_t)atomic_load(&runtime->msg_to_model)) > 0) {

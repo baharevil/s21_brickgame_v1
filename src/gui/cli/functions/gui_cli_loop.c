@@ -4,7 +4,7 @@
 #include <pthread.h>
 #include <ncurses.h>
 
-#include "../../../controller/runtime_t.h"
+#include "common/runtime_t.h"
 #include "gui_cli.h"
 
 void* gui_cli_loop(runtime_t *runtime) {

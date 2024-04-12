@@ -5,8 +5,8 @@
 #ifndef CONROLLER_H
 #define CONROLLER_H
 
-#include "runtime_t.h"
-#include "useraction_t.h"
+#include "common/runtime_t.h"
+#include "common/useraction_t.h"
 
 int controller_init(runtime_t *);
 void* controller_loop(runtime_t *);

@@ -5,8 +5,11 @@
 #ifndef GAME_T_H
 #define GAME_T_H
 
+#include <stdbool.h>
+#include <time.h>
+
 #ifndef GAME_INFO_T
-#include "game_info_t.h"
+#include "common/game_info_t.h"
 #endif
 
 typedef struct position {
@@ -29,6 +32,8 @@ typedef struct game_t {
   game_info_t *game_info;
   position figure_pos;
   fsm_state state;
+  clock_t last_op;
+  bool modified;
 } game_t;
 
 

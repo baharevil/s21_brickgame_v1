@@ -5,7 +5,7 @@ LDFLAGS = -lcheck -lsubunit -lpthread
 VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 
 #---== STATIC_VARIABLES ==---#
-project_name = controller
+project_name = common
 target_dir = .
 bin_dir	= $(target_dir)/bin
 bin_sub_dir = realese
@@ -41,7 +41,7 @@ dir_list := $(addprefix $(build_dir)/, $(sort $(dir $(func_source) $(test_source
 
 #---== COMPILE_RULES ==---#
 .PHONY: test 
-all: $(lib_name) $(project_name).o
+all: $(lib_name)
 
 test: bin $(import)
 	$(CC) -o $(bin_dir)/$(bin_sub_dir)/$@ -pipe -L. $(addprefix -l:, $(import)) $(LDFLAGS)
@@ -54,9 +54,6 @@ $(test_lib_name): $(call depenc_command, $(test_dir))
 
 $(build_dir)/%.o: %.c
 	$(CC) $(CFLAGS) $(if $(filter $(func_dir)/%.c, $^), $(GCOVFLAGS)) $(DEBUG) -c $^ -o $@
-
-$(project_name).o: $(project_name).c
-	$(CC) $(CFLAGS) -c $(project_name).c -o $(project_name).o
 
 debug: DEBUG = -g
 debug: bin_sub_dir = debug

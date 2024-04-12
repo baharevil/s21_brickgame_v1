@@ -1,9 +1,9 @@
 #ifndef TETRIS_H
 #define TETRIS_H
 
-#include "../../controller/controller.h"
-#include "../../controller/useraction_t.h"
-
+// #include "../../controller/controller.h"
+#include "common/runtime_t.h"
+#include "common/useraction_t.h"
 #include "game_t.h"
 
 typedef void (*action)(game_t *);
@@ -29,8 +29,9 @@ void action_fn(game_t *);
 
 action fsm(fsm_state, UserAction_t);
 
-// Геттер/сеттер
+// Геттер/сеттер адреса game
 game_t * game_locate(game_t *);
+int game_wait(int msec);
 
 void userInput(UserAction_t action, int hold);
 

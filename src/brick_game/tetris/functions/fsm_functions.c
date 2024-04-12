@@ -19,6 +19,7 @@ void pause_fn(game_t *game) {
       game->state = pause;
     } else {
       printf("Game unpaused.\n");
+      game->last_op = clock();
       game->state = temp_state;
     }
   }
@@ -27,6 +28,7 @@ void pause_fn(game_t *game) {
 void spawn_fn(game_t *game) {
   if (game) {
     game->state = spawn;
+    // spawn()
     move_fn(game);
   }
 }

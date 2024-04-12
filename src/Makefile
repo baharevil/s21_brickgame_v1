@@ -5,13 +5,14 @@ VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=
 
 #---== SETTING_GAME ==---#
 project_name = s21_brick_game_v1
+common_dir = common
 controller_dir = controller
 backend_dir = brick_game
 frontend_dir = gui
 sub_backend_dir = tetris
 sub_frontend_dir = cli
 install_dir = $(project_name)
-import := $(controller_dir)/controller.a $(backend_dir)/tetris.a $(frontend_dir)/gui.a
+import := $(controller_dir)/controller.a $(backend_dir)/tetris.a $(frontend_dir)/gui.a $(common_dir)/common.a
 
 .PHONY: all rebuild
 
@@ -29,6 +30,9 @@ $(frontend_dir)/gui.a:
 
 $(controller_dir)/controller.a:
 	$(MAKE) --directory=$(controller_dir)
+
+$(common_dir)/common.a:
+	$(MAKE) --directory=$(common_dir)
 
 # TODO
 #---== INSTALL ==---#
@@ -77,6 +81,7 @@ dvi:
 # TODO clean_dvi goal
 clean: clean_backend clean_frontend
 	$(MAKE) clean --directory=$(controller_dir)
+	$(MAKE) clean --directory=$(common_dir)
 	@rm -rf s21_brick_game_v1
 	
 clean_backend:

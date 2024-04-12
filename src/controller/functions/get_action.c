@@ -2,7 +2,7 @@
 #include <errno.h>
 #include <string.h>
 
-#include "useraction_t.h"
+#include "common/useraction_t.h"
 
 int get_action(UserAction_t *action, char *array) {
   int code = 0;

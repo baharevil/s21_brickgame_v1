@@ -1,8 +1,8 @@
 #ifndef GUI_CLI_H
 #define GUI_CLI_H
 
-#include "../../controller/runtime_t.h"
-#include "../../brick_game/tetris/game_info_t.h"
+#include "common/runtime_t.h"
+#include "common/game_info_t.h"
 
 /*TODO:
 GUI_CLI function here:
