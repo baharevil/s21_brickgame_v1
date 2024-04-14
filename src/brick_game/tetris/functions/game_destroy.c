@@ -10,30 +10,19 @@ int game_destroy(game_t *game) {
   code = (game == NULL || game->game_info == NULL) * EINVAL;
 
   if (!code) {
-    if (game->game_info->field) {
-      for (int row = 0; !code && row < field_height; row++) {
-        if (game->game_info->field[row]) {
-          free(game->game_info->field[row]);
-          game->game_info->field[row] = NULL;
-        }
-      }
-      free(game->game_info->field);
-      game->game_info->field = NULL;
-    }
-    
-    if (game->game_info->next) {
-      free(game->game_info->next);
-      game->game_info->field = NULL;
-    }
-    
+    // TODO: Free the database
+    // free (game->database);
     game->game_info->score = 0;
     game->game_info->high_score = 0; // TODO: Close fd HISCORES
     game->game_info->level = 0;
     game->game_info->speed = 0;
     game->game_info->pause = 0;
-    free(game->game_info);
-
-    game->state = 0;
+    game->figure_pos.x = 0;
+    game->figure_pos.y = 0;
+    game->last_op = 0;
+    game->modified = 0;
+    code = game_info_destroy(game->game_info);
+    free(game);
   }
 
   return code;

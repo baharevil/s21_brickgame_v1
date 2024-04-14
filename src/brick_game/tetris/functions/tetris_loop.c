@@ -16,22 +16,17 @@ void* tetris_loop(runtime_t *runtime) {
   
   if (!code) {
     pthread_t self_tid = pthread_self();
-    // runtime->model = self_tid;
-    
-    /* No other thread is going to join() this one - прикольно,
-    * самоотсоединение:*/
     pthread_detach(self_tid);
   }
 
   if (!code) {
-    game_t game = {0};
+    game_t *game = NULL;
     UserAction_t act = None;
     unsigned long now = 0;
 
-    code = game_init(&game);
-    
-    if (!code)
-      game_locate(&game);
+    game = game_init();
+    code = (game == NULL) * ENOMEM;
+    if (!code) game_locate(game);
 
     while (!code && !atomic_load(&runtime->game_stop)) {
       // Цикл не грузит процессор
@@ -39,9 +34,9 @@ void* tetris_loop(runtime_t *runtime) {
 
       // Вызов функции shift_fn по таймеру
       now = time_msec();
-      if (game.state == move && now - game.last_op >= (unsigned long) game.game_info->speed) {
-        shift_fn(&game);
-        game.last_op = now;
+      if (game->state == move && now - game->last_op >= (unsigned long) game->game_info->speed) {
+        shift_fn(game);
+        game->last_op = now;
       }
 
       // Обработка пользовательского ввода
@@ -51,6 +46,8 @@ void* tetris_loop(runtime_t *runtime) {
         if (act == Terminate) atomic_store(&runtime->model_stop, 1);
       }
     }
+    // Destroy the game
+    game_destroy(game);
   }
 
   atomic_store(&runtime->model_stop, 1);

@@ -4,32 +4,23 @@
 
 #include "tetris.h"
 
-int game_init(game_t *game) {
+game_t * game_init() {
   int code = 0;
+  game_t *game = NULL;
   
-  code = (game == NULL) * EINVAL;
+  game = calloc(1, sizeof(game_t));
+  code = (game == NULL) * ENOMEM;
 
+  // Инициализируем структуру game_info_t
   if (!code) {
-    game_info_t *temp = calloc(1, sizeof(game_info_t));
+    game_info_t *temp = NULL;
+    temp = game_info_init();
     code = (temp == NULL) * ENOMEM;
     if (!code) game->game_info = temp;
   }
 
+  // Присваиваем первоначальные значения
   if (!code) {
-    int **temp = NULL;
-    temp = (int **)malloc(field_height * sizeof(int *));
-    code = (temp == NULL) * ENOMEM;
-    if (!code) game->game_info->field = temp;
-  }
-
-  if (!code) {
-    int *temp = NULL;
-    for (int row = 0; !code && row < field_height; row++) {
-      temp = (int *)malloc(field_width * sizeof(int));
-      code = (temp == NULL) * ENOMEM;
-      if (!code) game->game_info->field[row] = temp;
-    }
-    game->game_info->score = 0;
     game->game_info->high_score = 0; // TODO: Load HISCORES
     game->game_info->level = 1;
     game->game_info->speed = 1000;
@@ -43,5 +34,5 @@ int game_init(game_t *game) {
     game->modified = false;
   }
   
-  return code;
+  return game;
 }

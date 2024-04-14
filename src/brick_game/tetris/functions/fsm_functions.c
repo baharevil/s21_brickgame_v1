@@ -70,7 +70,6 @@ void game_over_fn(game_t *game) {
 void terminate_fn(game_t *game) {
   if (game) {
     game->state = none;
-    game_destroy(game);
   }
 }
 
