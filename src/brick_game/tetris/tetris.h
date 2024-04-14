@@ -12,6 +12,8 @@ void* tetris_loop(runtime_t *);
 
 int game_init(game_t *);
 int game_destroy(game_t *);
+game_info_t * game_info_init();
+int game_info_destroy(game_info_t *game_info);
 
 void start_fn(game_t *);
 void pause_fn(game_t *);
@@ -31,7 +33,9 @@ action fsm(fsm_state, UserAction_t);
 
 // Геттер/сеттер адреса game
 game_t * game_locate(game_t *);
-int game_wait(int msec);
+
+figure * figure_create(const unsigned short size, const unsigned id);
+void figure_destroy(figure *fig);
 
 void userInput(UserAction_t action, int hold);
 

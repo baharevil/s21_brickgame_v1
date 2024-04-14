@@ -12,6 +12,12 @@
 #include "common/game_info_t.h"
 #endif
 
+typedef struct fugure {
+  unsigned id; // Increment
+  unsigned short size; // In both ordinates
+  int **body; // Colors inside of int
+} figure;
+
 typedef struct position {
   int x;
   int y;
@@ -30,6 +36,7 @@ typedef enum fsm_state {
 
 typedef struct game_t {
   game_info_t *game_info;
+  figure *database;
   position figure_pos;
   fsm_state state;
   unsigned long last_op;

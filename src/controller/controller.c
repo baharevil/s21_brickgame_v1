@@ -4,6 +4,7 @@
 #include <pthread.h>
 
 #include "controller.h"
+#include "common/common.h"
 
 int main() {
   int code = 0;
@@ -34,7 +35,7 @@ int main() {
   // Ожидание выхода всех дочерних потоков
   if (!code) {
     while (runtime.barrier.__size[0] != 3)
-      sleep(1);
+      thread_wait(1000);
   }
   // Деструктор
   controller_destroy(&runtime);

@@ -5,6 +5,7 @@
 #include <ncurses.h>
 
 #include "common/runtime_t.h"
+#include "common/common.h"
 #include "gui_cli.h"
 
 void* gui_cli_loop(runtime_t *runtime) {
@@ -24,7 +25,7 @@ void* gui_cli_loop(runtime_t *runtime) {
   if (!code) {
     // UserAction_t action = {0};
     while (!atomic_load(&runtime->game_stop)) {
-        // endless
+        thread_wait(500);
     }
   }
   

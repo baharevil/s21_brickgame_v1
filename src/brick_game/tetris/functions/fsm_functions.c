@@ -13,15 +13,17 @@ void start_fn(game_t *game) {
 
 void pause_fn(game_t *game) {
   if (game) {
-    static fsm_state temp_state = none;
-    if (game->state != pause) {
-      printf("Game paused.\n");
-      temp_state = game->state;
-      game->state = pause;
-    } else {
-      printf("Game unpaused.\n");
-      game->last_op = time_msec();
+    static fsm_state temp_state;
+    if (game->game_info->pause) {
       game->state = temp_state;
+      game->game_info->pause = 0;
+      game->last_op = time_msec();
+      printf("Game unpaused.\n");
+    } else {
+      temp_state = game->state;
+      game->game_info->pause = 1;
+      game->state = pause;
+      printf("Game paused.\n");
     }
   }
 }
@@ -66,8 +68,10 @@ void game_over_fn(game_t *game) {
 }
 
 void terminate_fn(game_t *game) {
-  if (game)
-  game_destroy(game);
+  if (game) {
+    game->state = none;
+    game_destroy(game);
+  }
 }
 
 void left_fn(game_t *game) {
