@@ -42,7 +42,6 @@ void move_fn(game_t *game) {
   game->last_op = time_msec();
 //   TODO: conditions block
 //   game->state = connect;
-//   game->state = shift;
 }
 
 void shift_fn(game_t *game) {
@@ -52,6 +51,7 @@ void shift_fn(game_t *game) {
     printf("Shifted.\n");
     // shift()
     // push cond_variable
+    game->modified = true;
     game->state = temp_state;
   }
 }
@@ -59,7 +59,7 @@ void shift_fn(game_t *game) {
 void connect_fn(game_t *game) {
   if (game)
   //connect()
-  game->state = spawn;
+  spawn_fn(game);
 }
 
 void game_over_fn(game_t *game) {

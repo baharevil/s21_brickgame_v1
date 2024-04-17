@@ -18,6 +18,11 @@ typedef struct fugure {
   int **body; // Colors inside of int
 } figure;
 
+typedef struct figures_db {
+  figure **figures;
+  unsigned count;
+} figures_db;
+
 typedef struct position {
   int x;
   int y;
@@ -36,7 +41,7 @@ typedef enum fsm_state {
 
 typedef struct game_t {
   game_info_t *game_info;
-  figure *database;
+  figures_db database;
   position figure_pos;
   fsm_state state;
   unsigned long last_op;

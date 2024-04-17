@@ -19,6 +19,13 @@ game_t * game_init() {
     if (!code) game->game_info = temp;
   }
 
+  // Инициализация массива фигур
+  if (!code) {
+    game->database.count = 0;
+    game->database.figures = NULL;
+    figure_db_load("./figures/", &game->database);
+  }
+
   // Присваиваем первоначальные значения
   if (!code) {
     game->game_info->high_score = 0; // TODO: Load HISCORES

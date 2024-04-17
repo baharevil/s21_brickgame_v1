@@ -9,10 +9,11 @@ void figure_destroy(figure *fig) {
   
   code = (fig == NULL) * EINVAL;
 
-  if (code) {
+  if (!code) {
     for (int row = 0; row < fig->size; row++)
       if (fig->body[row]) free (fig->body[row]);
     if (fig->body) free(fig->body);
-    if (fig) free(fig);
+    fig->id = 0;
+    fig->size = 0;
   }
 }

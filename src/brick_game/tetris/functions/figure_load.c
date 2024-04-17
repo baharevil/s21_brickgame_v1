@@ -1,0 +1,42 @@
+#include <stddef.h>
+#include <errno.h>
+#include <malloc.h>
+#include <stdio.h>
+
+#include "tetris.h"
+#include "game_t.h"
+
+figure * figure_load(FILE *file) {
+  int code = 0;
+  figure *result = NULL; 
+  unsigned short size = 0;
+
+  code = (file == NULL) * EINVAL;
+
+  if (!code) {
+    code = (fscanf(file, "%hu\n", &size) == 0) * EBADF;
+  }
+
+  if (!code && size > 0) {
+    result = figure_create(size);
+    code = (result == NULL) * ENOMEM;
+  }
+
+  if (!code && size > 0) {
+    int retval = 0;
+    int point = 0;
+    for (int row = 0; !code && row < size; row++) {
+      for (int col = 0; !code && col < size; col++) {
+        retval = fscanf(file, "%1d,", &point);
+        code = (retval != 1) * EBADF;
+        if (!code) result->body[row][col] = point;
+      }
+    }
+  }
+
+  if (!code && size > 0) {
+    result->size = size;
+  }
+
+  return result;
+}

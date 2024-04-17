@@ -1,6 +1,8 @@
 #ifndef TETRIS_H
 #define TETRIS_H
 
+#include <stdio.h>
+
 #include "common/common.h"
 #include "common/runtime_t.h"
 #include "common/useraction_t.h"
@@ -34,8 +36,12 @@ action fsm(fsm_state, UserAction_t);
 // Геттер/сеттер адреса game
 game_t * game_locate(game_t *);
 
-figure * figure_create(const unsigned short size, const unsigned id);
+figure * figure_create(const unsigned short size);
 void figure_destroy(figure *fig);
+figure * figure_load(FILE *file);
+int figure_db_load(const char *dir, figures_db *db);
+int figure_db_insert(figures_db *db, unsigned count);
+int figure_db_destroy(figures_db *db);
 
 void userInput(UserAction_t action, int hold);
 

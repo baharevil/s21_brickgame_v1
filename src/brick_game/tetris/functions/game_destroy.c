@@ -7,11 +7,15 @@
 int game_destroy(game_t *game) {
   int code = 0;
   
-  code = (game == NULL || game->game_info == NULL) * EINVAL;
+  code = (game == NULL) * EINVAL;
 
-  if (!code) {
-    // TODO: Free the database
-    // free (game->database);
+  if (!code && game->database.figures != NULL) {
+    // Free the database
+    code = figure_db_destroy(&game->database);
+    game->database.count = 0;
+  }
+
+  if (!code && game->game_info != NULL) {
     game->game_info->score = 0;
     game->game_info->high_score = 0; // TODO: Close fd HISCORES
     game->game_info->level = 0;

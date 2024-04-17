@@ -5,7 +5,7 @@
 #include "tetris.h"
 #include "game_t.h"
 
-figure * figure_create(const unsigned short size, const unsigned id) {
+figure * figure_create(const unsigned short size) {
   int code = 0;
   figure *result = NULL;
 
@@ -19,7 +19,6 @@ figure * figure_create(const unsigned short size, const unsigned id) {
   }
 
   if (!code) {
-    result->id = id;
     result->size = size;
     int **temp_body = calloc(size, sizeof(int *));
     code = (temp_body == NULL) * ENOMEM;
@@ -35,7 +34,7 @@ figure * figure_create(const unsigned short size, const unsigned id) {
     }
   }
 
-  if (code) {
+  if (code && result) {
     figure_destroy(result);
     result = NULL;
   }
