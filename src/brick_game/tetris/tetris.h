@@ -12,9 +12,9 @@ typedef void (*action)(game_t *);
 
 void* tetris_loop(runtime_t *);
 
-game_t * game_init();
-int game_destroy(game_t *);
-game_info_t * game_info_init();
+int game_init(game_t **game);
+int game_destroy(game_t *game);
+int game_info_init(game_info_t **game_info);
 int game_info_destroy(game_info_t *game_info);
 
 void start_fn(game_t *);

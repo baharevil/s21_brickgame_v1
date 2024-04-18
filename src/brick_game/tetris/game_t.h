@@ -42,6 +42,7 @@ typedef enum fsm_state {
 typedef struct game_t {
   game_info_t *game_info;
   figures_db database;
+  figure figure_cur;
   position figure_pos;
   fsm_state state;
   unsigned long last_op;

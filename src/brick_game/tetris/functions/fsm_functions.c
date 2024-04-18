@@ -5,6 +5,8 @@
 void start_fn(game_t *game) {
   if (game) {
     game->state = start;
+    // TODO: rand() from figures_database id/count
+    // link game_info_t->next to figure in database
     printf("Game started.\n");
     game->last_op = time_msec();
     spawn_fn(game);

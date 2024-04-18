@@ -11,6 +11,7 @@
 
 void* tetris_loop(runtime_t *runtime) {
   int code = 0;
+  game_t *game = NULL;
 
   code = (runtime == NULL) * EFAULT;
   
@@ -20,17 +21,19 @@ void* tetris_loop(runtime_t *runtime) {
   }
 
   if (!code) {
-    game_t *game = NULL;
     UserAction_t act = None;
     unsigned long now = 0;
 
-    game = game_init();
-    code = (game == NULL) * ENOMEM;
+    code = game_init(&game);
+
     if (!code) game_locate(game);
 
     while (!code && !atomic_load(&runtime->game_stop)) {
       // Цикл не грузит процессор
       thread_wait(100);
+
+      // Проверяем, не завершает ли модель игру
+      if (game->state == none) atomic_store(&runtime->model_stop, 1); 
 
       // Вызов функции shift_fn по таймеру
       now = time_msec();
@@ -43,12 +46,12 @@ void* tetris_loop(runtime_t *runtime) {
       if ((act = (UserAction_t)atomic_load(&runtime->msg_to_model)) > 0) {
         userInput(act, 0);
         atomic_store(&runtime->msg_to_model, 0);
-        if (act == Terminate) atomic_store(&runtime->model_stop, 1);
       }
     }
-    // Destroy the game
-    game_destroy(game);
   }
+  
+  // Destroy the game
+  if (game) game_destroy(game);
 
   atomic_store(&runtime->model_stop, 1);
 
