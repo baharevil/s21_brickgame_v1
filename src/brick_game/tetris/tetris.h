@@ -30,6 +30,9 @@ int figure_copy(const figure_t *src, figure_t **dst);
 int figure_copy_body(int **src, int **dst, unsigned short size);
 int game_info_next_init(int ***next);
 int game_info_next_destroy(int **next);
+int figure_set(game_t *game);
+int figure_unset(game_t *game);
+int figure_rotate(game_t *game);
 
 action fsm(fsm_state, UserAction_t);
 void start_fn(game_t *);

@@ -13,14 +13,16 @@ int figure_copy(const figure_t *src, figure_t **dst) {
   if (!code) {
     if (*dst == NULL) {
       *dst = figure_create(src->size);
-      figure_copy_body(src->body, (*dst)->body, src->size);
+      code = figure_copy_body(src->body, (*dst)->body, src->size);
     } else if ((*dst)->size != src->size) {
       figure_destroy(*dst);
       *dst = figure_create(src->size);
-      figure_copy_body(src->body, (*dst)->body, src->size);
+      code = figure_copy_body(src->body, (*dst)->body, src->size);
     } else if ((*dst)->size == src->size) {
-      figure_copy_body(src->body, (*dst)->body, src->size);
+      code = figure_copy_body(src->body, (*dst)->body, src->size);
     }
+    (*dst)->id = src->id;
+    (*dst)->size = src->size;    
   }
 
   return code;

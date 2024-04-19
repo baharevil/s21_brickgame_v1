@@ -15,5 +15,6 @@ void figure_destroy(figure_t *figure) {
     if (figure->body) free(figure->body);
     figure->id = 0;
     figure->size = 0;
+    free(figure);
   }
 }

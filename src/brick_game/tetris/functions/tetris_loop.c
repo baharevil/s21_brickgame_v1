@@ -41,12 +41,16 @@ void* tetris_loop(runtime_t *runtime) {
         shift_fn(game);
         game->last_op = now;
       }
+      
+      if (game->modified) pthread_cond_signal(&runtime->do_render);
 
       // Обработка пользовательского ввода
       if ((act = (UserAction_t)atomic_load(&runtime->msg_to_model)) > 0) {
         userInput(act, 0);
         atomic_store(&runtime->msg_to_model, 0);
       }
+
+      if (game->modified) pthread_cond_signal(&runtime->do_render);
     }
   }
   

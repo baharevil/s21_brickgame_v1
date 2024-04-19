@@ -18,7 +18,6 @@ int game_destroy(game_t *game) {
   // Удаляем текущую фигуру
   if (!code && game->figure_cur) {
     figure_destroy(game->figure_cur);
-    if(game->figure_cur) free(game->figure_cur);
   }
 
   if (!code && game->game_info) {

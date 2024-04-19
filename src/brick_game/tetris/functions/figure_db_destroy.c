@@ -14,8 +14,7 @@ int figure_db_destroy(figures_db_t *db) {
     for (unsigned i = 0; i < db->count; i++) {
       if (db->figures[i]) {
         figure_destroy(db->figures[i]);
-        free(db->figures[i]);
-        // db->figures[i] = NULL;
+        db->figures[i] = NULL;
       }
     }
     free(db->figures);
