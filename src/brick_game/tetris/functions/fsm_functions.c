@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdio.h>
 
 #include "tetris.h"
@@ -34,6 +35,10 @@ void spawn_fn(game_t *game) {
   if (game) {
     game->state = spawn;
     // spawn()
+    int rnd = rand() % (game->database.count - 1);
+    // TODO: Вставка происходит в начало строки, нужна отдельная функция.
+    figure_copy_body(game->database.figures[rnd]->body, &game->game_info->next[0], game->database.figures[rnd]->size);
+    figure_copy(game->database.figures[rnd], &game->figure_cur);
     move_fn(game);
   }
 }

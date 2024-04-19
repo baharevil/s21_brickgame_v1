@@ -2,6 +2,7 @@
 #include <errno.h>
 #include <malloc.h>
 
+#include "tetris.h"
 #include "common/game_info_t.h"
 
 int game_info_destroy(game_info_t *game_info) {
@@ -22,8 +23,8 @@ int game_info_destroy(game_info_t *game_info) {
     }
     
     if (game_info->next) {
-      free(game_info->next);
-      game_info->field = NULL;
+      game_info_next_destroy(game_info->next);
+      game_info->next = NULL;
     }
     free(game_info);
   }

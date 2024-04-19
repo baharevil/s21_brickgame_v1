@@ -1,7 +1,7 @@
 #ifndef GAME_INFO_T
 #define GAME_INFO_T
 
- enum field_size { field_height = 20, field_width = 10 };
+enum field_size { field_height = 20, field_width = 10 };
 
 typedef struct {
   int **field;

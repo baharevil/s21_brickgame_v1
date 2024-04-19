@@ -6,9 +6,9 @@
 #include "tetris.h"
 #include "game_t.h"
 
-figure * figure_load(FILE *file) {
+figure_t * figure_load(FILE *file) {
   int code = 0;
-  figure *result = NULL; 
+  figure_t *result = NULL; 
   unsigned short size = 0;
 
   code = (file == NULL) * EINVAL;

@@ -9,13 +9,19 @@ int game_destroy(game_t *game) {
   
   code = (game == NULL) * EINVAL;
 
-  if (!code && game->database.figures != NULL) {
-    // Free the database
+  // Удаляем базу данных фигур
+  if (!code && game->database.figures) {
     code = figure_db_destroy(&game->database);
     game->database.count = 0;
   }
 
-  if (!code && game->game_info != NULL) {
+  // Удаляем текущую фигуру
+  if (!code && game->figure_cur) {
+    figure_destroy(game->figure_cur);
+    if(game->figure_cur) free(game->figure_cur);
+  }
+
+  if (!code && game->game_info) {
     game->game_info->score = 0;
     game->game_info->high_score = 0; // TODO: Close fd HISCORES
     game->game_info->level = 0;

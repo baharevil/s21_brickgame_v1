@@ -16,17 +16,17 @@ typedef struct fugure {
   unsigned id; // Increment
   unsigned short size; // In both ordinates
   int **body; // Colors inside of int
-} figure;
+} figure_t;
 
-typedef struct figures_db {
-  figure **figures;
+typedef struct figures_db_t {
+  figure_t **figures;
   unsigned count;
-} figures_db;
+} figures_db_t;
 
-typedef struct position {
+typedef struct position_t {
   int x;
   int y;
-} position;
+} position_t;
 
 typedef enum fsm_state {
   none,
@@ -41,9 +41,9 @@ typedef enum fsm_state {
 
 typedef struct game_t {
   game_info_t *game_info;
-  figures_db database;
-  figure figure_cur;
-  position figure_pos;
+  figures_db_t database;
+  figure_t *figure_cur;
+  position_t figure_pos;
   fsm_state state;
   unsigned long last_op;
   bool modified;

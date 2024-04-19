@@ -9,7 +9,7 @@
 #include "tetris.h"
 #include "game_t.h"
 
-int figure_db_load(const char *dir, figures_db *db) {
+int figure_db_load(const char *dir, figures_db_t *db) {
   int code = 0;
   DIR *directory = NULL;
   char *fullpath = NULL;

@@ -5,7 +5,7 @@
 #include "tetris.h"
 #include "game_t.h"
 
-int figure_db_destroy(figures_db *db) {
+int figure_db_destroy(figures_db_t *db) {
   int code = 0;
 
   code = (db == NULL) * EINVAL;

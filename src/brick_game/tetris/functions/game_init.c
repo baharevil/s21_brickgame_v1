@@ -27,8 +27,10 @@ int game_init(game_t **game) {
 
   // Инициализация текущей игровой фигуры
   if (!code) {
-    // int rnd = rand() % ((*game)->database.count - 1);
-    // (*game)->figure_cur.body = figure_create((*game)->database.figures[rnd]->size);
+    int rnd = rand() % ((*game)->database.count - 1);
+    if (!code) code = game_info_next_init(&(*game)->game_info->next);
+    if (!code) code = figure_copy_body((*game)->database.figures[rnd]->body, (*game)->game_info->next, (*game)->database.figures[rnd]->size);
+    if (!code) code = figure_copy((*game)->database.figures[rnd], &(*game)->figure_cur);
   }
 
   // Присваиваем первоначальные значения

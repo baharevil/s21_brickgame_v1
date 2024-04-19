@@ -5,15 +5,15 @@
 #include "tetris.h"
 #include "game_t.h"
 
-figure * figure_create(const unsigned short size) {
+figure_t * figure_create(const unsigned short size) {
   int code = 0;
-  figure *result = NULL;
+  figure_t *result = NULL;
 
   code = (size == 0) * EINVAL;
 
   if (!code) {
-    figure * temp = NULL;
-    temp = calloc(size, sizeof(figure));
+    figure_t * temp = NULL;
+    temp = calloc(size, sizeof(figure_t));
     code = (temp == NULL) * ENOMEM;
     if (!code) result = temp;
   }
