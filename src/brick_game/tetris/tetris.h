@@ -50,5 +50,6 @@ void down_fn(game_t *);
 void action_fn(game_t *);
 
 void userInput(UserAction_t action, int hold);
+game_info_t update_current_state();
 
 #endif

@@ -26,7 +26,10 @@ void* tetris_loop(runtime_t *runtime) {
 
     code = game_init(&game);
 
-    if (!code) game_locate(game);
+    if (!code) {
+      signals_block();
+      game_locate(game);
+    }
 
     while (!code && !atomic_load(&runtime->game_stop)) {
       // Цикл не грузит процессор

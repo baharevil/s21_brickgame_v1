@@ -28,14 +28,15 @@ int main() {
   if (!code) code = pthread_create(&runtime.controller, &runtime.controller_attr, input_controller, (void *)&runtime);
 
   if (!code) {
+    signals_block();
     while (!atomic_load(&runtime.model_stop) && !atomic_load(&runtime.gui_stop) && !atomic_load(&runtime.controller_stop))
-      sleep(1);
+      thread_wait(500);
     atomic_store(&runtime.game_stop, 1);
   }
   // Ожидание выхода всех дочерних потоков
   if (!code) {
     while (runtime.barrier.__size[0] != 3)
-      thread_wait(1000);
+      thread_wait(500);
   }
   // Деструктор
   controller_destroy(&runtime);

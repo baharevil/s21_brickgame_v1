@@ -28,6 +28,7 @@ void* controller_loop(runtime_t *runtime) {
   if (!code) code = canonical_mode(1);
 
   if (!code) {
+    signals_block();
     char key[4] = {0};
     int len = 0;
     UserAction_t action = 0;

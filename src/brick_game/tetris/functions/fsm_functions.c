@@ -8,7 +8,6 @@ void start_fn(game_t *game) {
     game->state = start;
     // TODO: rand() from figures_database id/count
     // link game_info_t->next to figure in database
-    printf("Game started.\n");
     game->last_op = time_msec();
     spawn_fn(game);
   }
@@ -21,12 +20,10 @@ void pause_fn(game_t *game) {
       game->state = temp_state;
       game->game_info->pause = 0;
       game->last_op = time_msec();
-      printf("Game unpaused.\n");
     } else {
       temp_state = game->state;
       game->game_info->pause = 1;
       game->state = pause;
-      printf("Game paused.\n");
     }
   }
 }
@@ -56,7 +53,6 @@ void shift_fn(game_t *game) {
     game->state = shift;
     figure_unset(game);
     game->figure_pos.y++;
-    printf("Shifted, x: %d y: %d.\n", game->figure_pos.x, game->figure_pos.y);
     figure_set(game);
     game->modified = true;
     game->state = temp_state;

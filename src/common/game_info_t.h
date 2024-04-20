@@ -13,6 +13,4 @@ typedef struct {
   int pause;
 } game_info_t;
 
-game_info_t update_current_state();
-
 #endif

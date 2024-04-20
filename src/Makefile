@@ -1,5 +1,6 @@
 #---== COMPILER ==---#
 CC = gcc
+LDFLAGS = -lncurses
 VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 # -lpanel -lncurses -lmenu
 
@@ -20,7 +21,7 @@ all: $(project_name)
 rebuild: uninstall $(project_name)
 
 $(project_name): $(import)
-	$(CC) -L. $(controller_dir)/controller.o $(addprefix -l:, $^) -o $(project_name)
+	$(CC) -L. $(controller_dir)/controller.o $(addprefix -l:, $^) $(LDFLAGS) -o $(project_name)
 
 $(backend_dir)/tetris.a:
 	$(MAKE) --directory=$(backend_dir) target_dir=$(sub_backend_dir)
