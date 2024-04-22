@@ -13,7 +13,7 @@ frontend_dir = gui
 sub_backend_dir = tetris
 sub_frontend_dir = cli
 install_dir = $(project_name)
-import := $(controller_dir)/controller.a $(backend_dir)/tetris.a $(frontend_dir)/gui.a $(common_dir)/common.a
+import := $(controller_dir)/controller.a $(frontend_dir)/gui.a $(backend_dir)/tetris.a $(common_dir)/common.a
 
 .PHONY: all rebuild
 

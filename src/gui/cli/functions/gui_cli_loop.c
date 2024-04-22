@@ -10,8 +10,9 @@
 #include "common/game_info_t.h"
 #include "gui_cli.h"
 
-
 void* gui_cli_loop(runtime_t *runtime) {
+  extern game_info_t update_current_state();
+
   int code = 0;
   code = (runtime == NULL) * EFAULT;
 

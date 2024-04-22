@@ -33,7 +33,7 @@ typedef enum fsm_state {
   start,
   pause,
   spawn,
-  move,
+  moving,
   shift,
   connect,
   game_over

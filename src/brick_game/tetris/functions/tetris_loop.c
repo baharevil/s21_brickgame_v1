@@ -40,7 +40,7 @@ void* tetris_loop(runtime_t *runtime) {
 
       // Вызов функции shift_fn по таймеру
       now = time_msec();
-      if (game->state == move && now - game->last_op >= (unsigned long) game->game_info->speed) {
+      if (game->state == moving && now - game->last_op >= (unsigned long) game->game_info->speed) {
         shift_fn(game);
         game->last_op = now;
       }
