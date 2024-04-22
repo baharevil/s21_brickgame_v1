@@ -1,5 +1,5 @@
-#include <stddef.h>
 #include <errno.h>
+#include <stddef.h>
 #include <string.h>
 
 #include "common/useraction_t.h"
@@ -27,8 +27,8 @@ int get_action(UserAction_t *action, char *array) {
       result = Pause;
     else if (array[0] == 'q')
       result = Terminate;
-  
-    *action = result;    
+
+    *action = result;
   }
 
   return code;

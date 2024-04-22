@@ -1,20 +1,19 @@
-//TODO: Инициализация и запуск основного цикла
-#include <stddef.h>
+// TODO: Инициализация и запуск основного цикла
 #include <errno.h>
-#include <pthread.h>
 #include <malloc.h>
+#include <pthread.h>
 #include <time.h>
 
 #include "common/common.h"
 #include "common/runtime_t.h"
 #include "tetris.h"
 
-void* tetris_loop(runtime_t *runtime) {
+void* tetris_loop(runtime_t* runtime) {
   int code = 0;
-  game_t *game = NULL;
+  game_t* game = NULL;
 
   code = (runtime == NULL) * EFAULT;
-  
+
   if (!code) {
     pthread_t self_tid = pthread_self();
     pthread_detach(self_tid);
@@ -36,15 +35,16 @@ void* tetris_loop(runtime_t *runtime) {
       thread_wait(100);
 
       // Проверяем, не завершает ли модель игру
-      if (game->state == none) atomic_store(&runtime->model_stop, 1); 
+      if (game->state == none) atomic_store(&runtime->model_stop, 1);
 
       // Вызов функции shift_fn по таймеру
       now = time_msec();
-      if (game->state == moving && now - game->last_op >= (unsigned long) game->game_info->speed) {
+      if (game->state == moving &&
+          now - game->last_op >= (unsigned long)game->game_info->speed) {
         shift_fn(game);
         game->last_op = now;
       }
-      
+
       if (game->modified) pthread_cond_signal(&runtime->do_render);
 
       // Обработка пользовательского ввода
@@ -56,7 +56,7 @@ void* tetris_loop(runtime_t *runtime) {
       if (game->modified) pthread_cond_signal(&runtime->do_render);
     }
   }
-  
+
   // Destroy the game
   if (game) game_destroy(game);
 

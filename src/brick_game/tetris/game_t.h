@@ -1,5 +1,6 @@
-/* Основная структура игры
-Содержит все необходимые данные для выполнения модели
+/*
+  Основная структура игры
+  Содержит все необходимые данные для выполнения модели
 */
 
 #ifndef GAME_T_H
@@ -13,9 +14,9 @@
 #endif
 
 typedef struct fugure {
-  unsigned id; // Increment
-  unsigned short size; // In both ordinates
-  int **body; // Colors inside of int
+  unsigned id;          // Increment
+  unsigned short size;  // In both ordinates
+  int **body;           // Colors inside of int
 } figure_t;
 
 typedef struct figures_db_t {
@@ -48,6 +49,5 @@ typedef struct game_t {
   unsigned long last_op;
   bool modified;
 } game_t;
-
 
 #endif

@@ -1,27 +1,26 @@
-#include <stddef.h>
 #include <errno.h>
-#include <pthread.h>
-#include <unistd.h>
 #include <poll.h>
-
+#include <pthread.h>
+#include <stddef.h>
 #include <stdio.h>
-#include <wchar.h>
 #include <string.h>
+#include <unistd.h>
+#include <wchar.h>
 
-#include "controller.h"
 #include "common/common.h"
+#include "controller.h"
 
-void* controller_loop(runtime_t *runtime) {
+void* controller_loop(runtime_t* runtime) {
   int code = 0;
 
   code = (runtime == NULL) * EFAULT;
-  
+
   if (!code) {
     pthread_t self_tid = pthread_self();
     runtime->controller = self_tid;
-    
+
     /* No other thread is going to join() this one - прикольно,
-    * самоотсоединение:*/
+     * самоотсоединение:*/
     code = pthread_detach(self_tid);
   }
 
@@ -36,7 +35,7 @@ void* controller_loop(runtime_t *runtime) {
     struct pollfd event = {0};
     event.events = POLLIN;
     event.fd = STDIN_FILENO;
-    
+
     // Основной цикл
     pthread_mutex_lock(&runtime->stdin_mutex);
     while (!code && !atomic_load(&runtime->game_stop)) {

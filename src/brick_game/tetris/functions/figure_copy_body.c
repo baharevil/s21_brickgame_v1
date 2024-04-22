@@ -1,9 +1,9 @@
-#include <stddef.h>
 #include <errno.h>
+#include <stddef.h>
 #include <string.h>
 
-#include "tetris.h"
 #include "game_t.h"
+#include "tetris.h"
 
 int figure_copy_body(int **src, int **dst, unsigned short size) {
   int code = 0;

@@ -1,6 +1,6 @@
-#include <stddef.h>
 #include <errno.h>
 #include <malloc.h>
+#include <stddef.h>
 
 #include "tetris.h"
 
@@ -10,11 +10,11 @@ int game_info_next_init(int ***next) {
   int code = 0;
 
   // Аллоцируем строки next
-    int **temp = NULL;
-    temp = (int **)malloc(4 * sizeof(int *));
-    code = (temp == NULL) * ENOMEM;
-    if (!code) (*next) = temp;
-  
+  int **temp = NULL;
+  temp = (int **)malloc(4 * sizeof(int *));
+  code = (temp == NULL) * ENOMEM;
+  if (!code) (*next) = temp;
+
   // Аллоцируем столбцы next
   if (!code) {
     int *temp = NULL;

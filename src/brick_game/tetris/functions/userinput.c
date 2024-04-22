@@ -9,7 +9,7 @@ void userInput(UserAction_t user_action, int hold) {
   game_t *game = game_locate(NULL);
 
   code = (game == NULL);
-  
+
   if (!code) {
     // Получаем указатель на функцию-обработчик события
     act = fsm(game->state, user_action);

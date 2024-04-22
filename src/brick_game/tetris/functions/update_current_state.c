@@ -14,6 +14,6 @@ game_info_t update_current_state() {
     game_info.score = game_ptr->game_info->score;
     game_info.speed = game_ptr->game_info->speed;
   }
-  
+
   return game_info;
 }

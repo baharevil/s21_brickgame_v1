@@ -12,6 +12,7 @@ backend_dir = brick_game
 frontend_dir = gui
 sub_backend_dir = tetris
 sub_frontend_dir = cli
+
 install_dir = $(project_name)
 import := $(controller_dir)/controller.a $(frontend_dir)/gui.a $(backend_dir)/tetris.a $(common_dir)/common.a
 
@@ -21,7 +22,7 @@ all: $(project_name)
 rebuild: uninstall $(project_name)
 
 $(project_name): $(import)
-	$(CC) -L. $(controller_dir)/controller.o $(addprefix -l:, $^) $(LDFLAGS) -o $(project_name)
+	$(CC) -L. $(addprefix -l:, $^) $(LDFLAGS) -o $(project_name)
 
 $(backend_dir)/tetris.a:
 	$(MAKE) --directory=$(backend_dir) target_dir=$(sub_backend_dir)

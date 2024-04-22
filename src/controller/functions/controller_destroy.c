@@ -1,14 +1,14 @@
-#include <stddef.h>
 #include <errno.h>
 #include <pthread.h>
+#include <stddef.h>
 
 #include "controller.h"
 
 int controller_destroy(runtime_t *runtime) {
   int code = 0;
-  
+
   code = (runtime == NULL) * EFAULT;
-  
+
   if (!code) {
     // Грубо, можно подождать и т.п.
     if (runtime->gui) code = pthread_cancel(runtime->gui);

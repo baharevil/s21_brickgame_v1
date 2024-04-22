@@ -1,6 +1,6 @@
-#include <stddef.h>
 #include <errno.h>
 #include <pthread.h>
+#include <stddef.h>
 #include <sys/time.h>
 
 int thread_wait(int msec) {

@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "tetris.h"
 
@@ -62,7 +62,7 @@ void shift_fn(game_t *game) {
 
 void connect_fn(game_t *game) {
   if (game) {
-    //connect()
+    // connect()
     spawn_fn(game);
   }
 }
@@ -93,7 +93,8 @@ void left_fn(game_t *game) {
 void right_fn(game_t *game) {
   if (game) {
     figure_unset(game);
-    game->figure_pos.x += (game->figure_pos.x < field_width - game->figure_cur->size);
+    game->figure_pos.x +=
+        (game->figure_pos.x < field_width - game->figure_cur->size);
     figure_set(game);
     game->modified = true;
     move_fn(game);
@@ -112,7 +113,8 @@ void up_fn(game_t *game) {
 
 void down_fn(game_t *game) {
   if (game)
-    game->figure_pos.y += (game->figure_pos.y < field_height - game->figure_cur->size);
+    game->figure_pos.y +=
+        (game->figure_pos.y < field_height - game->figure_cur->size);
 }
 
 void action_fn(game_t *game) {

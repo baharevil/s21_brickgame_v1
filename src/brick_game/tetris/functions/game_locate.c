@@ -9,17 +9,16 @@ struct locate {
   enum is_set value;
 };
 
-game_t * game_locate(game_t *game) {
+game_t *game_locate(game_t *game) {
   static struct locate location;
   game_t *result = NULL;
-  
+
   if (game) {
     location.value = set;
     location.addr = game;
   }
-  
-  if (location.value == set && location.addr)
-    result = location.addr;
+
+  if (location.value == set && location.addr) result = location.addr;
 
   return result;
 }

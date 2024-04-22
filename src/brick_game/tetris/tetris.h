@@ -10,19 +10,19 @@
 
 typedef void (*action)(game_t *);
 
-void* tetris_loop(runtime_t *);
+void *tetris_loop(runtime_t *);
 
 // Геттер/сеттер адреса game
-game_t * game_locate(game_t *);
+game_t *game_locate(game_t *);
 
 int game_init(game_t **game);
 int game_destroy(game_t *game);
 int game_info_init(game_info_t **game_info);
 int game_info_destroy(game_info_t *game_info);
 
-figure_t * figure_create(const unsigned short size);
+figure_t *figure_create(const unsigned short size);
 void figure_destroy(figure_t *figure);
-figure_t * figure_load(FILE *file);
+figure_t *figure_load(FILE *file);
 int figure_db_load(const char *dir, figures_db_t *db);
 int figure_db_insert(figures_db_t *db, unsigned count);
 int figure_db_destroy(figures_db_t *db);

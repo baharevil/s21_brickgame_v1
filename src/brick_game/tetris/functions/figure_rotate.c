@@ -1,6 +1,6 @@
-#include <stddef.h>
 #include <errno.h>
 #include <malloc.h>
+#include <stddef.h>
 
 #include "tetris.h"
 
@@ -12,7 +12,7 @@ int figure_rotate(game_t *game) {
   int **temp_body = NULL;
   temp_body = malloc(game->figure_cur->size * sizeof(int *));
   code = (temp_body == NULL) * ENOMEM;
-  
+
   if (!code) {
     int *temp = NULL;
     for (int row = 0; !code && row < game->figure_cur->size; row++) {
@@ -21,13 +21,13 @@ int figure_rotate(game_t *game) {
       if (!code) temp_body[row] = temp;
     }
   }
-// row
-// 1 2  col
-// 3 4
+  // row
+  // 1 2  col
+  // 3 4
 
-// row
-//      col
-//
+  // row
+  //      col
+  //
   if (!code) {
     for (int col = 0; col < game->figure_cur->size; col++) {
       for (int row = game->figure_cur->size; row > 0; row--) {

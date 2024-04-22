@@ -9,8 +9,7 @@ void gui_cli_render(game_info_t game_info) {
   char tmp[128];
   for (int row = 0; row < field_height; row++) {
     for (int col = 0; col < field_width; col++) {
-      if (game_info.field[row][col])
-        tmp[col] = (unsigned char) 254;
+      if (game_info.field[row][col]) tmp[col] = (unsigned char)254;
       tmp[col + 1] = 0;
     }
     // mvprintw(row, 1, tmp);
