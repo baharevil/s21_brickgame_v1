@@ -1,13 +1,13 @@
-#include <stddef.h>
 #include <errno.h>
 #include <malloc.h>
+#include <stddef.h>
 
-#include "tetris.h"
 #include "common/game_info_t.h"
+#include "tetris.h"
 
 int game_info_destroy(game_info_t *game_info) {
   int code = 0;
-  
+
   code = (game_info == NULL) * EINVAL;
 
   if (!code) {
@@ -21,11 +21,18 @@ int game_info_destroy(game_info_t *game_info) {
       free(game_info->field);
       game_info->field = NULL;
     }
-    
+
     if (game_info->next) {
       game_info_next_destroy(game_info->next);
       game_info->next = NULL;
     }
+
+    game_info->score = 0;
+    game_info->high_score = 0;  // TODO: Close fd HISCORES
+    game_info->level = 0;
+    game_info->speed = 0;
+    game_info->pause = 0;
+
     free(game_info);
   }
 

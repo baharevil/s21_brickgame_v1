@@ -12,10 +12,12 @@
 #include "common/game_info_t.h"
 #endif
 
-typedef struct fugure {
-  unsigned id; // Increment
-  unsigned short size; // In both ordinates
-  int **body; // Colors inside of int
+enum direction { up = 1, down = 2, left = 3, right = 4 };
+
+typedef struct figure {
+  unsigned id;          // Increment
+  unsigned short size;  // In both ordinates
+  int **body;           // Colors inside of int
 } figure_t;
 
 typedef struct figures_db_t {
@@ -48,6 +50,5 @@ typedef struct game_t {
   unsigned long last_op;
   bool modified;
 } game_t;
-
 
 #endif

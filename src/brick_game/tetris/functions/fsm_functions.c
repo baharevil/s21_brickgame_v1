@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "tetris.h"
 
@@ -34,6 +34,7 @@ void spawn_fn(game_t *game) {
     int rnd = rand() % (game->database.count - 1);
     figure_copy(game->database.figures[rnd], &game->figure_cur);
     game->figure_pos.x = field_width / 2 - game->figure_cur->size / 2;
+    game->figure_pos.y = 0;
     figure_set(game);
     game->modified = true;
     move_fn(game);
@@ -43,7 +44,6 @@ void spawn_fn(game_t *game) {
 void move_fn(game_t *game) {
   if (game) {
     game->state = moving;
-    game->last_op = time_msec();
   }
 }
 
@@ -52,7 +52,11 @@ void shift_fn(game_t *game) {
     fsm_state temp_state = game->state;
     game->state = shift;
     figure_unset(game);
-    game->figure_pos.y++;
+    if (figure_check(game, down) != 0) connect_fn(game);
+    if (game->figure_pos.y < field_height - game->figure_cur->size)
+      game->figure_pos.y++;
+    else if (game->figure_pos.y == field_height - game->figure_cur->size)
+      connect_fn(game);
     figure_set(game);
     game->modified = true;
     game->state = temp_state;
@@ -62,7 +66,8 @@ void shift_fn(game_t *game) {
 
 void connect_fn(game_t *game) {
   if (game) {
-    //connect()
+    game->state = connect;
+    figure_set(game);
     spawn_fn(game);
   }
 }
@@ -93,7 +98,8 @@ void left_fn(game_t *game) {
 void right_fn(game_t *game) {
   if (game) {
     figure_unset(game);
-    game->figure_pos.x += (game->figure_pos.x < field_width - game->figure_cur->size);
+    game->figure_pos.x +=
+        (game->figure_pos.x < field_width - game->figure_cur->size);
     figure_set(game);
     game->modified = true;
     move_fn(game);
@@ -111,8 +117,14 @@ void up_fn(game_t *game) {
 }
 
 void down_fn(game_t *game) {
-  if (game)
-    game->figure_pos.y += (game->figure_pos.y < field_height - game->figure_cur->size);
+  if (game) {
+    figure_unset(game);
+    game->figure_pos.y +=
+        (game->figure_pos.y < field_height - game->figure_cur->size);
+    figure_set(game);
+    game->modified = true;
+    move_fn(game);
+  }
 }
 
 void action_fn(game_t *game) {

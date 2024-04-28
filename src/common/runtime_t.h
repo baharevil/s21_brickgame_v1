@@ -2,8 +2,8 @@
 #define RUNTIME_T
 
 #include <pthread.h>
-#include <stdbool.h>
 #include <stdatomic.h>
+#include <stdbool.h>
 
 #include "pthread_barrier.h"
 
@@ -30,7 +30,7 @@ typedef struct {
   pthread_mutexattr_t stdin_mutex_attr;
   pthread_mutexattr_t stdout_mutex_attr;
   pthread_mutexattr_t cond_mutex_attr;
-  //Barriers
+  // Barriers
   pthread_barrier_t barrier;
   pthread_barrierattr_t barrier_attr;
   // Flags

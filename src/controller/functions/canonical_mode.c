@@ -1,5 +1,5 @@
-#include <stddef.h>
 #include <errno.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <termios.h>
 
@@ -14,7 +14,7 @@ int canonical_mode(int mode) {
 
   if (!code) {
     if (mode == 1)
-      t.c_lflag &= (int16_t)~(ISIG | ICANON | ECHO);
+      t.c_lflag &= (int16_t) ~(ISIG | ICANON | ECHO);
     else
       t.c_lflag |= (int16_t)(ISIG | ICANON | ECHO);
     // t.c_cc[VMIN] = 1;

@@ -1,14 +1,14 @@
-#include <stddef.h>
 #include <errno.h>
 #include <malloc.h>
+#include <stddef.h>
 #include <stdio.h>
 
-#include "tetris.h"
 #include "game_t.h"
+#include "tetris.h"
 
-figure_t * figure_load(FILE *file) {
+figure_t *figure_load(FILE *file) {
   int code = 0;
-  figure_t *result = NULL; 
+  figure_t *result = NULL;
   unsigned short size = 0;
 
   code = (file == NULL) * EINVAL;

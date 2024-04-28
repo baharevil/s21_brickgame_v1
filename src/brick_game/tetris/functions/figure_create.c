@@ -1,18 +1,18 @@
-#include <stddef.h>
 #include <errno.h>
 #include <malloc.h>
+#include <stddef.h>
 
-#include "tetris.h"
 #include "game_t.h"
+#include "tetris.h"
 
-figure_t * figure_create(const unsigned short size) {
+figure_t *figure_create(const unsigned short size) {
   int code = 0;
   figure_t *result = NULL;
 
   code = (size == 0) * EINVAL;
 
   if (!code) {
-    figure_t * temp = NULL;
+    figure_t *temp = NULL;
     temp = calloc(size, sizeof(figure_t));
     code = (temp == NULL) * ENOMEM;
     if (!code) result = temp;

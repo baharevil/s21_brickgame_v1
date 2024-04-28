@@ -1,6 +1,6 @@
-#include <stddef.h>
 #include <errno.h>
 #include <malloc.h>
+#include <stddef.h>
 
 #include "tetris.h"
 
@@ -33,8 +33,7 @@ int game_info_init(game_info_t **game_info) {
     }
   }
 
-  if (code)
-    game_info_destroy(*game_info);
+  if (code) game_info_destroy(*game_info);
 
   return code;
 }

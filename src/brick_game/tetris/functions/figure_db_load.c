@@ -1,19 +1,18 @@
-#include <stddef.h>
+#include <dirent.h>
 #include <errno.h>
 #include <malloc.h>
-#include <dirent.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 
-
-#include "tetris.h"
 #include "game_t.h"
+#include "tetris.h"
 
 int figure_db_load(const char *dir, figures_db_t *db) {
   int code = 0;
   DIR *directory = NULL;
   char *fullpath = NULL;
-  
+
   code = (dir == NULL || db == NULL) * EINVAL;
 
   if (!code) {
@@ -32,7 +31,8 @@ int figure_db_load(const char *dir, figures_db_t *db) {
     struct dirent *dir_entry = NULL;
     FILE *file = NULL;
     while (!code && (dir_entry = readdir(directory)) != NULL) {
-      if (dir_entry->d_type == regular_file_t && strstr(dir_entry->d_name, ".tet")) {
+      if (dir_entry->d_type == regular_file_t &&
+          strstr(dir_entry->d_name, ".tet")) {
         strcpy(fullpath, dir);
         strcat(fullpath, dir_entry->d_name);
         file = fopen(fullpath, "rb");
@@ -49,7 +49,7 @@ int figure_db_load(const char *dir, figures_db_t *db) {
     }
     closedir(directory);
   }
-  if(fullpath) free(fullpath);
+  if (fullpath) free(fullpath);
 
   return code;
 }

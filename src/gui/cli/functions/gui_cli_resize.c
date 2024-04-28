@@ -1,5 +1,5 @@
-#include <signal.h>
 #include <ncurses.h>
+#include <signal.h>
 #include <string.h>
 
 #include "common/common.h"
@@ -20,11 +20,11 @@ void gui_cli_resize() {
 
   box(stdscr, 0, 0);
   if (LINES < 22 || COLS < 70)
-    mvaddstr(y, x, tmp);
-  else
     mvaddstr(y, x, "Screen too small :(");
+  else
+    mvaddstr(y, x, tmp);
   refresh();
-  
+
   // TODO:
   // Попробовать получить новые значения размеров окна(!) main_window
   // без переинициализации всего ncurses (initscr());

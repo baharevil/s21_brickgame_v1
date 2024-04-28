@@ -1,9 +1,9 @@
-#include <stddef.h>
 #include <errno.h>
+#include <stddef.h>
 #include <string.h>
 
-#include "tetris.h"
 #include "game_t.h"
+#include "tetris.h"
 
 int figure_copy(const figure_t *src, figure_t **dst) {
   int code = 0;
@@ -22,7 +22,7 @@ int figure_copy(const figure_t *src, figure_t **dst) {
       code = figure_copy_body(src->body, (*dst)->body, src->size);
     }
     (*dst)->id = src->id;
-    (*dst)->size = src->size;    
+    (*dst)->size = src->size;
   }
 
   return code;
