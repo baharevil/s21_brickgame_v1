@@ -22,7 +22,6 @@ void* gui_cli_loop(runtime_t* runtime) {
   // }
 
   if (!code) {
-    game_info_t game_info = {0};
     signals_unblock();
     pthread_mutex_lock(&runtime->stdout_mutex);
     initscr();
@@ -33,6 +32,7 @@ void* gui_cli_loop(runtime_t* runtime) {
     wrefresh(stdscr);
 
     while (!atomic_load(&runtime->game_stop)) {
+      game_info_t game_info = {0};
       pthread_mutex_lock(&runtime->cond_mutex);
       pthread_cond_wait(&runtime->do_render, &runtime->cond_mutex);
       // Такая передача по значению навязана нам заданием :(

@@ -37,7 +37,6 @@ void *tetris_loop(runtime_t *runtime) {
 
       // Проверяем, не завершает ли модель игру
       if (game->state == none) {
-        game_locate(game);
         atomic_store(&runtime->model_stop, 1);
         pthread_cond_signal(&runtime->do_render);
       }

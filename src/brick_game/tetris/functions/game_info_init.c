@@ -19,7 +19,7 @@ int game_info_init(game_info_t **game_info) {
   // Аллоцируем строки поля
   if (!code) {
     int **temp = NULL;
-    temp = (int **)malloc(field_height * sizeof(int *));
+    temp = (int **)calloc(field_height, sizeof(int *));
     code = (temp == NULL) * ENOMEM;
     if (!code) (*game_info)->field = temp;
   }
@@ -27,7 +27,7 @@ int game_info_init(game_info_t **game_info) {
   if (!code) {
     int *temp = NULL;
     for (int row = 0; !code && row < field_height; row++) {
-      temp = (int *)malloc(field_width * sizeof(int));
+      temp = (int *)calloc(field_width, sizeof(int));
       code = (temp == NULL) * ENOMEM;
       if (!code) (*game_info)->field[row] = temp;
     }
