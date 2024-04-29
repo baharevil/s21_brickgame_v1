@@ -25,10 +25,11 @@ void* gui_cli_loop(runtime_t* runtime) {
     signals_unblock();
     pthread_mutex_lock(&runtime->stdout_mutex);
     initscr();
+    start_color();
+    use_default_colors();
     set_signal_handler(gui_cli_resize);
-    // raw();
     box(stdscr, 0, 0);
-    wprintw(stdscr, "Hi There !!!");
+    wprintw(stdscr, "Tetris v.1");
     wrefresh(stdscr);
 
     while (!atomic_load(&runtime->game_stop)) {

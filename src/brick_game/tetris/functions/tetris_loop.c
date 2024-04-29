@@ -15,11 +15,6 @@ void *tetris_loop(runtime_t *runtime) {
 
   code = (runtime == NULL) * EFAULT;
 
-  // if (!code) {
-  //   pthread_t self_tid = pthread_self();
-  //   pthread_detach(self_tid);
-  // }
-
   if (!code) {
     UserAction_t act = None;
     unsigned long now = 0;
@@ -46,7 +41,6 @@ void *tetris_loop(runtime_t *runtime) {
       if (game->state == moving &&
           now - game->last_op >= (unsigned long)game->game_info->speed) {
         shift_fn(game);
-        game->last_op = now;
       }
 
       // Обработка пользовательского ввода

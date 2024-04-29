@@ -8,16 +8,28 @@ int figure_check(game_t *game, enum direction dir) {
 
   int code = 0;
 
-  for (int row = 0; row < game->figure_cur->size; row++) {
-    for (int col = 0; col < game->figure_cur->size; col++) {
-      if (game->game_info->field
-              [game->figure_pos.y + row +
-               (dir == down && game->figure_pos.y + row + 1 < field_height) -
-               (dir == up && game->figure_pos.y + row - 1 >= 0)]
-              [game->figure_pos.x + col +
-               (dir == right && game->figure_pos.x + col + 1 < field_width) -
-               (dir == left && game->figure_pos.x + col - 1 >= 0)] == 1)
-        code = 1;
+  for (int row = 0; !code && row < game->figure_cur->size; row++) {
+    for (int col = 0; !code && col < game->figure_cur->size; col++) {
+      if (game->figure_cur->body[row][col]) {
+        // Проверка границ
+        if (game->figure_pos.y + row +
+                (dir == down) > field_height - 1
+                || game->figure_pos.y + row -
+                (dir == up) < 0
+                || game->figure_pos.x + col -
+                (dir == left) < 0
+                || game->figure_pos.x + col +
+                (dir == right) > field_width - 1)
+          code = 1;
+
+        // Проверка соседних блоков
+        if (!code && game->game_info->field
+                [game->figure_pos.y + row +
+                (dir == down) - (dir == up)]
+                [game->figure_pos.x + col +
+                (dir == right) - (dir == left)] == 1)
+          code = 1;
+      }
     }
   }
 
