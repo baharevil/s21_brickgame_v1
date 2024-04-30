@@ -41,7 +41,6 @@ void* gui_cli_loop(runtime_t* runtime) {
       if (game_info.field) gui_cli_render(game_info);
       pthread_mutex_unlock(&runtime->cond_mutex);
     }
-    cbreak();
     endwin();
     pthread_mutex_unlock(&runtime->stdout_mutex);
   }

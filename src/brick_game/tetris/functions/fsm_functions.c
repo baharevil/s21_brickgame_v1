@@ -52,16 +52,13 @@ void shift_fn(game_t *game) {
     fsm_state temp_state = game->state;
     game->state = shift;
     figure_unset(game);
+    // check to connect
     if (figure_check(game, down) != 0) connect_fn(game);
-    if (game->figure_pos.y < field_height - game->figure_cur->size)
-      game->figure_pos.y++;
-    else if (game->figure_pos.y == field_height - game->figure_cur->size)
-      connect_fn(game);
+    else game->figure_pos.y++;
     figure_set(game);
     game->last_op = time_msec();
     game->modified = true;
     game->state = temp_state;
-    // TODO: check to connect
   }
 }
 
