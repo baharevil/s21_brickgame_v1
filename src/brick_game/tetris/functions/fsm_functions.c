@@ -42,7 +42,6 @@ void spawn_fn(game_t *game) {
 
 void move_fn(game_t *game) {
   if (game) {
-    // game->last_op = time_msec();
     game->state = moving;
   }
 }

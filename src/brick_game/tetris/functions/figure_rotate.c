@@ -9,36 +9,29 @@ int figure_rotate(game_t *game) {
 
   int code = 0;
 
-  int **temp_body = NULL;
-  temp_body = malloc(game->figure_cur->size * sizeof(int *));
-  code = (temp_body == NULL) * ENOMEM;
-
-  if (!code) {
-    int *temp = NULL;
-    for (int row = 0; !code && row < game->figure_cur->size; row++) {
-      temp = calloc(game->figure_cur->size, sizeof(int));
-      code = (temp == NULL) * ENOMEM;
-      if (!code) temp_body[row] = temp;
-    }
-  }
+  // int **temp_body = NULL;
+  figure_t *temp = NULL;
+  temp = figure_create(game->figure_cur->size);
+  code = (temp == NULL) * ENOMEM;
 
   if (!code) {
     for (int col = 0; col < game->figure_cur->size; col++) {
-      for (int row = game->figure_cur->size - 1; row >= 0; row--) {
-        temp_body[col][row] = game->figure_cur->body[row][col];
+      for (int row = game->figure_cur->size - 1, row_n = 0; row >= 0; row--, row_n++) {
+        temp->body[col][row_n] = game->figure_cur->body[row][col];
       }
     }
   }
 
-  figure_copy_body(temp_body, game->figure_cur->body, game->figure_cur->size);
+  figure_copy_body(temp->body, game->figure_cur->body, game->figure_cur->size);
 
   if (!code) {
-    for (int row = 0; row < game->figure_cur->size; row++) {
-      free(temp_body[row]);
-    }
+    figure_destroy(temp);
+    // for (int row = 0; row < game->figure_cur->size; row++) {
+    //   free(temp_body[row]);
+    // }
   }
 
-  if (!code) free(temp_body);
+  // if (!code) free(temp_body);
 
   return code;
 }
