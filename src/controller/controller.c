@@ -39,14 +39,11 @@ int main() {
     while (!atomic_load(&runtime.model_stop) &&
            !atomic_load(&runtime.gui_stop) &&
            !atomic_load(&runtime.controller_stop))
-      thread_wait(500);
+      // thread_wait(500); // грузит процессор (
+      sleep(1);
     atomic_store(&runtime.game_stop, 1);
   }
-  // Ожидание выхода всех дочерних потоков
-  // if (!code) {
-  //   while (runtime.barrier.__size[0] != 3)
-  //     thread_wait(500);
-  // }
+
   // Ожидание выхода всех дочерних потоков
   pthread_join(runtime.controller, (void*)&code);
   pthread_join(runtime.gui, (void*)&code);

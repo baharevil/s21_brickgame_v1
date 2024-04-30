@@ -12,10 +12,10 @@ int game_info_clean(game_info_t *game_info) {
   game_info->level = 1;
   game_info->speed = 1000;
   game_info->pause = 0;
-  
+
   if (game_info->field) {
     for (int row = 0; row < field_height; row++) {
-      memset(game_info->field[row], 0, field_width * sizeof (int));
+      memset(game_info->field[row], 0, field_width * sizeof(int));
     }
   }
 

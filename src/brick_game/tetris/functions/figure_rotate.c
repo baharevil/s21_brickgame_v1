@@ -16,7 +16,8 @@ int figure_rotate(game_t *game) {
 
   if (!code) {
     for (int col = 0; col < game->figure_cur->size; col++) {
-      for (int row = game->figure_cur->size - 1, row_n = 0; row >= 0; row--, row_n++) {
+      for (int row = game->figure_cur->size - 1, row_n = 0; row >= 0;
+           row--, row_n++) {
         temp->body[col][row_n] = game->figure_cur->body[row][col];
       }
     }

@@ -35,7 +35,8 @@ void spawn_fn(game_t *game) {
     figure_copy(game->database.figures[rnd], &game->figure_cur);
     game->figure_pos.x = field_width / 2 - game->figure_cur->size / 2;
     game->figure_pos.y = 0;
-    if (figure_check(game)) game_over_fn(game);
+    if (figure_check(game))
+      game_over_fn(game);
     else {
       figure_set(game);
       game->last_op = time_msec();
@@ -74,6 +75,7 @@ void connect_fn(game_t *game) {
   if (game) {
     game->state = connect;
     figure_set(game);
+    kaboom(game);
     spawn_fn(game);
   }
 }
@@ -143,13 +145,16 @@ void action_fn(game_t *game) {
     figure_t *temp = NULL;
     temp = figure_create(game->figure_cur->size);
     if (temp) {
-      figure_copy_body(game->figure_cur->body, temp->body, game->figure_cur->size);
+      figure_copy_body(game->figure_cur->body, temp->body,
+                       game->figure_cur->size);
       figure_unset(game);
       figure_rotate(game);
-      // check = figure_check(game, up) || figure_check(game, down) || figure_check(game, left) || figure_check(game, right);
+      // check = figure_check(game, up) || figure_check(game, down) ||
+      // figure_check(game, left) || figure_check(game, right);
       check = figure_check(game);
       if (check) {
-        figure_copy_body(temp->body, game->figure_cur->body, game->figure_cur->size);
+        figure_copy_body(temp->body, game->figure_cur->body,
+                         game->figure_cur->size);
       }
       figure_destroy(temp);
       figure_set(game);

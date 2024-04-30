@@ -35,6 +35,7 @@ int figure_set(game_t *game);
 int figure_unset(game_t *game);
 int figure_rotate(game_t *game);
 int figure_check(game_t *game);
+int kaboom(game_t *game);
 
 action fsm(fsm_state, UserAction_t);
 void start_fn(game_t *);
