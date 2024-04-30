@@ -12,8 +12,6 @@
 #include "common/game_info_t.h"
 #endif
 
-enum direction { up = 1, down = 2, left = 3, right = 4 };
-
 typedef struct figure {
   unsigned id;          // Increment
   unsigned short size;  // In both ordinates

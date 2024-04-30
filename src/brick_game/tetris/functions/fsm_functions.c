@@ -35,7 +35,7 @@ void spawn_fn(game_t *game) {
     figure_copy(game->database.figures[rnd], &game->figure_cur);
     game->figure_pos.x = field_width / 2 - game->figure_cur->size / 2;
     game->figure_pos.y = 0;
-    if (figure_check(game, down)) game_over_fn(game);
+    if (figure_check(game)) game_over_fn(game);
     else {
       figure_set(game);
       game->last_op = time_msec();
@@ -57,14 +57,16 @@ void shift_fn(game_t *game) {
     game->state = shift;
     figure_unset(game);
     // check to connect
-    if (figure_check(game, down) != 0) connect_fn(game);
-    else if (game->state != game_over) {
-      game->figure_pos.y++;
+    game->figure_pos.y += 1;
+    if (figure_check(game)) {
+      game->figure_pos.y -= 1;
+      connect_fn(game);
+    } else if (game->state != game_over) {
       figure_set(game);
       game->last_op = time_msec();
-      game->modified = true;
       game->state = temp_state;
     }
+    game->modified = true;
   }
 }
 
@@ -94,7 +96,8 @@ void terminate_fn(game_t *game) {
 void left_fn(game_t *game) {
   if (game) {
     figure_unset(game);
-    game->figure_pos.x -= !figure_check(game, left);
+    game->figure_pos.x -= 1;
+    game->figure_pos.x += figure_check(game);
     figure_set(game);
     game->modified = true;
     move_fn(game);
@@ -104,7 +107,8 @@ void left_fn(game_t *game) {
 void right_fn(game_t *game) {
   if (game) {
     figure_unset(game);
-    game->figure_pos.x += !figure_check(game, right);
+    game->figure_pos.x += 1;
+    game->figure_pos.x -= figure_check(game);
     figure_set(game);
     game->modified = true;
     move_fn(game);
@@ -114,7 +118,8 @@ void right_fn(game_t *game) {
 void up_fn(game_t *game) {
   if (game) {
     figure_unset(game);
-    game->figure_pos.y -= !figure_check(game, up);
+    game->figure_pos.y -= 1;
+    game->figure_pos.y += figure_check(game);
     figure_set(game);
     game->modified = true;
     move_fn(game);
@@ -124,7 +129,8 @@ void up_fn(game_t *game) {
 void down_fn(game_t *game) {
   if (game) {
     figure_unset(game);
-    game->figure_pos.y += !figure_check(game, down);
+    game->figure_pos.y += 1;
+    game->figure_pos.y -= figure_check(game);
     figure_set(game);
     game->modified = true;
     move_fn(game);
@@ -136,16 +142,19 @@ void action_fn(game_t *game) {
     int check = 0;
     figure_t *temp = NULL;
     temp = figure_create(game->figure_cur->size);
-    figure_copy_body(game->figure_cur->body, temp->body, game->figure_cur->size);
-    figure_unset(game);
-    figure_rotate(game);
-    check = figure_check(game, up) || figure_check(game, down) || figure_check(game, left) || figure_check(game, right);
-    if (check) {
-      figure_copy_body(temp->body, game->figure_cur->body, game->figure_cur->size);
+    if (temp) {
+      figure_copy_body(game->figure_cur->body, temp->body, game->figure_cur->size);
+      figure_unset(game);
+      figure_rotate(game);
+      // check = figure_check(game, up) || figure_check(game, down) || figure_check(game, left) || figure_check(game, right);
+      check = figure_check(game);
+      if (check) {
+        figure_copy_body(temp->body, game->figure_cur->body, game->figure_cur->size);
+      }
+      figure_destroy(temp);
+      figure_set(game);
+      game->modified = true;
     }
-    figure_set(game);
-    figure_destroy(temp);
-    game->modified = true;
     move_fn(game);
   }
 }
