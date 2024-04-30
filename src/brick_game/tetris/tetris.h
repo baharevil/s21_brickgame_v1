@@ -19,6 +19,7 @@ int game_init(game_t **game);
 int game_destroy(game_t *game);
 int game_info_init(game_info_t **game_info);
 int game_info_destroy(game_info_t *game_info);
+int game_info_clean(game_info_t *game_info);
 
 figure_t *figure_create(const unsigned short size);
 void figure_destroy(figure_t *figure);

@@ -5,8 +5,10 @@
 
 void start_fn(game_t *game) {
   if (game) {
+    if (game->state == game_over) {
+      game_info_clean(game->game_info);
+    }
     game->state = start;
-    // game->last_op = time_msec();
     spawn_fn(game);
   }
 }
@@ -33,10 +35,13 @@ void spawn_fn(game_t *game) {
     figure_copy(game->database.figures[rnd], &game->figure_cur);
     game->figure_pos.x = field_width / 2 - game->figure_cur->size / 2;
     game->figure_pos.y = 0;
-    figure_set(game);
-    game->last_op = time_msec();
-    game->modified = true;
-    move_fn(game);
+    if (figure_check(game, down)) game_over_fn(game);
+    else {
+      figure_set(game);
+      game->last_op = time_msec();
+      game->modified = true;
+      move_fn(game);
+    }
   }
 }
 
@@ -53,11 +58,13 @@ void shift_fn(game_t *game) {
     figure_unset(game);
     // check to connect
     if (figure_check(game, down) != 0) connect_fn(game);
-    else game->figure_pos.y++;
-    figure_set(game);
-    game->last_op = time_msec();
-    game->modified = true;
-    game->state = temp_state;
+    else if (game->state != game_over) {
+      game->figure_pos.y++;
+      figure_set(game);
+      game->last_op = time_msec();
+      game->modified = true;
+      game->state = temp_state;
+    }
   }
 }
 
@@ -71,8 +78,9 @@ void connect_fn(game_t *game) {
 
 void game_over_fn(game_t *game) {
   if (game) {
-    // Game Over screen, Start to Play again
     game->state = game_over;
+    // Game Over screen, Start to Play again
+    printf("GAME OVER!\n");
   }
 }
 
