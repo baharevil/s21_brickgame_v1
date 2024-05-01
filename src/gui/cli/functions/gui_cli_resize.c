@@ -1,5 +1,7 @@
 #include <ncurses.h>
 #include <signal.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
 #include <string.h>
 
 #include "common/common.h"
@@ -7,28 +9,22 @@
 #include "gui_cli.h"
 
 void gui_cli_resize() {
-  endwin();
+  struct winsize ws = {0};
+  ioctl(STDIN_FILENO, TIOCGWINSZ, &ws);
   clear();
-  initscr();
+  resizeterm(ws.ws_row, ws.ws_col);
+  box(stdscr, 0, 0);
+  
   refresh();
 
-  char tmp[128];
-  sprintf(tmp, "%dx%d", COLS, LINES);
+  int x = ws.ws_col / 2 - 20 / 2;
+  int y = ws.ws_row / 2 - 1;
 
-  int x = COLS / 2 - strlen(tmp) / 2;
-  int y = LINES / 2 - 1;
-
-  box(stdscr, 0, 0);
-  if (LINES < 22 || COLS < 70)
+  if (ws.ws_row < 22 || ws.ws_col < 70)
     mvaddstr(y, x, "Screen too small :(");
   else
-    mvaddstr(y, x, tmp);
+    mvaddstr(y, x, "                   ");
   refresh();
 
-  // TODO:
-  // Попробовать получить новые значения размеров окна(!) main_window
-  // без переинициализации всего ncurses (initscr());
-  // В таком случае можно будет удалить окно main_window и создать его заново.
-  // signal(SIGWINCH, gui_cli_resize);
   set_signal_handler(gui_cli_resize);
 }
