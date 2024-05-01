@@ -12,7 +12,7 @@ int init_game_windows(game_windows_t *windows) {
 
   // game_windows_t
   data.hight = WINLIN + 2;
-  data.width = data.hight + 2;
+  data.width = data.hight + 22;
   init_win(stdscr, &(windows->win), &data);
 
   // game_win_t

@@ -1,7 +1,0 @@
-{
-  "files.associations": {
-    "cstdlib": "c",
-    "game_info_t.h": "c",
-    "malloc.h": "c"
-  }
-}

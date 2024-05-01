@@ -45,28 +45,16 @@ void* gui_cli_loop(runtime_t* runtime) {
   int code = 0;
   code = (runtime == NULL) * EFAULT;
 
-  // if (!code) {
-  //   // pthread_t self_tid = pthread_self();
-  //   // pthread_detach(self_tid);
-  // }
-
   if (!code) {
+    signals_block();
     signals_unblock();
+    set_signal_handler(gui_cli_resize);
     pthread_mutex_lock(&runtime->stdout_mutex);
 
-    setlocale(LC_CTYPE, "");
-    initscr();
-    cbreak();
-    noecho();
-    curs_set(0);
-
-    // start_color();
-    // use_default_colors();
-
-    // set_signal_handler(gui_cli_resize);
-    // box(stdscr, 0, 0);
-    // wprintw(stdscr, "Tetris v.1");
-    // wrefresh(stdscr);
+    setlocale(LC_CTYPE, ""); // Стоит перенести в init
+    initscr();               // Стоит перенести в init
+    // cbreak(); // Дерутся с
+    // noecho(); // контроллером
 
     game_windows_t windows = {0};
     init_game_windows(&windows);

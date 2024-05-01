@@ -8,7 +8,7 @@
 #include "common/runtime_t.h"
 
 #define WINLIN 22
-#define WINCOL 12
+#define WINCOL 22
 
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
@@ -67,6 +67,7 @@ void render_field(game_win_t *game);
 void *gui_cli_loop(runtime_t *);
 void gui_cli_resize();
 void gui_cli_render(game_windows_t *, game_info_t);
+int term_size(int *y, int *x);
 
 extern game_info_t update_current_state();
 

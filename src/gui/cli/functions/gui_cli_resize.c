@@ -9,21 +9,14 @@
 #include "gui_cli.h"
 
 void gui_cli_resize() {
-  struct winsize ws = {0};
-  ioctl(STDIN_FILENO, TIOCGWINSZ, &ws);
-  clear();
-  resizeterm(ws.ws_row, ws.ws_col);
-  box(stdscr, 0, 0);
+  int x = 0, y = 0;
+  term_size(&y, &x);
   
-  refresh();
-
-  int x = ws.ws_col / 2 - 20 / 2;
-  int y = ws.ws_row / 2 - 1;
-
-  if (ws.ws_row < 22 || ws.ws_col < 70)
-    mvaddstr(y, x, "Screen too small :(");
-  else
-    mvaddstr(y, x, "                   ");
+  resizeterm(y, x);
+  if (y < 24 || x < 46)
+    clear();
+  // box(stdscr, 0, 0);
+  curs_set(0);
   refresh();
 
   set_signal_handler(gui_cli_resize);
