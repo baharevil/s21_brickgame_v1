@@ -1,6 +1,6 @@
 #---== COMPILER ==---#
 CC = gcc
-LDFLAGS = -lncurses
+LDFLAGS = -lpanel -lncurses
 VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 # -lpanel -lncurses -lmenu
 
@@ -15,7 +15,7 @@ sub_frontend_dir = cli
 install_dir = $(project_name)
 import := $(controller_dir)/controller.a $(frontend_dir)/gui.a $(backend_dir)/tetris.a $(common_dir)/common.a
 
-.PHONY: all rebuild
+.PHONY: all rebuild $(import)
 
 all: $(project_name)
 rebuild: uninstall $(project_name)

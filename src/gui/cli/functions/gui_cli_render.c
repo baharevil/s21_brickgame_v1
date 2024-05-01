@@ -1,25 +1,30 @@
-#include <ncurses.h>
-#include <string.h>
+
 
 #include "common/game_info_t.h"
 #include "gui_cli.h"
 
-void gui_cli_render(game_info_t game_info) {
-  // wborder(stdscr, 1, 2, 3, 4, 1, 2, 3, 4);
-  mvwprintw(stdscr, 1, 5, "-------------------");
+void gui_cli_render(game_windows_t *windows, game_info_t game_info) {
+  if (!windows) return;
+
+  windows->game.field = game_info.field;
+  render_field(&(windows->game));
+  // TODO render_next, render_score, render_max, render_level
+  update_panels();
+  doupdate();
+
+  refresh();
+}
+
+void render_field(game_win_t *game) {
+  if (!game) return;
+
+  wclear(game->win.win);
+  box(game->win.win, 0, 0);
   for (int row = 0; row < field_height; row++) {
     for (int col = 0; col < field_width; col++) {
-      mvwprintw(stdscr, 1 + row, 4, "|");
-      if (game_info.field[row][col]) {
-        mvwprintw(stdscr, 2 + row, 5 + col * 2, "%c", 'o');
-      } else {
-        mvwprintw(stdscr, 2 + row, 5 + col * 2, "%c", 32);
-      }
-      mvwprintw(stdscr, 1 + row, 24, "|");
+      if (game->field[row][col]) mvwaddch(game->win.win, row + 1, col + 1, ACS_DEGREE);
     }
   }
-  mvwprintw(stdscr, 21, 4, "|");
-  mvwprintw(stdscr, 21, 24, "|");
-  mvwprintw(stdscr, 22, 5, "-------------------");
-  refresh();
+  wrefresh(game->win.win);
+
 }
