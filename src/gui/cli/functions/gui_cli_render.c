@@ -4,8 +4,10 @@
 void gui_cli_render(game_windows_t *windows, game_info_t game_info) {
   if (!windows) return;
 
+  int term_x = 0, term_y = 0;
+  term_size(&term_y, &term_x);
   windows->game.field = game_info.field;
-  render_field(&(windows->game));
+  if (term_y > 24 || term_x > 46) render_field(&(windows->game));
   // TODO render_next, render_score, render_max, render_level
   update_panels();
   doupdate();

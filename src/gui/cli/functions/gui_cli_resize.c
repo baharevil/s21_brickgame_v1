@@ -13,9 +13,10 @@ void gui_cli_resize() {
   term_size(&y, &x);
   
   resizeterm(y, x);
-  if (y < 24 || x < 46)
+  if (y < 24 || x < 46) {
     clear();
-  // box(stdscr, 0, 0);
+    box(stdscr, 0, 0);
+  }
   curs_set(0);
   refresh();
 
