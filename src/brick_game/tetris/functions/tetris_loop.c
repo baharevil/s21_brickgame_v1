@@ -10,23 +10,21 @@
 #include "tetris.h"
 
 void *tetris_loop(runtime_t *runtime) {
+  if (!runtime) return (void *) EFAULT;
+  
   int code = 0;
   game_t *game = NULL;
 
-  code = (runtime == NULL) * EFAULT;
+  code = game_init(&game);
 
   if (!code) {
     UserAction_t act = None;
     unsigned long now = 0;
 
-    code = game_init(&game);
+    signals_block();
+    game_locate(game);
 
-    if (!code) {
-      signals_block();
-      game_locate(game);
-    }
-
-    while (!code && !atomic_load(&runtime->game_stop)) {
+    while (!atomic_load(&runtime->game_stop)) {
       // Цикл не грузит процессор
       thread_wait(100);
 
@@ -60,9 +58,9 @@ void *tetris_loop(runtime_t *runtime) {
   // Destroy the game
   if (game) game_destroy(game);
 
-  atomic_store(&runtime->model_stop, 1);
+  if (!code) atomic_store(&runtime->model_stop, 1);
 
-  pthread_barrier_wait(&runtime->barrier);
+  if (!code) pthread_barrier_wait(&runtime->barrier);
 
   pthread_exit(0);
 }
