@@ -45,10 +45,10 @@ void* controller_loop(runtime_t* runtime) {
       }
     }
     pthread_mutex_unlock(&runtime->stdin_mutex);
-    canonical_mode(0);
   }
 
   pthread_barrier_wait(&runtime->barrier);
+  canonical_mode(0);
 
   pthread_exit(0);
 }

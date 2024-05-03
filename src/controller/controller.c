@@ -45,8 +45,8 @@ int main() {
   }
 
   // Ожидание выхода всех дочерних потоков
-  pthread_join(runtime.controller, (void*)&code);
   pthread_join(runtime.gui, (void*)&code);
+  pthread_join(runtime.controller, (void*)&code);
   pthread_join(runtime.model, (void*)&code);
 
   // Деструктор
