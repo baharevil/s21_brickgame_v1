@@ -11,12 +11,14 @@ START_TEST(thread_wait_test1) {
 
 Suite * suite_thread_wait() {
   Suite *s = NULL;
-  TCase *tc_core = NULL;
+  TCase *tc = NULL;
 
-  s = suite_create("suite_thread_wait");
-  tc_core = tcase_create("Core");
+  s = suite_create("\x1b[1;33m-=suite_thread_wait=-\x1b[0m");
+  tc = tcase_create("suite_thread_wait");
 
-  tcase_add_test(tc_core, thread_wait_test1);
+  tcase_add_test(tc, thread_wait_test1);
+
+  suite_add_tcase(s, tc);
 
   return s;
 }

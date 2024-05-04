@@ -15,7 +15,7 @@ void run_test_case(Suite *testcase) {
 }
 
 void run_tests() {
-//   int testcase_counter = 1;
+  int testcase_counter = 0;
   Suite *list_cases[] = {
     suite_tetris_loop(),
     // suite_game_locate(),
@@ -58,11 +58,11 @@ void run_tests() {
     NULL
   };
 
-  for (Suite **current_testcase = list_cases; current_testcase != NULL; current_testcase++) {
-    run_test_case(*current_testcase);
+  while (list_cases[testcase_counter] != NULL) {
+    run_test_case(list_cases[testcase_counter]);
     putc('\n', stdout);
-  }
-  
+    testcase_counter++;
+  } 
 }
 
 int main() {

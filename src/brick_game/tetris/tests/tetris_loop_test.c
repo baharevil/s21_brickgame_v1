@@ -11,12 +11,14 @@ START_TEST(suite_tetris_loop1) {
 
 Suite * suite_tetris_loop() {
   Suite *s = NULL;
-  TCase *tc_core = NULL;
+  TCase *tc = NULL;
 
-  s = suite_create("suite_tetris_loop");
+  s = suite_create("\x1b[1;33m-=suite_tetris_loop=-\x1b[0m");
 
-  tc_core = tcase_create("Core");
-  tcase_add_test(tc_core, suite_tetris_loop1);
+  tc = tcase_create("suite_tetris_loop");
+  tcase_add_test(tc, suite_tetris_loop1);
+
+  suite_add_tcase(s, tc);
 
   return s;
 }
