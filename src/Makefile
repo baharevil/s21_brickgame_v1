@@ -43,10 +43,20 @@ $(common_dir)/common.a:
 uninstall: clean
 	@echo "Game uninstall"
 
-#---== TEST ==---#
-test:
+#---== TESTS ==---#
+test: common_test tetris_test
+
+common_test: LDFLAGS += -lcheck -lsubunit -lm
+common_test: $(common_dir)/common.a
+	$(MAKE) test --directory=$(common_dir)
+	$(CC) -L. $(common_dir)/common_test.a $(addprefix -l:, $^) $(LDFLAGS) -o $@
+	@echo "Common test compiled"
+
+tetris_test: LDFLAGS += -lcheck -lsubunit -lm
+tetris_test: $(backend_dir)/tetris.a $(common_dir)/common.a
 	$(MAKE) test --directory=$(backend_dir) target_dir=$(sub_backend_dir)
-	@echo "Test complidet"
+	$(CC) -L. $(backend_dir)/tetris_test.a $(addprefix -l:, $^) $(LDFLAGS) -o $@
+	@echo "Tetris test compiled"
 
 dist:
 # TODO dist (tar) goal
@@ -80,7 +90,7 @@ dvi:
 #---== CLEAN ==---#
 .PHONY: clean
 # TODO clean_dvi goal
-clean: clean_backend clean_frontend
+clean: clean_backend clean_frontend clean_test
 	$(MAKE) clean --directory=$(controller_dir)
 	$(MAKE) clean --directory=$(common_dir)
 	@rm -rf s21_brick_game_v1
@@ -90,3 +100,11 @@ clean_backend:
 
 clean_frontend:
 	@$(MAKE) clean --directory=$(frontend_dir) target_dir=$(sub_frontend_dir)
+
+clean_test: clean_common_test clean_tetris_test
+
+clean_common_test:
+	@rm -rf common_test
+
+clean_tetris_test:
+	@rm -rf tetris_test
