@@ -5,16 +5,14 @@
 #include "tetris.h"
 
 int game_info_init(game_info_t **game_info) {
+  if(game_info == NULL) return EINVAL;
+
   int code = 0;
 
-  code = (game_info == NULL) * EINVAL;
-
   // Аллоцируем структуру game_info_t
-  if (!code) {
-    game_info_t *temp = calloc(1, sizeof(game_info_t));
-    code = (temp == NULL) * ENOMEM;
-    if (!code) *game_info = temp;
-  }
+  game_info_t *temp = calloc(1, sizeof(game_info_t));
+  code = (temp == NULL) * ENOMEM;
+  if (!code) *game_info = temp;
 
   // Аллоцируем строки поля
   if (!code) {

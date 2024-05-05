@@ -10,15 +10,15 @@ struct locate {
 };
 
 game_t *game_locate(game_t *game) {
-  static struct locate location;
+  static struct locate location = {0};
   game_t *result = NULL;
 
-  if (game && !location.value) {
-    location.value = set;
-    location.addr = game;
-  } else if (game == location.addr && location.value) {
+  if (game == location.addr && location.value) {
     location.value = not_set;
     location.addr = NULL;
+  } else if (game) {
+    location.value = set;
+    location.addr = game;
   }
 
   if (location.value == set && location.addr) result = location.addr;

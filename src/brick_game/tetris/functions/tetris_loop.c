@@ -55,6 +55,9 @@ void *tetris_loop(runtime_t *runtime) {
     }
   }
 
+  // Check the game locate clean
+  if (game_locate(NULL)) game_locate(game);
+
   // Destroy the game
   if (game) game_destroy(game);
 

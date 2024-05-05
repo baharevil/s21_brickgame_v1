@@ -23,6 +23,7 @@ int figure_db_load(const char *dir, figures_db_t *db) {
   if (!code) {
     size_t pathlen = strlen(dir);
     fullpath = malloc(sizeof(char) * (pathlen + FILENAME_MAX));
+    code = (fullpath == NULL) * ENOMEM;
   }
 
   if (!code) {

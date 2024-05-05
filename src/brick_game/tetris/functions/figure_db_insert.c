@@ -10,10 +10,10 @@ int figure_db_insert(figures_db_t *db, unsigned count) {
 
   code = (db == NULL) * EINVAL;
 
-  if (!code)
+  if (!code) {
     db->figures = realloc(db->figures, (count + 1) * sizeof(figure_t *));
-
-  code = (db->figures == NULL) * ENOMEM;
+    code = (db->figures == NULL) * ENOMEM;
+  }
 
   return code;
 }
