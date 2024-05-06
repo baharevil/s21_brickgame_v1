@@ -27,7 +27,7 @@ int figure_db_insert(figures_db_t *db, unsigned count);
 int figure_db_destroy(figures_db_t *db);
 
 figure_t *figure_create(const unsigned short size);
-void figure_destroy(figure_t *figure);
+int figure_destroy(figure_t *figure);
 figure_t *figure_load(FILE *file);
 int figure_copy(const figure_t *src, figure_t **dst);
 int figure_copy_body(int **src, int **dst, unsigned short size);

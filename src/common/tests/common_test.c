@@ -1,6 +1,6 @@
-#include <stdio.h>
-
 #include "common_test.h"
+
+#include <stdio.h>
 
 void run_test_case(Suite *testcase) {
   SRunner *srunner = {0};
@@ -14,14 +14,12 @@ void run_test_case(Suite *testcase) {
 
 void run_tests() {
   int testcase_counter = 0;
-  Suite *list_cases[] = {
-    suite_thread_wait(),
-    // suite_time_msec(),
-    // suite_signals_block(),
-    // suite_signals_unblock(),
-    // suite_set_signal_handler(),
-    NULL
-  };
+  Suite *list_cases[] = {suite_thread_wait(),
+                         // suite_time_msec(),
+                         // suite_signals_block(),
+                         // suite_signals_unblock(),
+                         // suite_set_signal_handler(),
+                         NULL};
 
   while (list_cases[testcase_counter] != NULL) {
     run_test_case(list_cases[testcase_counter]);

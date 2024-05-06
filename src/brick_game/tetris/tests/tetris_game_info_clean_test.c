@@ -1,6 +1,5 @@
-#include <errno.h>
 #include <check.h>
-#include <stdbool.h>
+#include <errno.h>
 
 #include "tetris.h"
 
@@ -8,7 +7,8 @@ START_TEST(suite_game_info_clean_test1) {
   int result = 0;
   result = game_info_clean(NULL);
   ck_assert_int_eq(result, EINVAL);
-} END_TEST
+}
+END_TEST
 
 START_TEST(suite_game_info_clean_test2) {
   int result = 0;
@@ -17,9 +17,10 @@ START_TEST(suite_game_info_clean_test2) {
   result = game_info_clean(game_info);
   game_info_destroy(game_info);
   ck_assert_int_eq(result, 0);
-} END_TEST
+}
+END_TEST
 
-Suite * suite_game_info_clean() {
+Suite *suite_game_info_clean() {
   Suite *s = NULL;
   TCase *tc = NULL;
 

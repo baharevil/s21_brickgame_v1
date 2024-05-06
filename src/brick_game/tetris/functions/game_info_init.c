@@ -5,7 +5,7 @@
 #include "tetris.h"
 
 int game_info_init(game_info_t **game_info) {
-  if(game_info == NULL) return EINVAL;
+  if (game_info == NULL) return EINVAL;
 
   int code = 0;
 

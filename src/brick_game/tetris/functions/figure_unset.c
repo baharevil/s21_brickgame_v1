@@ -4,7 +4,9 @@
 #include "tetris.h"
 
 int figure_unset(game_t *game) {
-  if (!game) return EINVAL;
+  if (!game || !game->figure_cur || !game->figure_cur->body ||
+      !game->game_info || !game->game_info->field)
+    return EINVAL;
 
   int code = 0;
 

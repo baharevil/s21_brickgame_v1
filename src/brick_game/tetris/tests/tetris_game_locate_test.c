@@ -1,4 +1,3 @@
-#include <errno.h>
 #include <check.h>
 
 #include "tetris.h"
@@ -7,7 +6,8 @@ START_TEST(suite_game_locate_test1) {
   void *result = NULL;
   result = (void *)game_locate(NULL);
   ck_assert_ptr_eq(result, (void *)NULL);
-} END_TEST
+}
+END_TEST
 
 START_TEST(suite_game_locate_test2) {
   void *result = NULL;
@@ -16,9 +16,10 @@ START_TEST(suite_game_locate_test2) {
   // Clean the location
   game_locate(&game);
   ck_assert_ptr_eq(result, (void *)&game);
-} END_TEST
+}
+END_TEST
 
-Suite * suite_game_locate() {
+Suite *suite_game_locate() {
   Suite *s = NULL;
   TCase *tc = NULL;
 

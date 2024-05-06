@@ -10,8 +10,8 @@
 #include "tetris.h"
 
 void *tetris_loop(runtime_t *runtime) {
-  if (!runtime) return (void *) EFAULT;
-  
+  if (!runtime) return (void *)EFAULT;
+
   int code = 0;
   game_t *game = NULL;
 

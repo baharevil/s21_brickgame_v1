@@ -4,7 +4,7 @@
 
 #include "game_t.h"
 
-void figure_destroy(figure_t *figure) {
+int figure_destroy(figure_t *figure) {
   int code = 0;
 
   code = (figure == NULL) * EINVAL;
@@ -17,4 +17,6 @@ void figure_destroy(figure_t *figure) {
     figure->size = 0;
     free(figure);
   }
+
+  return code;
 }

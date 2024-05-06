@@ -1,5 +1,5 @@
-#include <errno.h>
 #include <check.h>
+#include <errno.h>
 
 #include "tetris.h"
 
@@ -7,21 +7,23 @@ START_TEST(suite_figure_db_load_test1) {
   int result = 0;
   result = figure_db_load(NULL, NULL);
   ck_assert_int_eq(result, EINVAL);
-} END_TEST
+}
+END_TEST
 
 START_TEST(suite_figure_db_load_test2) {
   int result = 0;
   figures_db_t db = {0};
   result = figure_db_load("./wrong_path/", &db);
   ck_assert_int_eq(result, ENOENT);
-} END_TEST
+}
+END_TEST
 
 START_TEST(suite_figure_db_load_test3) {
   int result = 0;
   result = figure_db_load("./figures/", NULL);
   ck_assert_int_eq(result, EINVAL);
-} END_TEST
-
+}
+END_TEST
 
 START_TEST(suite_figure_db_load_test4) {
   int result = 0;
@@ -29,9 +31,10 @@ START_TEST(suite_figure_db_load_test4) {
   result = figure_db_load("./figures/", &db);
   figure_db_destroy(&db);
   ck_assert_int_eq(result, 0);
-} END_TEST
+}
+END_TEST
 
-Suite * suite_figure_db_load() {
+Suite *suite_figure_db_load() {
   Suite *s = NULL;
   TCase *tc = NULL;
 

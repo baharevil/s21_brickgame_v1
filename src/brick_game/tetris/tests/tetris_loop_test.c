@@ -1,6 +1,5 @@
-#include <errno.h>
 #include <check.h>
-#include <stdbool.h>
+#include <errno.h>
 #include <pthread.h>
 
 #include "common/common.h"
@@ -10,21 +9,24 @@ START_TEST(suite_tetris_loop_test1) {
   void *result = NULL;
   result = tetris_loop(NULL);
   ck_assert_ptr_eq(result, (void *)EFAULT);
-} END_TEST
+}
+END_TEST
 
 START_TEST(suite_tetris_loop_test2) {
   void *result = NULL;
   runtime_t runtime = {0};
   pthread_barrier_init(&runtime.barrier, NULL, 1);
-  pthread_create(&runtime.model, NULL, (void* (*)(void *))tetris_loop, (void*)&runtime);
+  pthread_create(&runtime.model, NULL, (void *(*)(void *))tetris_loop,
+                 (void *)&runtime);
   thread_wait(100);
   runtime.game_stop = 1;
-  pthread_join(runtime.model, (void*)result);
+  pthread_join(runtime.model, (void *)result);
   pthread_barrier_destroy(&runtime.barrier);
   ck_assert_ptr_eq(result, (void *)0);
-} END_TEST
+}
+END_TEST
 
-Suite * suite_tetris_loop() {
+Suite *suite_tetris_loop() {
   Suite *s = NULL;
   TCase *tc = NULL;
 

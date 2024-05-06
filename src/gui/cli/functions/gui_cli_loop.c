@@ -51,8 +51,8 @@ void* gui_cli_loop(runtime_t* runtime) {
     set_signal_handler(gui_cli_resize);
     pthread_mutex_lock(&runtime->stdout_mutex);
 
-    setlocale(LC_CTYPE, ""); // Стоит перенести в init
-    initscr();               // Стоит перенести в init
+    setlocale(LC_CTYPE, "");  // Стоит перенести в init
+    initscr();                // Стоит перенести в init
     // cbreak(); // Дерутся с
     // noecho(); // контроллером
 

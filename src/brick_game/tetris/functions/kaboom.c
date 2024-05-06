@@ -8,7 +8,7 @@ static int check_line_full(int *);
 static int swap_lines_down(game_info_t *, int);
 
 int kaboom(game_t *game) {
-  if (!game) return EINVAL;
+  if (!game || !game->game_info || !game->game_info->field) return EINVAL;
 
   int code = 0;
 
@@ -19,7 +19,7 @@ int kaboom(game_t *game) {
       game->game_info->score += 100;
       if (game->game_info->score % 600 > game->game_info->level) {
         game->game_info->level++;
-        game->game_info->speed /= 2;
+        game->game_info->speed /= 1.1;
       }
     }
   }

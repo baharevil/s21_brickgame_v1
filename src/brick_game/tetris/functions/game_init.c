@@ -6,8 +6,8 @@
 #include "tetris.h"
 
 int game_init(game_t **game) {
-  if(game == NULL) return EINVAL;
-  
+  if (game == NULL) return EINVAL;
+
   int code = 0;
 
   *game = calloc(1, sizeof(game_t));

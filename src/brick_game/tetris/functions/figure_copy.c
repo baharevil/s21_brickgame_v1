@@ -8,7 +8,7 @@
 int figure_copy(const figure_t *src, figure_t **dst) {
   int code = 0;
 
-  code = (src == NULL) * EINVAL;
+  code = (!src || !src->body || !dst) * EINVAL;
 
   if (!code) {
     if (*dst == NULL) {
