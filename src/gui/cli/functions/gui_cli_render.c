@@ -45,6 +45,14 @@ int render_field(win_t *windows, int **field, int higth, int width,
                  char *label) {
   if (!windows || !field) return EFAULT;
 
+  init_pair(1, 0, COLOR_RED);
+  init_pair(2, 0, COLOR_GREEN);
+  init_pair(3, 0, COLOR_YELLOW);
+  init_pair(4, 0, COLOR_BLUE);
+  init_pair(5, 0, COLOR_MAGENTA);
+  init_pair(6, 0, COLOR_CYAN);
+  init_pair(7, 0, COLOR_WHITE);
+  
   // clear
   // wclear(windows->win);
   box(windows->win, 0, 0);
@@ -52,7 +60,11 @@ int render_field(win_t *windows, int **field, int higth, int width,
   // render
   for (int i = 0; i < higth; i++) {
     for (int j = 0; j < width; j++)
-      if (field[i][j]) mvwaddstr(windows->win, 1 + i, 1 + 2 * j, "[]");
+      if (field[i][j]) {
+        wattrset(windows->win, COLOR_PAIR(field[i][j]));
+        mvwaddstr(windows->win, 1 + i, 1 + 2 * j, "  ");
+        wattrset(windows->win, 0);
+      } 
       else mvwaddstr(windows->win, 1 + i, 1 + 2 * j, "  ");
   }
   if (label) mvwaddstr(windows->win, 1, 1, label);
