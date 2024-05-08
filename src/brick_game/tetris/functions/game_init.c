@@ -51,6 +51,9 @@ int game_init(game_t **game) {
     (*game)->state = start;
     (*game)->last_op = time_msec();
     (*game)->modified = false;
+
+    //Store the game address
+    game_locate((*game));
   }
 
   return code;

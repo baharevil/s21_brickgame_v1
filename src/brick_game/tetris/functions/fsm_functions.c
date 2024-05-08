@@ -5,9 +5,8 @@
 
 void start_fn(game_t *game) {
   if (game) {
-    if (game->state == game_over) {
+    if (game->state == game_over)
       game_info_clean(game->game_info);
-    }
     game->state = start;
     spawn_fn(game);
   }
@@ -84,7 +83,7 @@ void game_over_fn(game_t *game) {
   if (game) {
     game->state = game_over;
     // Game Over screen, Start to Play again
-    printf("GAME OVER!\n");
+    // printf("GAME OVER!\n");
   }
 }
 

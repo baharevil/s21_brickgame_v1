@@ -1,9 +1,6 @@
 #ifndef GUI_CLI_H
 #define GUI_CLI_H
 
-#include <ncurses.h>
-#include <panel.h>
-
 #include "common/game_info_t.h"
 #include "common/runtime_t.h"
 #include "windows.h"

@@ -1,6 +1,6 @@
 // TODO: Инициализация и запуск основного цикла
 #include <errno.h>
-// #include <ncurses.h>
+#include <ncurses.h>
 #include <locale.h>
 #include <pthread.h>
 #include <signal.h>
@@ -25,9 +25,10 @@ void* gui_cli_loop(runtime_t* runtime) {
 
     setlocale(LC_CTYPE, "");  // Стоит перенести в init
     initscr();                // Стоит перенести в init
+    start_color();            // Цвета
     curs_set(0); // мерцание курсора
-    cbreak(); // немедленный вывод нажатой клавиши
-    noecho(); // непоказывать нажатый символ на экране
+    // cbreak(); // немедленный вывод нажатой клавиши
+    // noecho(); // непоказывать нажатый символ на экране
 
     game_windows_t *windows = get_windows();
     init_game_windows(windows);

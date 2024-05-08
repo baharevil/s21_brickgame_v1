@@ -9,7 +9,7 @@ int thread_wait(int msec) {
   pthread_cond_t condition;
   struct timespec how_much = {0};
 
-  code = (msec == 0) * EINVAL;
+  code = (msec < 1) * EINVAL;
 
   if (!code) code = pthread_mutex_init(&mutex, NULL);
   if (!code) code = pthread_cond_init(&condition, NULL);

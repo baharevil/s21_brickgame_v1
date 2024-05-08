@@ -1,7 +1,7 @@
 #ifndef WINDOWS_H
 #define WINDOWS_H
 
-#include <curses.h>
+#include <panel.h>
 #include <ncurses.h>
 
 enum window_setting {

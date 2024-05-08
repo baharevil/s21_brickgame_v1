@@ -17,7 +17,7 @@ int kaboom(game_t *game) {
       memset(game->game_info->field[row], 0, field_width * sizeof(int));
       swap_lines_down(game->game_info, row);
       game->game_info->score += 100;
-      if (game->game_info->score % 600 > game->game_info->level) {
+      if (game->game_info->score / 600 + 1 > game->game_info->level) {
         game->game_info->level++;
         game->game_info->speed /= 1.1;
       }
@@ -32,7 +32,7 @@ static int check_line_full(int *line) {
 
   int code = 1;
   for (int col = 0; code && col < field_width; col++) {
-    code = (line[col] == 1);
+    code = (line[col] != 0);
   }
 
   return code;

@@ -19,6 +19,17 @@ START_TEST(suite_game_locate_test2) {
 }
 END_TEST
 
+START_TEST(suite_game_locate_test3) {
+  void *result = NULL;
+  game_t game = {0};
+  game_locate(&game);
+  // Clean the location
+  game_locate(&game);
+  result = (void *)game_locate(NULL);
+  ck_assert_ptr_eq(result, NULL);
+}
+END_TEST
+
 Suite *suite_game_locate() {
   Suite *s = NULL;
   TCase *tc = NULL;
@@ -28,6 +39,7 @@ Suite *suite_game_locate() {
   tc = tcase_create("suite_game_locate");
   tcase_add_test(tc, suite_game_locate_test1);
   tcase_add_test(tc, suite_game_locate_test2);
+  tcase_add_test(tc, suite_game_locate_test3);
 
   suite_add_tcase(s, tc);
 

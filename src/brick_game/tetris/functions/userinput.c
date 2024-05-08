@@ -5,10 +5,14 @@
 void userInput(UserAction_t user_action, int hold) {
   int code = 0;
   action act = NULL;
+  game_t *game = NULL;
 
-  game_t *game = game_locate(NULL);
+  code = (user_action > 8 || hold < 0);
 
-  code = (game == NULL);
+  if (!code) {
+    game = game_locate(NULL);
+    code = (game == NULL);
+  }
 
   if (!code) {
     // Получаем указатель на функцию-обработчик события

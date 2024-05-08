@@ -21,7 +21,7 @@ int figure_check(game_t *game) {
 
         // Проверка соседних блоков
         if (!code && game->game_info->field[game->figure_pos.y + row]
-                                           [game->figure_pos.x + col] == 1)
+                                           [game->figure_pos.x + col] != 0)
           code = 1;
       }
     }

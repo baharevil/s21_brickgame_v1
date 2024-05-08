@@ -29,6 +29,9 @@ int game_destroy(game_t *game) {
     code = game_info_destroy(game->game_info);
   }
 
+  // Check the game locate clean
+  if (game_locate(NULL)) game_locate(game);
+
   free(game);
 
   return code;

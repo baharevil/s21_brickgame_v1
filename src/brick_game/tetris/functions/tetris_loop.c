@@ -22,7 +22,6 @@ void *tetris_loop(runtime_t *runtime) {
     unsigned long now = 0;
 
     signals_block();
-    game_locate(game);
 
     while (!atomic_load(&runtime->game_stop)) {
       // Цикл не грузит процессор
@@ -54,9 +53,6 @@ void *tetris_loop(runtime_t *runtime) {
       }
     }
   }
-
-  // Check the game locate clean
-  if (game_locate(NULL)) game_locate(game);
 
   // Destroy the game
   if (game) game_destroy(game);
