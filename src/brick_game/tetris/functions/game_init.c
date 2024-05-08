@@ -26,16 +26,16 @@ int game_init(game_t **game) {
     if (!code) code = ((*game)->database.count == 0) * ENODATA;
   }
 
+  // Инициализация поля следующей фигуры
+  if (!code)
+    code = game_info_next_init(&(*game)->game_info->next);
+  
   // Инициализация текущей игровой фигуры
   if (!code) {
-    int rnd = rand() % ((*game)->database.count - 1);
-    if (!code) code = game_info_next_init(&(*game)->game_info->next);
-    if (!code)
-      code = figure_copy_body((*game)->database.figures[rnd]->body,
+    (*game)->next_id = rand() % ((*game)->database.count - 1);
+    code = figure_copy_body((*game)->database.figures[(*game)->next_id]->body,
                               (*game)->game_info->next,
-                              (*game)->database.figures[rnd]->size);
-    if (!code)
-      code = figure_copy((*game)->database.figures[rnd], &(*game)->figure_cur);
+                              (*game)->database.figures[(*game)->next_id]->size);
   }
 
   // Присваиваем первоначальные значения

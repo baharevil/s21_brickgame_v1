@@ -15,6 +15,9 @@ void *tetris_loop(runtime_t *);
 // Геттер/сеттер адреса game
 game_t *game_locate(game_t *);
 
+void logo_start(int **field);
+void logo_game_over(int **field);
+
 int game_init(game_t **game);
 int game_destroy(game_t *game);
 int game_info_init(game_info_t **game_info);
@@ -22,6 +25,7 @@ int game_info_destroy(game_info_t *game_info);
 int game_info_clean(game_info_t *game_info);
 int game_info_next_init(int ***next);
 int game_info_next_destroy(int **next);
+int game_info_next_clean(int **next);
 int figure_db_load(const char *dir, figures_db_t *db);
 int figure_db_insert(figures_db_t *db, unsigned count);
 int figure_db_destroy(figures_db_t *db);

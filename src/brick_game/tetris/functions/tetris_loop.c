@@ -15,13 +15,16 @@ void *tetris_loop(runtime_t *runtime) {
   int code = 0;
   game_t *game = NULL;
 
-  code = game_init(&game);
+  // code = signals_block();
+
+  if (!code) code = game_init(&game);
 
   if (!code) {
+    logo_start(game->game_info->field);
+    thread_wait(10);
+    pthread_cond_signal(&runtime->do_render);
     UserAction_t act = None;
     unsigned long now = 0;
-
-    signals_block();
 
     while (!atomic_load(&runtime->game_stop)) {
       // Цикл не грузит процессор

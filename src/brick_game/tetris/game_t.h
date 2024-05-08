@@ -44,6 +44,7 @@ typedef struct game_t {
   figures_db_t database;
   figure_t *figure_cur;
   position_t figure_pos;
+  int next_id;
   fsm_state state;
   unsigned long last_op;
   bool modified;
