@@ -39,7 +39,7 @@ void* gui_cli_loop(runtime_t* runtime) {
       pthread_cond_wait(&runtime->do_render, &runtime->cond_mutex);
 
       game_info = update_current_state();
-      if (game_info.field) gui_cli_render(windows, game_info);
+      if (game_info.field) gui_cli_render(windows, &game_info);
 
       pthread_mutex_unlock(&runtime->cond_mutex);
     }

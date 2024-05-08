@@ -1,49 +1,67 @@
 #include <errno.h>
+#include <string.h>
 
 #include "common/game_info_t.h"
 #include "gui_cli.h"
 
-void gui_cli_render(game_windows_t *windows, game_info_t game_info) {
+void gui_cli_render(game_windows_t *windows, game_info_t *game_info) {
   if (!windows) return;
 
   int term_x = 0, term_y = 0;
   term_size(&term_y, &term_x);
-  render_field(&windows->game_win, game_info.field);
-  render_next(&windows->stats_windows.next_win, game_info.next);
+  
+  render_field(&windows->game_win, game_info->field, field_higth, field_windth,
+               NULL);
+  // !Bug with next btick  
+  render_field(&windows->stats_windows.next_win.window, game_info->next,
+               brick_higth, brick_windth,
+               windows->stats_windows.next_win.label);
+
+  render_score(&windows->stats_windows.max_win, game_info->high_score);
+  render_score(&windows->stats_windows.score_win, game_info->score);
+  render_score(&windows->stats_windows.level_win, game_info->level);
 
   doupdate();
 }
 
-int render_field(win_t *windows, int **field) {
+int render_field(win_t *windows, int **field, int higth, int width,
+                 char *label) {
   if (!windows || !field) return EFAULT;
 
+  // clear
   wclear(windows->win);
   box(windows->win, 0, 0);
 
-  for (int row = 0; row < field_height; row++) {
-    for (int col = 0; col < field_width; col++) {
-      if (field[row][col]) 
-        mvwaddstr(windows->win, 1 + row, 1 + 2 * col, "[]");
-    }
+  // render
+  for (int i = 0; i < higth; i++) {
+    for (int j = 0; j < width; j++)
+      if (field[i][j]) mvwaddstr(windows->win, 1 + i, 1 + 2 * j, "[]");
   }
+  if (label) mvwaddstr(windows->win, 1, 1, label);
 
+  // flag_to_update
   wnoutrefresh(windows->win);
   return 0;
 }
 
-int render_next(support_win_t *windows, int **next) {
-  if (!windows || !next) return EFAULT;
+int render_score(support_win_t *supp_win, int score) {
+  if (!supp_win) return EFAULT;
+  
+  // clear 
+  wclear(supp_win->window.win);
+  box(supp_win->window.win, 0, 0);
 
-  wclear(windows->window.win);
-  box(windows->window.win, 0, 0);
+  // render
+  char buffer[128] = {0};
+  sprintf(buffer, "%d", score);
+  mvwaddstr(supp_win->window.win, supp_win->window.data.hight - 2,
+            supp_win->window.data.width - strlen(buffer) - 1, buffer);
 
-  for (int i = 0; i < brick_higth; i++) {
-    for (int j = 0; j < brick_windth; j++)
-      if (next[i][j]) mvwaddstr(windows->window.win, 1 + j, 1 + 2 * i, "[]");
-  }
+  attron(A_BOLD);
+  mvwaddstr(supp_win->window.win, 1, 1, supp_win->label);
+  attroff(A_BOLD);
 
-  mvwprintw(windows->window.win, 1, 1, "%s", windows->label);
-
-  wnoutrefresh(windows->window.win);
+  // flag_to_update
+  wnoutrefresh(supp_win->window.win);
   return 0;
 }

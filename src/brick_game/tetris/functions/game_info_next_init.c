@@ -11,7 +11,7 @@ int game_info_next_init(int ***next) {
 
   // Аллоцируем строки next
   int **temp = NULL;
-  temp = (int **)malloc(4 * sizeof(int *));
+  temp = (int **)calloc(4, sizeof(int *));
   code = (temp == NULL) * ENOMEM;
   if (!code) (*next) = temp;
 
@@ -19,7 +19,7 @@ int game_info_next_init(int ***next) {
   if (!code) {
     int *temp = NULL;
     for (int row = 0; !code && row < 4; row++) {
-      temp = (int *)malloc(4 * sizeof(int));
+      temp = (int *)calloc(4, sizeof(int));
       code = (temp == NULL) * ENOMEM;
       if (!code) (*next)[row] = temp;
     }

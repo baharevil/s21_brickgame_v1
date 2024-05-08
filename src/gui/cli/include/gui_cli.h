@@ -21,9 +21,10 @@ enum brick_setting {
   brick_windth = 4
 };
 
-void gui_cli_render(game_windows_t *windows, game_info_t game_info);
-int render_next(support_win_t *windows, int **next);
-int render_field(win_t *windows, int **field);
+void gui_cli_render(game_windows_t *windows, game_info_t *game_info);
+int render_score(support_win_t *supp_win, int score);
+int render_field(win_t *windows, int **field, int higth, int width,
+                 char *label);
 
 void gui_cli_resize();
 int term_size(int *y, int *x);
