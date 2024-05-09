@@ -39,7 +39,10 @@ int game_init(game_t **game) {
 
   // Присваиваем первоначальные значения
   if (!code) {
-    (*game)->game_info->high_score = 0;  // TODO: Load HISCORES
+    (*game)->game_info->high_score = 0;
+    // Load HISCORES
+    hi_scores_load("scores.data", &(*game)->game_info->high_score);
+    (*game)->game_info->score = 0;
     (*game)->game_info->level = 1;
     (*game)->game_info->speed = 1000;
     (*game)->game_info->pause = 0;

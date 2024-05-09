@@ -26,8 +26,11 @@ int game_info_destroy(game_info_t *game_info) {
     game_info->next = NULL;
   }
 
+  // Save HISCORES
+  if(game_info->high_score)
+    hi_scores_save("scores.data", &game_info->high_score);
+  game_info->high_score = 0;
   game_info->score = 0;
-  game_info->high_score = 0;  // TODO: Close fd HISCORES
   game_info->level = 0;
   game_info->speed = 0;
   game_info->pause = 0;

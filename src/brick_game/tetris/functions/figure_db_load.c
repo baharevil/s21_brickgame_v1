@@ -36,7 +36,7 @@ int figure_db_load(const char *dir, figures_db_t *db) {
           strstr(dir_entry->d_name, ".tet")) {
         strcpy(fullpath, dir);
         strcat(fullpath, dir_entry->d_name);
-        file = fopen(fullpath, "rb");
+        file = fopen(fullpath, "r");
         code = (file == NULL) * EACCES;
         if (!code) code = figure_db_insert(db, increment);
         if (!code) {

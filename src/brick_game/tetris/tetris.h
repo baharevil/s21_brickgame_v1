@@ -41,6 +41,9 @@ int figure_rotate(game_t *game);
 int figure_check(game_t *game);
 int kaboom(game_t *game);
 
+int hi_scores_load(char *filename, int *hi_score);
+int hi_scores_save(char *filename, int *hi_score);
+
 action fsm(fsm_state, UserAction_t);
 void start_fn(game_t *);
 void pause_fn(game_t *);
