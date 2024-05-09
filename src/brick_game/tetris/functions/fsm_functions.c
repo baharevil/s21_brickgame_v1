@@ -5,8 +5,7 @@
 
 void start_fn(game_t *game) {
   if (game) {
-    // if (game->state == game_over)
-      game_info_clean(game->game_info);
+    game_info_clean(game->game_info);
     game->state = start;
     spawn_fn(game);
   }
@@ -30,13 +29,13 @@ void pause_fn(game_t *game) {
 void spawn_fn(game_t *game) {
   if (game) {
     game->state = spawn;
-
+    // Spawn next figure & choose new random
     figure_copy(game->database.figures[game->next_id], &game->figure_cur);
     game->next_id = rand() % (game->database.count - 1);
     game_info_next_clean(game->game_info->next);
     figure_copy_body(game->database.figures[game->next_id]->body,
-                          game->game_info->next,
-                          game->database.figures[game->next_id]->size);
+                     game->game_info->next,
+                     game->database.figures[game->next_id]->size);
 
     game->figure_pos.x = field_width / 2 - game->figure_cur->size / 2;
     game->figure_pos.y = 0;
@@ -153,8 +152,6 @@ void action_fn(game_t *game) {
                        game->figure_cur->size);
       figure_unset(game);
       figure_rotate(game);
-      // check = figure_check(game, up) || figure_check(game, down) ||
-      // figure_check(game, left) || figure_check(game, right);
       check = figure_check(game);
       if (check) {
         figure_copy_body(temp->body, game->figure_cur->body,

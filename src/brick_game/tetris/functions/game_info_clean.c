@@ -8,7 +8,7 @@ int game_info_clean(game_info_t *game_info) {
 
   int code = 0;
 
-  game_info->high_score = 0;
+  game_info->score = 0;
   game_info->level = 1;
   game_info->speed = 1000;
   game_info->pause = 0;

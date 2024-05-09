@@ -17,6 +17,8 @@ int kaboom(game_t *game) {
       memset(game->game_info->field[row], 0, field_width * sizeof(int));
       swap_lines_down(game->game_info, row);
       game->game_info->score += 100;
+      if (game->game_info->score > game->game_info->high_score)
+        game->game_info->high_score = game->game_info->score;
       if (game->game_info->score / 600 + 1 > game->game_info->level) {
         game->game_info->level++;
         game->game_info->speed /= 1.1;

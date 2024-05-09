@@ -6,10 +6,7 @@
 
 void test_handler();
 
-START_TEST(suite_set_signal_handler_test1) {
-   
-  set_signal_handler(test_handler);
-}
+START_TEST(suite_set_signal_handler_test1) { set_signal_handler(test_handler); }
 END_TEST
 
 Suite *suite_set_signal_handler() {
@@ -26,6 +23,4 @@ Suite *suite_set_signal_handler() {
   return s;
 }
 
-void test_handler() {
-  return;
-}
+void test_handler() { return; }

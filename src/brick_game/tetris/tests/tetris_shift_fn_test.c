@@ -13,8 +13,7 @@ START_TEST(suite_shift_fn_test2) {
   game_t *game = NULL;
   game_init(&game);
   spawn_fn(game);
-  for(int i = 10; i > 0; i--)
-    shift_fn(game);
+  for (int i = 10; i > 0; i--) shift_fn(game);
   ck_assert(game->figure_pos.y == 10);
   game_destroy(game);
 }
@@ -25,7 +24,7 @@ START_TEST(suite_shift_fn_test3) {
   game_init(&game);
   spawn_fn(game);
   shift_fn(game);
-  spawn_fn(game); 
+  spawn_fn(game);
   shift_fn(game);
   ck_assert(game->state == game_over);
   game_destroy(game);

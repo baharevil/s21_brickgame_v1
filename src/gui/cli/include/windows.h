@@ -1,8 +1,8 @@
 #ifndef WINDOWS_H
 #define WINDOWS_H
 
-#include <panel.h>
 #include <ncurses.h>
+#include <panel.h>
 
 enum window_setting {
   main_min_higth = 24,

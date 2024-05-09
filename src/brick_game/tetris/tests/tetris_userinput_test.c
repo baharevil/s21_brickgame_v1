@@ -3,24 +3,16 @@
 
 #include "tetris.h"
 
-START_TEST(suite_userInput_test1) {
-  userInput(-1, -1);
-}
+START_TEST(suite_userInput_test1) { userInput(-1, -1); }
 END_TEST
 
-START_TEST(suite_userInput_test2) {
-  userInput(1, -1);
-}
+START_TEST(suite_userInput_test2) { userInput(1, -1); }
 END_TEST
 
-START_TEST(suite_userInput_test3) {
-  userInput(-1, 1);
-}
+START_TEST(suite_userInput_test3) { userInput(-1, 1); }
 END_TEST
 
-START_TEST(suite_userInput_test4) {
-  userInput(1, 1);
-}
+START_TEST(suite_userInput_test4) { userInput(1, 1); }
 END_TEST
 
 START_TEST(suite_userInput_test5) {

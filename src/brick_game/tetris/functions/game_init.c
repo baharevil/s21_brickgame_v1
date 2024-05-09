@@ -27,15 +27,14 @@ int game_init(game_t **game) {
   }
 
   // Инициализация поля следующей фигуры
-  if (!code)
-    code = game_info_next_init(&(*game)->game_info->next);
-  
+  if (!code) code = game_info_next_init(&(*game)->game_info->next);
+
   // Инициализация текущей игровой фигуры
   if (!code) {
     (*game)->next_id = rand() % ((*game)->database.count - 1);
     code = figure_copy_body((*game)->database.figures[(*game)->next_id]->body,
-                              (*game)->game_info->next,
-                              (*game)->database.figures[(*game)->next_id]->size);
+                            (*game)->game_info->next,
+                            (*game)->database.figures[(*game)->next_id]->size);
   }
 
   // Присваиваем первоначальные значения
@@ -52,7 +51,7 @@ int game_init(game_t **game) {
     (*game)->last_op = time_msec();
     (*game)->modified = false;
 
-    //Store the game address
+    // Store the game address
     game_locate((*game));
   }
 

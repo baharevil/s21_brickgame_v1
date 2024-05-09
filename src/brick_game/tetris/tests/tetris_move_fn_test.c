@@ -12,7 +12,7 @@ END_TEST
 START_TEST(suite_move_fn_test2) {
   game_t *game = NULL;
   game_init(&game);
-  for(fsm_state i = none; i <= game_over; i++) {
+  for (fsm_state i = none; i <= game_over; i++) {
     game->state = i;
     move_fn(game);
     ck_assert(game->state == moving);

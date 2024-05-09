@@ -7,16 +7,17 @@
 void gui_cli_render(game_windows_t *windows, game_info_t *game_info) {
   if (!windows) return;
 
-  static int stored_x = 0, stored_y = 0, stored_hs = 0, stored_s = 0, stored_l = 0;
+  static int stored_x = 0, stored_y = 0, stored_hs = 0, stored_s = 0,
+             stored_l = 0;
   int term_x = 0, term_y = 0, resized = 0;
   term_size(&term_y, &term_x);
-  
+
   resized = (stored_x != term_x || stored_y != term_y);
 
-  render_field(&windows->game_win, game_info->field, field_height, field_width, NULL);
-  // !Bug with next btick  
+  render_field(&windows->game_win, game_info->field, field_height, field_width, 1,
+               NULL);
   render_field(&windows->stats_windows.next_win.window, game_info->next,
-               brick_higth, brick_windth,
+               brick_higth, brick_windth, 10,
                windows->stats_windows.next_win.label);
 
   if (resized || stored_hs != game_info->high_score) {
@@ -33,15 +34,21 @@ void gui_cli_render(game_windows_t *windows, game_info_t *game_info) {
   }
   // Тут не попал
   if (resized) {
-    box(windows->main_win.win, 0, 0);
+    // box(windows->main_win.win, 0, 0);
     box(windows->game_win.win, 0, 0);
     box(windows->stat_win.win, 0, 0);
+    wnoutrefresh(windows->main_win.win);
+    wnoutrefresh(windows->game_win.win);
+    wnoutrefresh(windows->stat_win.win);
+    stored_x = term_x, stored_y = term_y;
+    resized = 0;
+    curs_set(0);
   }
 
   doupdate();
 }
 
-int render_field(win_t *windows, int **field, int higth, int width,
+int render_field(win_t *windows, int **field, int higth, int width, int offset,
                  char *label) {
   if (!windows || !field) return EFAULT;
 
@@ -52,21 +59,19 @@ int render_field(win_t *windows, int **field, int higth, int width,
   init_pair(5, 0, COLOR_MAGENTA);
   init_pair(6, 0, COLOR_CYAN);
   init_pair(7, 0, COLOR_WHITE);
-  
-  // clear
-  // wclear(windows->win);
-  box(windows->win, 0, 0);
 
   // render
   for (int i = 0; i < higth; i++) {
     for (int j = 0; j < width; j++)
       if (field[i][j]) {
         wattrset(windows->win, COLOR_PAIR(field[i][j]));
-        mvwaddstr(windows->win, 1 + i, 1 + 2 * j, "  ");
+        mvwaddstr(windows->win, 1 + i, offset + 2 * j, "  ");
         wattrset(windows->win, 0);
-      } 
-      else mvwaddstr(windows->win, 1 + i, 1 + 2 * j, "  ");
+      } else
+        mvwaddstr(windows->win, 1 + i, offset + 2 * j, "  ");
   }
+  
+  box(windows->win, 0, 0);
   if (label) mvwaddstr(windows->win, 1, 1, label);
 
   // flag_to_update
@@ -76,9 +81,9 @@ int render_field(win_t *windows, int **field, int higth, int width,
 
 int render_score(support_win_t *supp_win, int score) {
   if (!supp_win) return EFAULT;
-  
-  // clear 
-  // wclear(supp_win->window.win);
+
+  // clear
+  wclear(supp_win->window.win);
   box(supp_win->window.win, 0, 0);
 
   // render

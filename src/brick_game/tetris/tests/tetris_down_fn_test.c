@@ -13,7 +13,7 @@ START_TEST(suite_down_fn_test2) {
   game_t *game = NULL;
   game_init(&game);
   spawn_fn(game);
-  for(int i = 0; i < field_height - game->figure_cur->size - 1; i++)
+  for (int i = 0; i < field_height - game->figure_cur->size - 1; i++)
     down_fn(game);
   ck_assert(game->figure_pos.y == field_height - game->figure_cur->size - 1);
   game_destroy(game);
@@ -28,8 +28,7 @@ START_TEST(suite_down_fn_test3) {
   game->game_info->field[10][4] = 1;
   game->game_info->field[10][5] = 1;
   game->game_info->field[10][6] = 1;
-  for(int i = 0; i < 10; i++)
-    down_fn(game);
+  for (int i = 0; i < 10; i++) down_fn(game);
   ck_assert(game->figure_pos.y <= 10);
   ck_assert(game->modified == 1);
   game_destroy(game);

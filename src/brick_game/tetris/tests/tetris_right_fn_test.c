@@ -13,8 +13,7 @@ START_TEST(suite_right_fn_test2) {
   game_t *game = NULL;
   game_init(&game);
   spawn_fn(game);
-  for(int i = game->figure_pos.x; i > 0; i--)
-    right_fn(game);
+  for (int i = game->figure_pos.x; i > 0; i--) right_fn(game);
   ck_assert(game->figure_pos.x == field_width - game->figure_cur->size);
   game_destroy(game);
 }
