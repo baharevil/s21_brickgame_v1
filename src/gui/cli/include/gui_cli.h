@@ -9,13 +9,11 @@
 #define EXIT_FAILURE 1
 
 enum game_filed_setting { field_higth = 20, field_windth = 10 };
-
 enum brick_setting { brick_higth = 4, brick_windth = 4 };
 
 void gui_cli_render(game_windows_t *windows, game_info_t *game_info);
-int render_score(support_win_t *supp_win, int score);
-int render_field(win_t *windows, int **field, int higth, int width, int offset,
-                 char *label);
+int render_score(win_t *window, int value);
+int render_field(win_t *window, int **field, int higth, int width, int offset);
 
 void gui_cli_resize();
 int term_size(int *y, int *x);

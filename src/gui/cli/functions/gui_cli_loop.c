@@ -27,8 +27,6 @@ void* gui_cli_loop(runtime_t* runtime) {
     initscr();                // Стоит перенести в init
     start_color();            // Цвета
     curs_set(0);              // мерцание курсора
-    // cbreak(); // немедленный вывод нажатой клавиши
-    // noecho(); // непоказывать нажатый символ на экране
 
     game_windows_t* windows = get_windows();
     init_game_windows(windows);

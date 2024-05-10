@@ -11,14 +11,14 @@
 void gui_cli_resize() {
   int x = 0, y = 0;
   term_size(&y, &x);
+  game_windows_t *windows = get_windows();
 
-  resizeterm(y, x);
-  if (y < 24 || x < 46) {
-    clear();
-    box(stdscr, 0, 0);
+  clear();
+  if (y < windows->main_win.data.min_hight ||
+      x < windows->main_win.data.min_width) {
+    small_win_banner(y, x);
   }
-  curs_set(0);
-  refresh();
 
+  wnoutrefresh(stdscr);
   set_signal_handler(gui_cli_resize);
 }

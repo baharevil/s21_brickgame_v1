@@ -1,6 +1,7 @@
 #include "windows.h"
 
 #include <errno.h>
+#include <malloc.h>
 #include <string.h>
 
 game_windows_t *get_windows() {
@@ -53,37 +54,56 @@ int init_game_windows(game_windows_t *windows) {
                         .width = game_min_width,
                         .min_width = game_min_width},
            TRUE);
-
-  // stats_windows
-  char *labels[] = {"Hiscore", "Score", "Level", "Next"};
-  for (int i = 0; i < count_support_win; i++) {
-    init_win(windows->stat_win.win, &windows->stats_windows.windows[i].window,
-             (win_data_t){.start_x = 1,
-                          .start_y = 1 + i * support_min_higth,
-                          .hight = support_min_higth,
-                          .min_hight = support_min_higth,
-                          .width = support_min_width,
-                          .min_width = support_min_width},
-             TRUE);
-    windows->stats_windows.windows[i].show = TRUE;
-    windows->stats_windows.windows[i].label = labels[i];
-    mvwprintw(windows->stats_windows.windows[i].window.win, 1, 1, "%s",
-              labels[i]);
-    wrefresh(windows->stats_windows.windows[i].window.win);
-  }
   return 0;
 }
 
 int del_game_windows(game_windows_t *windows) {
   if (windows == NULL) return EFAULT;
 
-  for (int i = 0; i < count_support_win; i++) {
-    delwin(windows->stats_windows.windows[i].window.win);
-  }
-
   delwin(windows->stat_win.win);
   delwin(windows->game_win.win);
   delwin(windows->main_win.win);
 
   return 0;
+}
+
+int add_sup_win(game_windows_t *windows, win_data_t data) {
+  if (windows == NULL) return EFAULT;
+
+  windows->stats_winds = realloc(windows->stats_winds,
+                                 sizeof(win_t) * (windows->count_stat_win + 1));
+  init_win(windows->stat_win.win,
+           &windows->stats_winds[windows->count_stat_win], data, TRUE);
+  windows->count_stat_win += 1;
+
+  return 0;
+}
+
+int destroy_supp_win(game_windows_t *windows) {
+  if (windows == NULL) return EFAULT;
+
+  for (int i = 0; i < windows->count_stat_win; i++) {
+    delwin(windows->stats_winds[i].win);
+  }
+
+  windows->count_stat_win = 0;
+  free(windows->stats_winds), windows->stats_winds = NULL;
+
+  return 0;
+}
+
+void small_win_banner(int y, int x) {
+  game_windows_t *windows = get_windows();
+
+  const char error_title[] = "SMALL TERMINAL";
+  const char error_desc[] = "required %dx%d (now %dx%d)";
+
+  clear();
+  wattron(stdscr, WA_BLINK);
+  mvwprintw(stdscr, y / 2, ((x - strlen(error_title)) / 2), error_title);
+  mvwprintw(stdscr, y / 2 + 1, ((x - strlen(error_desc)) / 2), error_desc,
+            windows->main_win.data.min_width, windows->main_win.data.min_hight,
+            x, y);
+  wattroff(stdscr, WA_BLINK);
+  wnoutrefresh(stdscr);
 }

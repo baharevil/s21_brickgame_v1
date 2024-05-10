@@ -27,7 +27,7 @@ int game_info_destroy(game_info_t *game_info) {
   }
 
   // Save HISCORES
-  if(game_info->high_score)
+  if (game_info->high_score)
     hi_scores_save("scores.data", &game_info->high_score);
   game_info->high_score = 0;
   game_info->score = 0;

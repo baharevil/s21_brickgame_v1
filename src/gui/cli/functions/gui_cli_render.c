@@ -7,50 +7,70 @@
 void gui_cli_render(game_windows_t *windows, game_info_t *game_info) {
   if (!windows) return;
 
-  static int stored_x = 0, stored_y = 0, stored_hs = 0, stored_s = 0,
-             stored_l = 0;
-  int term_x = 0, term_y = 0, resized = 0;
+  int term_x = 0, term_y = 0;
   term_size(&term_y, &term_x);
 
-  resized = (stored_x != term_x || stored_y != term_y);
-
-  render_field(&windows->game_win, game_info->field, field_height, field_width, 1,
-               NULL);
-  render_field(&windows->stats_windows.next_win.window, game_info->next,
-               brick_higth, brick_windth, 10,
-               windows->stats_windows.next_win.label);
-
-  if (resized || stored_hs != game_info->high_score) {
-    render_score(&windows->stats_windows.max_win, game_info->high_score);
-    stored_hs = game_info->high_score;
-  }
-  if (resized || stored_s != game_info->score) {
-    render_score(&windows->stats_windows.score_win, game_info->score);
-    stored_s = game_info->score;
-  }
-  if (resized || stored_l != game_info->level) {
-    render_score(&windows->stats_windows.level_win, game_info->level);
-    stored_l = game_info->level;
-  }
-  // Тут не попал
-  if (resized) {
-    // box(windows->main_win.win, 0, 0);
-    box(windows->game_win.win, 0, 0);
+  if (term_y >= windows->main_win.data.min_hight &&
+      term_x >= windows->main_win.data.min_width) {
+    
+    
+    destroy_supp_win(windows);
+    box(windows->main_win.win, 0, 0);
     box(windows->stat_win.win, 0, 0);
     wnoutrefresh(windows->main_win.win);
-    wnoutrefresh(windows->game_win.win);
     wnoutrefresh(windows->stat_win.win);
-    stored_x = term_x, stored_y = term_y;
-    resized = 0;
-    curs_set(0);
+    
+    render_field(&windows->game_win, game_info->field, field_height,
+                 field_width, 1);
+    add_sup_win(windows,
+                (win_data_t){.hight = 4,
+                             .min_hight = 4,
+                             .width = windows->stat_win.data.min_width - 2,
+                             .min_width = windows->stat_win.data.min_width - 2,
+                             .start_x = 1,
+                             .start_y = 1,
+                             .label = "HISCORE"});
+    render_score(&windows->stats_winds[windows->count_stat_win - 1], game_info->high_score);
+    
+    add_sup_win(windows,
+                (win_data_t){.hight = 4,
+                             .min_hight = 4,
+                             .width = windows->stat_win.data.min_width - 2,
+                             .min_width = windows->stat_win.data.min_width - 2,
+                             .start_x = 1,
+                             .start_y = 5,
+                             .label = "SCORE"});
+    render_score(&windows->stats_winds[windows->count_stat_win - 1], game_info->score);
+
+    add_sup_win(windows,
+                (win_data_t){.hight = 4,
+                             .min_hight = 4,
+                             .width = windows->stat_win.data.min_width - 2,
+                             .min_width = windows->stat_win.data.min_width - 2,
+                             .start_x = 1,
+                             .start_y = 9,
+                             .label = "LEVEL"});
+    render_score(&windows->stats_winds[windows->count_stat_win - 1], game_info->level);
+
+    add_sup_win(windows,
+                (win_data_t){.hight = 5,
+                             .min_hight = 4,
+                             .width = windows->stat_win.data.min_width - 2,
+                             .min_width = windows->stat_win.data.min_width - 2,
+                             .start_x = 1,
+                             .start_y = 13,
+                             .label = "NEXT"});
+    render_field(&windows->stats_winds[windows->count_stat_win - 1], game_info->next, brick_higth,
+                 brick_windth, 8);
+  } else {
+    small_win_banner(term_y, term_x);
   }
 
   doupdate();
 }
 
-int render_field(win_t *windows, int **field, int higth, int width, int offset,
-                 char *label) {
-  if (!windows || !field) return EFAULT;
+int render_field(win_t *window, int **field, int higth, int width, int offset) {
+  if (!window || !field) return EFAULT;
 
   init_pair(1, 0, COLOR_RED);
   init_pair(2, 0, COLOR_GREEN);
@@ -64,39 +84,34 @@ int render_field(win_t *windows, int **field, int higth, int width, int offset,
   for (int i = 0; i < higth; i++) {
     for (int j = 0; j < width; j++)
       if (field[i][j]) {
-        wattrset(windows->win, COLOR_PAIR(field[i][j]));
-        mvwaddstr(windows->win, 1 + i, offset + 2 * j, "  ");
-        wattrset(windows->win, 0);
+        wattrset(window->win, COLOR_PAIR(field[i][j]));
+        mvwaddstr(window->win, 1 + i, offset + 2 * j, "  ");
+        wattrset(window->win, 0);
       } else
-        mvwaddstr(windows->win, 1 + i, offset + 2 * j, "  ");
+        mvwaddstr(window->win, 1 + i, offset + 2 * j, "  ");
   }
-  
-  box(windows->win, 0, 0);
-  if (label) mvwaddstr(windows->win, 1, 1, label);
+
+  box(window->win, 0, 0);
+  if (window->data.label) mvwaddstr(window->win, 1, 1, window->data.label);
 
   // flag_to_update
-  wnoutrefresh(windows->win);
+  wnoutrefresh(window->win);
   return 0;
 }
 
-int render_score(support_win_t *supp_win, int score) {
-  if (!supp_win) return EFAULT;
+int render_score(win_t *window, int value) {
+  if (!window) return EFAULT;
 
-  // clear
-  wclear(supp_win->window.win);
-  box(supp_win->window.win, 0, 0);
-
-  // render
   char buffer[128] = {0};
-  sprintf(buffer, "%d", score);
-  mvwaddstr(supp_win->window.win, supp_win->window.data.hight - 2,
-            supp_win->window.data.width - strlen(buffer) - 1, buffer);
+  sprintf(buffer, "%d", value);
 
-  attron(A_BOLD);
-  mvwaddstr(supp_win->window.win, 1, 1, supp_win->label);
-  attroff(A_BOLD);
+  mvwaddstr(window->win, window->data.hight - 2,
+            window->data.width - strlen(buffer) - 1, buffer);
+
+  box(window->win, 0, 0);
+  if (window->data.label) mvwaddstr(window->win, 1, 1, window->data.label);
 
   // flag_to_update
-  wnoutrefresh(supp_win->window.win);
+  wnoutrefresh(window->win);
   return 0;
 }

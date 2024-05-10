@@ -4,7 +4,7 @@
 // #include "tetris.h"
 
 int hi_scores_save(char *filename, int *hi_score) {
-  if(!filename || !hi_score) return EINVAL;
+  if (!filename || !hi_score) return EINVAL;
 
   int code = 0;
 
