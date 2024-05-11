@@ -12,14 +12,12 @@ void gui_cli_render(game_windows_t *windows, game_info_t *game_info) {
 
   if (term_y >= windows->main_win.data.min_hight &&
       term_x >= windows->main_win.data.min_width) {
-    
-    
     destroy_supp_win(windows);
     box(windows->main_win.win, 0, 0);
     box(windows->stat_win.win, 0, 0);
     wnoutrefresh(windows->main_win.win);
     wnoutrefresh(windows->stat_win.win);
-    
+
     render_field(&windows->game_win, game_info->field, field_height,
                  field_width, 1);
     add_sup_win(windows,
@@ -30,8 +28,9 @@ void gui_cli_render(game_windows_t *windows, game_info_t *game_info) {
                              .start_x = 1,
                              .start_y = 1,
                              .label = "HISCORE"});
-    render_score(&windows->stats_winds[windows->count_stat_win - 1], game_info->high_score);
-    
+    render_score(&windows->stats_winds[windows->count_stat_win - 1],
+                 game_info->high_score);
+
     add_sup_win(windows,
                 (win_data_t){.hight = 4,
                              .min_hight = 4,
@@ -40,7 +39,8 @@ void gui_cli_render(game_windows_t *windows, game_info_t *game_info) {
                              .start_x = 1,
                              .start_y = 5,
                              .label = "SCORE"});
-    render_score(&windows->stats_winds[windows->count_stat_win - 1], game_info->score);
+    render_score(&windows->stats_winds[windows->count_stat_win - 1],
+                 game_info->score);
 
     add_sup_win(windows,
                 (win_data_t){.hight = 4,
@@ -50,7 +50,8 @@ void gui_cli_render(game_windows_t *windows, game_info_t *game_info) {
                              .start_x = 1,
                              .start_y = 9,
                              .label = "LEVEL"});
-    render_score(&windows->stats_winds[windows->count_stat_win - 1], game_info->level);
+    render_score(&windows->stats_winds[windows->count_stat_win - 1],
+                 game_info->level);
 
     add_sup_win(windows,
                 (win_data_t){.hight = 5,
@@ -60,8 +61,8 @@ void gui_cli_render(game_windows_t *windows, game_info_t *game_info) {
                              .start_x = 1,
                              .start_y = 13,
                              .label = "NEXT"});
-    render_field(&windows->stats_winds[windows->count_stat_win - 1], game_info->next, brick_height,
-                 brick_width, 8);
+    render_field(&windows->stats_winds[windows->count_stat_win - 1],
+                 game_info->next, brick_height, brick_width, 8);
   } else {
     small_win_banner(term_y, term_x);
   }
