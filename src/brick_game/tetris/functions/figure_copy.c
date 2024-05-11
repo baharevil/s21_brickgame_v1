@@ -5,6 +5,13 @@
 #include "game_t.h"
 #include "tetris.h"
 
+/**
+ * @ingroup Functions_for_manage_figures_on_field
+ * @brief Функция копирования фигуры
+ * @param[in] figure_t* Указатель на фигуру-источник
+ * @param[in] figure_t* Указатель на фигуру-назначение
+ * @return Код ошибки: Согласно errno
+ */
 int figure_copy(const figure_t *src, figure_t **dst) {
   int code = 0;
 

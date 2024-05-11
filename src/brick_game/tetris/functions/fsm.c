@@ -3,6 +3,13 @@
 
 #include "tetris.h"
 
+/**
+ * @ingroup FSM_functions
+ * @brief Функция МКА возвращаюшая действие исходя из действий игрока
+ * @param[in] fsm_state Состояние
+ * @param[in] UserAction_t Действие игрока
+ * @return action Адрес функции действия
+ */
 action fsm(fsm_state state, UserAction_t user_action) {
   action result = NULL;
 

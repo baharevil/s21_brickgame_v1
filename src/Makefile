@@ -13,6 +13,7 @@ sub_backend_dir = tetris
 sub_frontend_dir = cli
 install_dir = ~/$(project_name)
 gcov_report_dir = gcov_report
+docs_dir = docs
 import := $(controller_dir)/controller.a $(frontend_dir)/gui.a $(backend_dir)/tetris.a $(common_dir)/common.a
 
 #---= GCOVR + OPEN =---#
@@ -23,7 +24,7 @@ REPORTFLAGS = --html --html-details --html-self-contained
 OS := $(shell uname -s)
 OPEN_CMD := $(if $(filter Linux, $(OS)), xdg-open, open)
 
-.PHONY: all rebuild $(import)
+.PHONY: all rebuild $(import) docs
 
 all: $(project_name)
 rebuild: clean $(project_name)
@@ -107,12 +108,12 @@ gcov_report_dir:
 deps:
 	pip install gcovr
 
-doc:
-	doxygen doc/doc_config
-	$(OPEN_CMD) doc/html/index.html
+docs:
+	@doxygen docs/doxygen.conf
+	$(OPEN_CMD) docs/html/index.html
 
 dvi:
-# TODO dvi (document) goal
+	$(MAKE) --directory=$(docs_dir)/latex
 
 #---== CLEAN ==---#
 .PHONY: clean distclean mostlyclean realclean
@@ -120,7 +121,7 @@ distclean: clean
 	@rm -rf scores.data
 realclean: distclean
 mostlyclean: clean_test clean_gcov_report clean_dist
-clean: clean_backend clean_frontend clean_project clean_test clean_gcov_report clean_dist
+clean: clean_backend clean_frontend clean_project clean_test clean_gcov_report clean_docs clean_dist
 	$(MAKE) clean --directory=$(controller_dir)
 	$(MAKE) clean --directory=$(common_dir)
 	
@@ -147,4 +148,5 @@ clean_gcov_report:
 clean_dist:
 	@rm -rf $(project_name).tar
 
-# TODO clean_dvi goal
+clean_docs:
+	@rm -rf $(docs_dir)/html $(docs_dir)/latex

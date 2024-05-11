@@ -7,6 +7,9 @@
 
 #include "pthread_barrier.h"
 
+/**
+ * @brief Структура разделяемой между потоками памяти
+ */
 typedef struct {
   // TIDs
   pthread_t model;

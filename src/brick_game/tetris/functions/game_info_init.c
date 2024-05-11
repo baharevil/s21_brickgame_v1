@@ -4,6 +4,12 @@
 
 #include "tetris.h"
 
+/**
+ * @ingroup Functions_for_manage_game_structures
+ * @brief Функция созания структуры обмена
+ * @param[in] game_info_t** Указатель на структуру обмена
+ * @return Код ошибки: Согласно errno
+ */
 int game_info_init(game_info_t **game_info) {
   if (game_info == NULL) return EINVAL;
 

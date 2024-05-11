@@ -8,6 +8,13 @@
 #include "game_t.h"
 #include "tetris.h"
 
+/**
+ * @ingroup Functions_for_manage_figures_DB
+ * @brief Функция загрузки фигур в БД
+ * @param[in] const char * Имя директории
+ * @param[in] figures_db_t* Указатель на БД фигур
+ * @return Код ошибки: Согласно errno
+ */
 int figure_db_load(const char *dir, figures_db_t *db) {
   int code = 0;
   DIR *directory = NULL;

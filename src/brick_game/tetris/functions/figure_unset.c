@@ -3,6 +3,12 @@
 
 #include "tetris.h"
 
+/**
+ * @ingroup Functions_for_manage_figures_on_field
+ * @brief Функция удаления фигуры с поля
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Код ошибки: Согласно errno
+ */
 int figure_unset(game_t *game) {
   if (!game || !game->figure_cur || !game->figure_cur->body ||
       !game->game_info || !game->game_info->field)

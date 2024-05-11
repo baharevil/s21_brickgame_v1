@@ -1,8 +1,13 @@
 #include <errno.h>
 #include <stdio.h>
 
-// #include "tetris.h"
-
+/**
+ * @ingroup Functions_for_save_end_load_high_scores
+ * @brief Функции загрузки результатов игры
+ * @param[in] char* Имя файла
+ * @param[in] int* Указатель на число
+ * @return Код ошибки: Согласно errno
+ */
 int hi_scores_load(char *filename, int *hi_score) {
   if (!filename || !hi_score) return EINVAL;
 

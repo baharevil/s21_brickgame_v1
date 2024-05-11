@@ -4,6 +4,12 @@
 
 #include "tetris.h"
 
+/**
+ * @ingroup Functions_for_manage_game_structures
+ * @brief Функция уничтожения структуры игры
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Код ошибки: Согласно errno
+ */
 int game_destroy(game_t *game) {
   if (!game) return EINVAL;
 

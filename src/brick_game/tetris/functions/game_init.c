@@ -5,6 +5,12 @@
 
 #include "tetris.h"
 
+/**
+ * @ingroup Functions_for_manage_game_structures
+ * @brief Функция создания и инициализации структуры игры
+ * @param[in] game_t** Указатель на структуру игры
+ * @return Код ошибки: Согласно errno
+ */
 int game_init(game_t **game) {
   if (game == NULL) return EINVAL;
 

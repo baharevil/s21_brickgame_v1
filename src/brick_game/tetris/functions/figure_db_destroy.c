@@ -5,6 +5,12 @@
 #include "game_t.h"
 #include "tetris.h"
 
+/**
+ * @ingroup Functions_for_manage_figures_DB
+ * @brief Функция уничтожения БД фигур
+ * @param[in] figure_t* Указатель на БД фигур
+ * @return Код ошибки: Согласно errno
+ */
 int figure_db_destroy(figures_db_t *db) {
   int code = 0;
 

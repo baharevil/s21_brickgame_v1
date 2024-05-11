@@ -3,6 +3,12 @@
 
 #include "tetris.h"
 
+/**
+ * @ingroup FSM_functions
+ * @brief Функция МКА запуска игры
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Функция не возвращает значения
+ */
 void start_fn(game_t *game) {
   if (game) {
     game_info_clean(game->game_info);
@@ -11,6 +17,12 @@ void start_fn(game_t *game) {
   }
 }
 
+/**
+ * @ingroup FSM_functions
+ * @brief Функция МКА паузы игры
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Функция не возвращает значения
+ */
 void pause_fn(game_t *game) {
   if (game) {
     static fsm_state temp_state;
@@ -26,6 +38,12 @@ void pause_fn(game_t *game) {
   }
 }
 
+/**
+ * @ingroup FSM_functions
+ * @brief Функция МКА создания новой фигуры на поле
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Функция не возвращает значения
+ */
 void spawn_fn(game_t *game) {
   if (game) {
     game->state = spawn;
@@ -50,12 +68,24 @@ void spawn_fn(game_t *game) {
   }
 }
 
+/**
+ * @ingroup FSM_functions
+ * @brief Функция МКА перевода игры в состояние передвижения
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Функция не возвращает значения
+ */
 void move_fn(game_t *game) {
   if (game) {
     game->state = moving;
   }
 }
 
+/**
+ * @ingroup FSM_functions
+ * @brief Функция МКА сдвига фигуры на поле
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Функция не возвращает значения
+ */
 void shift_fn(game_t *game) {
   if (game) {
     fsm_state temp_state = game->state;
@@ -75,6 +105,12 @@ void shift_fn(game_t *game) {
   }
 }
 
+/**
+ * @ingroup FSM_functions
+ * @brief Функция МКА присоединения фигуры к полю
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Функция не возвращает значения
+ */
 void connect_fn(game_t *game) {
   if (game) {
     game->state = connect;
@@ -84,6 +120,12 @@ void connect_fn(game_t *game) {
   }
 }
 
+/**
+ * @ingroup FSM_functions
+ * @brief Функция МКА окончания игры
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Функция не возвращает значения
+ */
 void game_over_fn(game_t *game) {
   if (game) {
     game->state = game_over;
@@ -91,6 +133,12 @@ void game_over_fn(game_t *game) {
   }
 }
 
+/**
+ * @ingroup FSM_functions
+ * @brief Функция МКА выхода из игры
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Функция не возвращает значения
+ */
 void terminate_fn(game_t *game) {
   if (game) {
     game->state = none;
@@ -98,6 +146,12 @@ void terminate_fn(game_t *game) {
   }
 }
 
+/**
+ * @ingroup FSM_functions
+ * @brief Функция МКА хода влево
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Функция не возвращает значения
+ */
 void left_fn(game_t *game) {
   if (game) {
     figure_unset(game);
@@ -109,6 +163,12 @@ void left_fn(game_t *game) {
   }
 }
 
+/**
+ * @ingroup FSM_functions
+ * @brief Функция МКА хода вправо
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Функция не возвращает значения
+ */
 void right_fn(game_t *game) {
   if (game) {
     figure_unset(game);
@@ -119,7 +179,13 @@ void right_fn(game_t *game) {
     move_fn(game);
   }
 }
-// It's a joke)
+
+/**
+ * @ingroup FSM_functions
+ * @brief Функция МКА хода вверх (отключена)
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Функция не возвращает значения
+ */
 void up_fn(game_t *game) {
   if (game) {
     figure_unset(game);
@@ -131,6 +197,12 @@ void up_fn(game_t *game) {
   }
 }
 
+/**
+ * @ingroup FSM_functions
+ * @brief Функция МКА хода вниз
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Функция не возвращает значения
+ */
 void down_fn(game_t *game) {
   if (game) {
     figure_unset(game);
@@ -142,6 +214,12 @@ void down_fn(game_t *game) {
   }
 }
 
+/**
+ * @ingroup FSM_functions
+ * @brief Функция МКА вызова действия в игре
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Функция не возвращает значения
+ */
 void action_fn(game_t *game) {
   if (game) {
     int check = 0;

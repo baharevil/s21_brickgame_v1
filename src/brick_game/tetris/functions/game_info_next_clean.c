@@ -3,6 +3,12 @@
 
 #include "tetris.h"
 
+/**
+ * @ingroup Functions_for_manage_game_structures
+ * @brief Функция очистки поля следующей фигуры
+ * @param[in] int** Указатель на поле следующей фигуры
+ * @return Код ошибки: Согласно errno
+ */
 int game_info_next_clean(int **next) {
   if (!next) return EINVAL;
 

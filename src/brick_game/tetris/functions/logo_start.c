@@ -2,6 +2,12 @@
 
 #include "tetris.h"
 
+/**
+ * @ingroup Screens
+ * @brief Функция нанесения заставки перед началом игры на поле
+ * @param[in] int** Указатель на поле игры
+ * @return Функция не возвращает значения
+ */
 void logo_start(int **field) {
   int logo[field_height][field_width] = {
       {0, 2, 2, 2, 2, 2, 0, 0, 0, 0}, {0, 0, 0, 2, 0, 3, 3, 3, 3, 0},

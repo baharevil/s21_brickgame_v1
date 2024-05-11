@@ -5,6 +5,12 @@
 #include "game_t.h"
 #include "tetris.h"
 
+/**
+ * @ingroup Functions_for_manage_figures
+ * @brief Функция создания фигуры
+ * @param[in] const unsigned short Размер
+ * @return Указатель на созданную фигуру
+ */
 figure_t *figure_create(const unsigned short size) {
   int code = 0;
   figure_t *result = NULL;

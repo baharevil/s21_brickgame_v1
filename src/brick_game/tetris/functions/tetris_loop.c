@@ -9,6 +9,12 @@
 #include "common/runtime_t.h"
 #include "tetris.h"
 
+/**
+ * @ingroup Thread_functions Потоковые функции
+ * @brief Основная функция потока машины конечных автоматов
+ * @param[in] *runtime Указатель на структуру разделяемой памяти
+ * @return Код ошибки: Согласно errno
+ */
 void *tetris_loop(runtime_t *runtime) {
   if (!runtime) return (void *)EFAULT;
 

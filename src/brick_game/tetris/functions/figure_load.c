@@ -6,6 +6,12 @@
 #include "game_t.h"
 #include "tetris.h"
 
+/**
+ * @ingroup Functions_for_manage_figures
+ * @brief Функция загрузки фигуры из файла
+ * @param[in] FILE* Указатель на файл
+ * @return Указатель на созданную структуру figure_t*
+ */
 figure_t *figure_load(FILE *file) {
   int code = 0;
   figure_t *result = NULL;

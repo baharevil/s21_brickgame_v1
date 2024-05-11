@@ -2,6 +2,11 @@
 
 #include "tetris.h"
 
+/**
+ * @ingroup Functions_getting_data_structure_for_rendering
+ * @brief Функция осуществляющая передачу пользовательского ввода в МКА
+ * @return Функция не возвращает значения
+ */
 void userInput(UserAction_t user_action, int hold) {
   int code = 0;
   action act = NULL;

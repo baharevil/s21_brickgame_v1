@@ -3,6 +3,12 @@
 
 #include "tetris.h"
 
+/**
+ * @ingroup Functions_for_manage_game_structures
+ * @brief Функция очистки структуры обмена
+ * @param[in] game_info_t* Указатель на структуру обмена
+ * @return Код ошибки: Согласно errno
+ */
 int game_info_clean(game_info_t *game_info) {
   if (!game_info) return EINVAL;
 

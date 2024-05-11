@@ -7,6 +7,13 @@
 static int check_line_full(int *);
 static int swap_lines_down(game_info_t *, int);
 
+/**
+ * @ingroup Functions_for_manage_figures_on_field
+ * @brief Функция стирания заполненных строк с экрана
+ * Стирает полные строки после присоединения фигуры к полю
+ * @param[in] game_t* Указатель на структуру игры
+ * @return Код ошибки: Согласно errno
+ */
 int kaboom(game_t *game) {
   if (!game || !game->game_info || !game->game_info->field) return EINVAL;
 

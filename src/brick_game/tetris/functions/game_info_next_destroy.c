@@ -4,8 +4,12 @@
 
 #include "tetris.h"
 
-enum { present = -1, not_present = -2 };
-
+/**
+ * @ingroup Functions_for_manage_game_structures
+ * @brief Функция удаления поля следующей фигуры
+ * @param[in] int* Указатель на поле следующей фигуры
+ * @return Код ошибки: Согласно errno
+ */
 int game_info_next_destroy(int **next) {
   if (!next) return EINVAL;
 

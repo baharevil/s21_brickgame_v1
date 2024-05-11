@@ -4,6 +4,12 @@
 
 #include "game_t.h"
 
+/**
+ * @ingroup Functions_for_manage_figures
+ * @brief Функция уничтожения фигуры
+ * @param[in] figure_t* Указатель на фигуру
+ * @return Код ошибки: Согласно errno
+ */
 int figure_destroy(figure_t *figure) {
   int code = 0;
 
