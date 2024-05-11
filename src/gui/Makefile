@@ -1,18 +1,16 @@
+#---== COMPILER ==---#
+CC = gcc
+DEBUG = -g
+CFLAGS = -Wall -Werror -Wextra -std=c11 -I./$(include_dir) -I.. -pedantic
+LDFLAGS = -lm -lncurses
+
 #---== STATIC_VARIABLES ==---#
 project_name = gui
 target_dir = 
 build_dir = $(target_dir)/build
 func_dir = $(target_dir)/functions
 include_dir = $(target_dir)/include
-
 lib_name := $(project_name).a
-
-#---== COMPILER ==---#
-CC = gcc
-DEBUG = -g
-CFLAGS = -Wall -Werror -Wextra -std=c11 -I./$(include_dir) -I.. -pedantic -g
-LDFLAGS = -lm -lncurses
-VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 
 #---= DYNAMIC_VARIABLES =---#
 func_source := $(shell find $(func_dir) -iname "*.c")

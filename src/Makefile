@@ -11,13 +11,22 @@ backend_dir = brick_game
 frontend_dir = gui
 sub_backend_dir = tetris
 sub_frontend_dir = cli
-install_dir = $(project_name)
+install_dir = ~/$(project_name)
+gcov_report_dir = gcov_report
 import := $(controller_dir)/controller.a $(frontend_dir)/gui.a $(backend_dir)/tetris.a $(common_dir)/common.a
+
+#---= GCOVR + OPEN =---#
+GCOVR := $(shell command -v gcovr 2> /dev/null)
+# GCOVR += $(if $(filter %gcovr,$(GCOVR)),,~/.local/bin/gcovr)
+GCOVR += $(if $(findstring gcovr,$(GCOVR)),,~/.local/bin/gcovr)
+REPORTFLAGS = --html --html-details --html-self-contained
+OS := $(shell uname -s)
+OPEN_CMD := $(if $(filter Linux, $(OS)), xdg-open, open)
 
 .PHONY: all rebuild $(import)
 
 all: $(project_name)
-rebuild: uninstall $(project_name)
+rebuild: clean $(project_name)
 
 $(project_name): $(import)
 	$(CC) -L. $(controller_dir)/controller.o $(addprefix -l:, $^) $(LDFLAGS) -o $(project_name)
@@ -34,16 +43,21 @@ $(controller_dir)/controller.a:
 $(common_dir)/common.a:
 	$(MAKE) --directory=$(common_dir)
 
-# TODO
 #---== INSTALL ==---#
-# install: 
+install: $(project_name)
+	@mkdir -p $(install_dir)
+	@mkdir -p $(install_dir)/figures
+	@cp $(project_name) $(install_dir)
+	@cp figures/*.tet $(install_dir)/figures
+	@echo "Game installed"
 
 #---== UNINSTALL ==---#
-uninstall: clean
-	@echo "Game uninstall"
+uninstall:
+	@rm -rf $(install_dir)
+	@echo "Game uninstalled"
 
 #---== TESTS ==---#
-test: common_test tetris_test
+test: tetris_test
 
 common_test: LDFLAGS += -lcheck -lsubunit -lm
 common_test: $(common_dir)/common.a
@@ -57,8 +71,14 @@ tetris_test: $(backend_dir)/tetris.a $(common_dir)/common.a
 	$(CC) -L. $(backend_dir)/tetris_test.a $(addprefix -l:, $^) $(LDFLAGS) -o $@
 	@echo "Tetris test compiled"
 
+dist: install_dir = dist/$(project_name)
 dist:
-# TODO dist (tar) goal
+	@mkdir -p $(install_dir)
+	@mkdir -p $(install_dir)/figures
+	@cp $(project_name) $(install_dir)
+	@cp figures/*.tet $(install_dir)/figures
+	@tar cf $(project_name).tar -C dist .
+	@rm -rf $(install_dir)
 
 #---== CHECK_RULES ==---#
 .PHONY: clang-n clang-i
@@ -73,12 +93,13 @@ valgrind: $(project_name)
 
 #---== REPORT ==---#
 gcov_report: LDFLAGS += -lgcov -lcheck -lsubunit -ldl -lm
-gcov_report: gcov_report_dir
+gcov_report: clean_backend clean_frontend clean_gcov_report gcov_report_dir
 	$(MAKE) gcov_report --directory=$(backend_dir) target_dir=$(sub_backend_dir)
 	$(MAKE) gcov_report --directory=$(common_dir)
 	$(CC) -L. $(backend_dir)/tetris_test.a $(backend_dir)/tetris.a $(common_dir)/common.a $(LDFLAGS) -o tetris_test
 	@./tetris_test
-	@gcovr -r brick_game --html --html-details --html-self-contained -o gcov_report/brick_game.html
+	@$(GCOVR) -r $(backend_dir) $(REPORTFLAGS) -o $(gcov_report_dir)/$(project_name).html
+	$(OPEN_CMD) $(gcov_report_dir)/$(project_name).html
 
 gcov_report_dir:
 	$(shell [ ! -w report ] && mkdir -p gcov_report) 
@@ -86,25 +107,31 @@ gcov_report_dir:
 deps:
 	pip install gcovr
 
+doc:
+	doxygen doc/doc_config
+	$(OPEN_CMD) doc/html/index.html
+
 dvi:
 # TODO dvi (document) goal
 
 #---== CLEAN ==---#
-.PHONY: clean
-# TODO clean_dvi goal
-clean: clean_backend clean_frontend clean_test clean_gcov_report
+.PHONY: clean distclean mostlyclean realclean
+distclean: clean
+	@rm -rf scores.data
+realclean: distclean
+mostlyclean: clean_test clean_gcov_report clean_dist
+clean: clean_backend clean_frontend clean_project clean_test clean_gcov_report clean_dist
 	$(MAKE) clean --directory=$(controller_dir)
 	$(MAKE) clean --directory=$(common_dir)
-	@rm -rf s21_brick_game_v1
-# @rm -rf tetris_test
-# @rm -rf common_test
-# @rm -rf gcov_report
 	
 clean_backend:
 	@$(MAKE) clean --directory=$(backend_dir) target_dir=$(sub_backend_dir)
 
 clean_frontend:
 	@$(MAKE) clean --directory=$(frontend_dir) target_dir=$(sub_frontend_dir)
+
+clean_project:
+	@rm -rf $(project_name)
 
 clean_test: clean_common_test clean_tetris_test
 
@@ -116,3 +143,8 @@ clean_tetris_test:
 
 clean_gcov_report:
 	@rm -rf gcov_report
+
+clean_dist:
+	@rm -rf $(project_name).tar
+
+# TODO clean_dvi goal

@@ -1,8 +1,8 @@
 #---== COMPILER ==---#
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -std=c11 -I.. -I. -pedantic -g
+DEBUG = -g
+CFLAGS = -Wall -Werror -Wextra -std=c11 -I.. -I. -pedantic
 LDFLAGS = -lcheck -lsubunit -lpthread
-VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 
 #---== STATIC_VARIABLES ==---#
 project_name = common
@@ -12,26 +12,15 @@ bin_sub_dir = release
 build_dir = build
 func_dir = functions
 test_dir = tests
-report_dir = $(target_dir)/gcovr-report
-
-lib_name := $(project_name).a
-test_lib_name := $(project_name)_test.a
-report_name = $(report_dir)/$(project_name).html
-import = $(test_lib_name) $(lib_name)
-
-#---= GCOVR + OPEN =---#
-GCOVR := $(shell command -v gcovr 2> /dev/null)
-ifeq ($(GCOVR),)
-    GCOVR := ~/.local/bin/gcovr
-endif
-REPORTFLAGS = --html-nested --output
-OS := $(shell uname -s)
-OPEN_CMD := $(if $(filter Linux, $(OS)), xdg-open, open)
 
 #---= DYNAMIC_VARIABLES =---#
 find_command = find $(1) -iname "*.c"
 depenc_command = $(addprefix $(build_dir)/, $(filter $(1)/%.o, $(obj_list)))
 find_command_gcov = find $(1) -iname "*.gcda" -o -iname '*.gcno'
+
+lib_name := $(project_name).a
+test_lib_name := $(project_name)_test.a
+import = $(test_lib_name) $(lib_name)
 
 func_source := $(shell $(call find_command, $(func_dir)))
 test_source = $(shell $(call find_command, $(test_dir)))
@@ -54,10 +43,6 @@ $(test_lib_name): build $(call depenc_command, $(test_dir))
 $(build_dir)/%.o: %.c
 	$(CC) $(CFLAGS) $(if $(filter $(func_dir)/%.c, $^), $(GCOVFLAGS)) $(DEBUG) -c $^ -o $@
 
-debug: DEBUG = -g
-debug: bin_sub_dir = debug
-debug: clean_obj test
-
 build:
 	@$(shell [ ! -w "$(build_dir)" ] && mkdir $(build_dir) )
 	@$(shell [ ! -w "$(dir_list)" ] && mkdir $(dir_list) )
@@ -74,20 +59,10 @@ clang-n:
 clang-i:
 	find . -iname '*.h' -o -iname '*.c' | xargs clang-format -i -style=file:../../materials/linters/.clang-format
 
-valgrind: val = valgrind
-valgrind: test
-
 #---== REPORT ==---#
 gcov_report: GCOVFLAGS = -fprofile-arcs -ftest-coverage
 gcov_report: LDFLAGS += -lgcov
 gcov_report: clean_gcov test
-
-gcov_open:
-	$(OPEN_CMD) $(report_name)
-
-doc:
-	doxygen doc/doc_config
-	$(OPEN_CMD) doc/html/index.html
 
 #---== CLEAN ==---#
 .PHONY: clean clean_gcov clean_obj clean_doc
