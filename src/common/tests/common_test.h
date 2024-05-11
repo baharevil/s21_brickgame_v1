@@ -10,6 +10,8 @@ Suite* suite_signals_unblock();
 Suite* suite_set_signal_handler();
 
 void run_tests();
-void run_test_case();
+void run_test_case(Suite*);
+
+int memory_locked(int);
 
 #endif

@@ -22,7 +22,9 @@ int figure_rotate(game_t *game) {
     }
   }
 
-  figure_copy_body(temp->body, game->figure_cur->body, game->figure_cur->size);
+  if (!code)
+    figure_copy_body(temp->body, game->figure_cur->body,
+                     game->figure_cur->size);
 
   if (!code) figure_destroy(temp);
 

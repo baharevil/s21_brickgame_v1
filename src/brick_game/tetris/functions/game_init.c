@@ -58,5 +58,7 @@ int game_init(game_t **game) {
     game_locate((*game));
   }
 
+  if (code) game_destroy(*game), *game = NULL;
+
   return code;
 }

@@ -81,8 +81,6 @@ valgrind: test
 gcov_report: GCOVFLAGS = -fprofile-arcs -ftest-coverage
 gcov_report: LDFLAGS += -lgcov
 gcov_report: clean_gcov test
-	@mkdir $(report_dir)
-	$(GCOV) $(REPORTFLAGS) $(report_name)
 
 gcov_open:
 	$(OPEN_CMD) $(report_name)

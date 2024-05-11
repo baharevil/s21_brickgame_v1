@@ -1,6 +1,7 @@
 #include <check.h>
 
 #include "tetris.h"
+#include "tetris_test.h"
 
 START_TEST(suite_figure_create_test1) {
   figure_t *figure = NULL;
@@ -10,6 +11,28 @@ START_TEST(suite_figure_create_test1) {
 END_TEST
 
 START_TEST(suite_figure_create_test2) {
+  figure_t *figure = NULL, *check = NULL;
+  memory_locked(sizeof(figure_t), 1);
+  figure = figure_create(10);
+  memory_locked(0, -1);
+  check = figure;
+  figure_destroy(figure);
+  ck_assert_ptr_null(check);
+}
+END_TEST
+
+START_TEST(suite_figure_create_test3) {
+  figure_t *figure = NULL, *check = NULL;
+  memory_locked(sizeof(int), 1);
+  figure = figure_create(10);
+  memory_locked(0, -1);
+  check = figure;
+  figure_destroy(figure);
+  ck_assert_ptr_null(check);
+}
+END_TEST
+
+START_TEST(suite_figure_create_test4) {
   figure_t *figure = NULL;
   for (int i = 1; i < 11; i++) {
     figure = figure_create(i);
@@ -29,6 +52,8 @@ Suite *suite_figure_create() {
   if (s && tc) {
     tcase_add_test(tc, suite_figure_create_test1);
     tcase_add_test(tc, suite_figure_create_test2);
+    tcase_add_test(tc, suite_figure_create_test3);
+    tcase_add_test(tc, suite_figure_create_test4);
     suite_add_tcase(s, tc);
   }
 

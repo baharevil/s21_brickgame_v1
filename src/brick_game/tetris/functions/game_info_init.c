@@ -31,7 +31,7 @@ int game_info_init(game_info_t **game_info) {
     }
   }
 
-  if (code) game_info_destroy(*game_info);
+  if (code) game_info_destroy(*game_info), *game_info = NULL;
 
   return code;
 }

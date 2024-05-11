@@ -18,6 +18,7 @@ void* gui_cli_loop(runtime_t* runtime) {
   code = (runtime == NULL) * EFAULT;
 
   if (!code) {
+    int x = 0, y = 0;
     signals_block();
     signals_unblock();
     set_signal_handler(gui_cli_resize);
@@ -34,11 +35,13 @@ void* gui_cli_loop(runtime_t* runtime) {
 
     game_info_t game_info = {0};
     while (!atomic_load(&runtime->game_stop)) {
+      term_size(&y, &x);
       pthread_mutex_lock(&runtime->cond_mutex);
       pthread_cond_wait(&runtime->do_render, &runtime->cond_mutex);
 
       game_info = update_current_state();
-      if (game_info.field) gui_cli_render(windows, &game_info);
+      if (game_info.field && y > 24 && x > 46)
+        gui_cli_render(windows, &game_info);
 
       pthread_mutex_unlock(&runtime->cond_mutex);
     }

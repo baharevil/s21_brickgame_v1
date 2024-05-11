@@ -47,7 +47,7 @@ debug: DEBUG = -g
 debug: bin_sub_dir = debug
 debug: clean_obj test
 
-test: $(test_lib_name)
+test: $(import)
 
 $(lib_name): build $(call depenc_command, $(func_dir))
 $(test_lib_name): build $(call depenc_command, $(test_dir))
@@ -59,7 +59,7 @@ $(build_dir)/functions/%.o: $(func_dir)/%.c
 	$(CC) $(CFLAGS) $(if $(filter $(func_dir)/%.c, $^), $(GCOVFLAGS)) $(DEBUG) -c $^ -o $@
 
 $(build_dir)/tests/%.o: $(test_dir)/%.c
-	$(CC) $(CFLAGS) $(GCOVFLAGS) $(DEBUG) -c $^ -o $@
+	$(CC) $(CFLAGS) $(DEBUG) -c $^ -o $@
 
 build:
 	@$(shell [ ! -w "$(build_dir)" ] && mkdir $(build_dir) )
@@ -84,8 +84,8 @@ valgrind: test
 gcov_report: GCOVFLAGS = -fprofile-arcs -ftest-coverage
 gcov_report: LDFLAGS += -lgcov
 gcov_report: clean_gcov test
-	@mkdir $(report_dir)
-	$(GCOV) $(REPORTFLAGS) $(report_name)
+# @mkdir $(report_dir)
+# $(GCOV) $(REPORTFLAGS) $(report_name)
 
 gcov_open:
 	$(OPEN_CMD) $(report_name)

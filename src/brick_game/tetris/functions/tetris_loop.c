@@ -15,7 +15,7 @@ void *tetris_loop(runtime_t *runtime) {
   int code = 0;
   game_t *game = NULL;
 
-  // code = signals_block();
+  code = signals_block();
 
   if (!code) code = game_init(&game);
 

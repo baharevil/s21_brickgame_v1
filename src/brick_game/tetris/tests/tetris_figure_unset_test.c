@@ -39,6 +39,7 @@ START_TEST(suite_figure_unset_test4) {
   int result = 0;
   game_t *game = NULL;
   game_init(&game);
+  spawn_fn(game);
   result = figure_unset(game);
   game_destroy(game);
   ck_assert_int_eq(result, 0);

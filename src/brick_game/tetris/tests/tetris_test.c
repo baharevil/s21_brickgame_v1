@@ -1,10 +1,9 @@
 #include "tetris_test.h"
 
+#include <dlfcn.h>
 #include <stdio.h>
 
 void run_test_case(Suite *testcase) {
-  // TestResult *result = {0};
-  // result = srunner_results(srunner);
   SRunner *srunner = {0};
   srunner = srunner_create(testcase);
   if (srunner) {
@@ -16,7 +15,9 @@ void run_test_case(Suite *testcase) {
 
 void run_tests() {
   int testcase_counter = 0;
-  Suite *list_cases[] = {suite_tetris_loop(),
+  Suite *list_cases[] = {suite_hi_scores_load(),
+                         suite_hi_scores_save(),
+                         suite_tetris_loop(),
                          suite_game_locate(),
                          suite_game_init(),
                          suite_game_destroy(),
@@ -24,6 +25,7 @@ void run_tests() {
                          suite_game_info_clean(),
                          suite_game_info_destroy(),
                          suite_game_info_next_init(),
+                         suite_game_info_next_clean(),
                          suite_game_info_next_destroy(),
                          suite_figure_db_load(),
                          suite_figure_db_insert(),
@@ -66,4 +68,37 @@ void run_tests() {
 int main() {
   run_tests();
   return 0;
+}
+
+void *malloc(size_t __size) {
+  void *result = NULL;
+  void *(*libc_malloc)(size_t) = NULL;
+  *(void **)(&libc_malloc) = dlsym((void *)-1l, "malloc");
+  if (!memory_locked(__size, 0)) result = libc_malloc(__size);
+  return result;
+}
+
+void *calloc(size_t __nmemb, size_t __size) {
+  void *result = NULL;
+  void *(*libc_calloc)(size_t, size_t) = NULL;
+  *(void **)(&libc_calloc) = dlsym((void *)-1l, "calloc");
+  if (!memory_locked(__size, 0)) result = libc_calloc(__nmemb, __size);
+  return result;
+}
+
+void *memset(void *__s, int __c, size_t __n) {
+  void *result = NULL;
+  void *(*libc_memset)(void *, int, size_t) = NULL;
+  *(void **)(&libc_memset) = dlsym((void *)-1l, "memset");
+  if (!memory_locked(__n, 0)) result = libc_memset(__s, __c, __n);
+  return result;
+}
+
+int memory_locked(size_t size, int locked) {
+  static size_t value = 0;
+  int result = 0;
+  if (locked == 1) value = size;
+  if (locked == -1) value = 0;
+  if (locked == 0 && value == size) result = 1;
+  return result;
 }

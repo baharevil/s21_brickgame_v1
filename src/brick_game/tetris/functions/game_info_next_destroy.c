@@ -11,7 +11,7 @@ int game_info_next_destroy(int **next) {
 
   int code = 0;
 
-  for (int row = 0; !code && row < 4; row++) {
+  for (int row = 0; row < 4; row++) {
     free(next[row]);
   }
 

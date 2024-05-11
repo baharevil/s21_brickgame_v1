@@ -1,8 +1,7 @@
 #---== COMPILER ==---#
 CC = gcc
-LDFLAGS = -lpanel -lncurses
+LDFLAGS = -lncurses
 VALFLAGS = --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s
-# -lpanel -lncurses -lmenu
 
 #---== SETTING_GAME ==---#
 project_name = s21_brick_game_v1
@@ -73,13 +72,16 @@ valgrind: $(project_name)
 	valgrind --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all --track-origins=yes -s $(shell pwd)/$(project_name)
 
 #---== REPORT ==---#
-gcov_report: gcov_report_backend gcov_report_frontend
+gcov_report: LDFLAGS += -lgcov -lcheck -lsubunit -ldl -lm
+gcov_report: gcov_report_dir
 	$(MAKE) gcov_report --directory=$(backend_dir) target_dir=$(sub_backend_dir)
-	@echo "If you want open use: make gcov_open"
+	$(MAKE) gcov_report --directory=$(common_dir)
+	$(CC) -L. $(backend_dir)/tetris_test.a $(backend_dir)/tetris.a $(common_dir)/common.a $(LDFLAGS) -o tetris_test
+	@./tetris_test
+	@gcovr -r brick_game --html --html-details --html-self-contained -o gcov_report/brick_game.html
 
-gcov_open: gcov_open_backend gcov_open_frontend
-	$(MAKE) gcov_open --directory=$(backend_dir) target_dir=$(sub_backend_dir)
-	@echo "Open completed"
+gcov_report_dir:
+	$(shell [ ! -w report ] && mkdir -p gcov_report) 
 
 deps:
 	pip install gcovr
@@ -90,10 +92,13 @@ dvi:
 #---== CLEAN ==---#
 .PHONY: clean
 # TODO clean_dvi goal
-clean: clean_backend clean_frontend clean_test
+clean: clean_backend clean_frontend clean_test clean_gcov_report
 	$(MAKE) clean --directory=$(controller_dir)
 	$(MAKE) clean --directory=$(common_dir)
 	@rm -rf s21_brick_game_v1
+# @rm -rf tetris_test
+# @rm -rf common_test
+# @rm -rf gcov_report
 	
 clean_backend:
 	@$(MAKE) clean --directory=$(backend_dir) target_dir=$(sub_backend_dir)
@@ -108,3 +113,6 @@ clean_common_test:
 
 clean_tetris_test:
 	@rm -rf tetris_test
+
+clean_gcov_report:
+	@rm -rf gcov_report

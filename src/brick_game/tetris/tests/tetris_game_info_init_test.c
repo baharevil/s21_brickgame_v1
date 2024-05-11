@@ -2,6 +2,7 @@
 #include <errno.h>
 
 #include "tetris.h"
+#include "tetris_test.h"
 
 START_TEST(suite_game_info_init_test1) {
   int result = 0;
@@ -11,6 +12,17 @@ START_TEST(suite_game_info_init_test1) {
 END_TEST
 
 START_TEST(suite_game_info_init_test2) {
+  int result = 0;
+  game_info_t *game_info = NULL;
+  memory_locked(sizeof(game_info_t), 1);
+  result = game_info_init(&game_info);
+  memory_locked(0, -1);
+  game_info_destroy(game_info);
+  ck_assert_int_eq(result, ENOMEM);
+}
+END_TEST
+
+START_TEST(suite_game_info_init_test3) {
   int result = 0;
   game_info_t *game_info = NULL;
   result = game_info_init(&game_info);
@@ -28,6 +40,7 @@ Suite *suite_game_info_init() {
   tc = tcase_create("suite_game_info_init");
   tcase_add_test(tc, suite_game_info_init_test1);
   tcase_add_test(tc, suite_game_info_init_test2);
+  tcase_add_test(tc, suite_game_info_init_test3);
 
   suite_add_tcase(s, tc);
 

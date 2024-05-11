@@ -3,7 +3,10 @@
 
 #include <check.h>
 
-Suite* suite_tetris_loop();  // With wrong args only
+Suite* suite_logo_start();
+Suite* suite_logo_game_over();
+
+Suite* suite_tetris_loop();
 Suite* suite_game_locate();
 Suite* suite_game_init();
 Suite* suite_game_destroy();
@@ -11,6 +14,7 @@ Suite* suite_game_info_init();
 Suite* suite_game_info_clean();
 Suite* suite_game_info_destroy();
 Suite* suite_game_info_next_init();
+Suite* suite_game_info_next_clean();
 Suite* suite_game_info_next_destroy();
 Suite* suite_figure_db_load();
 Suite* suite_figure_db_insert();
@@ -25,6 +29,9 @@ Suite* suite_figure_unset();
 Suite* suite_figure_rotate();
 Suite* suite_figure_check();
 Suite* suite_kaboom();
+
+Suite* suite_hi_scores_load();
+Suite* suite_hi_scores_save();
 
 Suite* suite_fsm();
 Suite* suite_start_fn();
@@ -45,6 +52,8 @@ Suite* suite_userInput();
 Suite* suite_update_current_state();
 
 void run_tests();
-void run_test_case();
+void run_test_case(Suite*);
+
+int memory_locked(size_t, int);
 
 #endif

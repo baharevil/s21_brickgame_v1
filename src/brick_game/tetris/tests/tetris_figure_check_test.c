@@ -39,6 +39,8 @@ START_TEST(suite_figure_check_test4) {
   int result = 0;
   game_t *game = NULL;
   game_init(&game);
+  spawn_fn(game);
+  figure_unset(game);
   result = figure_check(game);
   game_destroy(game);
   ck_assert_int_eq(result, 0);
