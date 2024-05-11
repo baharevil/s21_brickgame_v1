@@ -60,8 +60,8 @@ void gui_cli_render(game_windows_t *windows, game_info_t *game_info) {
                              .start_x = 1,
                              .start_y = 13,
                              .label = "NEXT"});
-    render_field(&windows->stats_winds[windows->count_stat_win - 1], game_info->next, brick_higth,
-                 brick_windth, 8);
+    render_field(&windows->stats_winds[windows->count_stat_win - 1], game_info->next, brick_height,
+                 brick_width, 8);
   } else {
     small_win_banner(term_y, term_x);
   }

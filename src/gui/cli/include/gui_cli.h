@@ -8,12 +8,7 @@
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
 
-<<<<<<< Updated upstream
-enum game_filed_setting { field_higth = 20, field_windth = 10 };
-enum brick_setting { brick_higth = 4, brick_windth = 4 };
-=======
-enum next_size { next_height = 4, next_width = 4 };
->>>>>>> Stashed changes
+enum brick_setting { brick_height = 4, brick_width = 4 };
 
 void gui_cli_render(game_windows_t *windows, game_info_t *game_info);
 int render_score(win_t *window, int value);

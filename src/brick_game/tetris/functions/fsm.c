@@ -15,7 +15,7 @@ action fsm(fsm_state state, UserAction_t user_action) {
       {NULL, NULL, pause_fn, terminate_fn, NULL, NULL, NULL, NULL,
        NULL},                                                          // pause
       {NULL, NULL, NULL, terminate_fn, NULL, NULL, NULL, NULL, NULL},  // spawn
-      {NULL, NULL, pause_fn, terminate_fn, left_fn, right_fn, up_fn, down_fn,
+      {NULL, NULL, pause_fn, terminate_fn, left_fn, right_fn, NULL, down_fn,
        action_fn},                                             // move
       {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},  // shift
       {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},  // connect
