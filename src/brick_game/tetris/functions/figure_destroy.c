@@ -17,7 +17,7 @@ int figure_destroy(figure_t *figure) {
 
   if (!code) {
     for (int row = 0; row < figure->size; row++)
-      if (figure->body[row]) free(figure->body[row]);
+      if (figure->body && figure->body[row]) free(figure->body[row]);
     if (figure->body) free(figure->body);
     figure->id = 0;
     figure->size = 0;

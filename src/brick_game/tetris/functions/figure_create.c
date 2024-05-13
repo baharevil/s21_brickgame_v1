@@ -12,17 +12,16 @@
  * @return Указатель на созданную фигуру
  */
 figure_t *figure_create(const unsigned short size) {
+  if (size == 0) return NULL;
+
   int code = 0;
+
   figure_t *result = NULL;
 
-  code = (size == 0) * EINVAL;
-
-  if (!code) {
-    figure_t *temp = NULL;
-    temp = calloc(1, sizeof(figure_t));
-    code = (temp == NULL) * ENOMEM;
-    if (!code) result = temp;
-  }
+  figure_t *temp = NULL;
+  temp = calloc(1, sizeof(figure_t));
+  code = (temp == NULL) * ENOMEM;
+  if (!code) result = temp;
 
   if (!code) {
     result->size = size;

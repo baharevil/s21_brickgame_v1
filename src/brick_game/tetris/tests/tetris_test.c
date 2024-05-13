@@ -2,6 +2,7 @@
 
 #include <dlfcn.h>
 #include <stdio.h>
+#include <string.h>
 
 void run_test_case(Suite *testcase) {
   SRunner *srunner = {0};
@@ -91,6 +92,15 @@ void *memset(void *__s, int __c, size_t __n) {
   void *(*libc_memset)(void *, int, size_t) = NULL;
   *(void **)(&libc_memset) = dlsym((void *)-1l, "memset");
   if (!memory_locked(__n, 0)) result = libc_memset(__s, __c, __n);
+  return result;
+}
+
+void *memcpy(void *__dest, const void *__src,
+		     size_t __n) {
+  void *result = NULL;
+  void *(*libc_memcpy)(void*, const void*, size_t) = NULL;
+  *(void **)(&libc_memcpy) = dlsym((void *)-1l, "memcpy");
+  if (!memory_locked(__n, 0)) result = libc_memcpy(__dest, __src, __n);
   return result;
 }
 
